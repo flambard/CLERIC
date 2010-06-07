@@ -133,12 +133,14 @@
 				 +cm-reg-send-tt+ +cm-exit2-tt+))) ))
 
 
-(defmethod encode-control-message ((object link) &key &allow-other-keys)
+(defmethod encode-control-message ((object link) &key atom-cache-entries &allow-other-keys)
   (with-slots (from-pid to-pid) object
     (encode
-     (tuple +cm-link+ from-pid to-pid))))
+     (tuple +cm-link+ from-pid to-pid)
+     :atom-cache-entries atom-cache-entries)))
+     
 
-(defmethod encode-control-message ((object send) &key &allow-other-keys)
+(defmethod encode-control-message ((object send) &key atom-cache-entries &allow-other-keys)
   (with-slots (cookie to-pid trace-token message) object
     (concatenate 'vector
 		 (encode (if trace-token
@@ -148,10 +150,12 @@
 				    trace-token)
 			     (tuple +cm-send+
 				    cookie
-				    to-pid)))
-		 (encode message))))
+				    to-pid))
+			 :atom-cache-entries atom-cache-entries)
+		 (encode message :atom-cache-entries atom-cache-entries))))
+			   
 
-(defmethod encode-control-message ((object exit) &key &allow-other-keys)
+(defmethod encode-control-message ((object exit) &key atom-cache-entries &allow-other-keys)
   (with-slots (from-pid to-pid trace-token reason) object
     (encode (if trace-token
 		(tuple +cm-exit-tt+
@@ -162,19 +166,22 @@
 		(tuple +cm-exit+
 		       from-pid
 		       to-pid
-		       reason)))))
+		       reason))
+	    :atom-cache-entries atom-cache-entries)))
 
-(defmethod encode-control-message ((object unlink) &key &allow-other-keys)
+(defmethod encode-control-message ((object unlink) &key atom-cache-entries &allow-other-keys)
   (with-slots (from-pid to-pid) object
     (encode (tuple +cm-unlink+
 		   from-pid
-		   to-pid))))
+		   to-pid)
+	    :atom-cache-entries atom-cache-entries)))
 
-(defmethod encode-control-message ((object node-link) &key &allow-other-keys)
+(defmethod encode-control-message ((object node-link) &key atom-cache-entries &allow-other-keys)
   (declare (ignore object))
-  (encode (tuple +cm-node-link+)))
+  (encode (tuple +cm-node-link+)
+	  :atom-cache-entries atom-cache-entries))
 
-(defmethod encode-control-message ((object reg-send) &key &allow-other-keys)
+(defmethod encode-control-message ((object reg-send) &key atom-cache-entries &allow-other-keys)
   (with-slots (from-pid cookie to-name trace-token message) object
     (concatenate 'vector
 		 (encode (if trace-token
@@ -186,16 +193,18 @@
 			     (tuple +cm-reg-send+
 				    from-pid
 				    cookie
-				    to-name)))
-		 (encode message))))
+				    to-name))
+			 :atom-cache-entries atom-cache-entries)
+		 (encode message :atom-cache-entries atom-cache-entries))))
 
-(defmethod encode-control-message ((object group-leader) &key &allow-other-keys)
+(defmethod encode-control-message ((object group-leader) &key atom-cache-entries &allow-other-keys)
   (with-slots (from-pid to-pid) object
     (encode (tuple +cm-group-leader+
 		   from-pid
-		   to-pid))))
+		   to-pid)
+	    :atom-cache-entries atom-cache-entries)))
 
-(defmethod encode-control-message ((object exit2) &key &allow-other-keys)
+(defmethod encode-control-message ((object exit2) &key atom-cache-entries &allow-other-keys)
   (with-slots (from-pid to-pid trace-token reason) object
     (encode (if trace-token
 		(tuple +cm-exit2-tt+
@@ -206,7 +215,8 @@
 		(tuple +cm-exit2+
 		       from-pid
 		       to-pid
-		       reason)))))
+		       reason))
+	    :atom-cache-entries atom-cache-entries)))
 
 
 (defun decode-control-message (bytes &key (start 0) (version-tag nil))

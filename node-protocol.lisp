@@ -9,7 +9,8 @@
 						      :from-pid from-pid
 						      :to-name (make-symbol to-name)
 						      :message message)
-				       :distribution-header t)
+				       :distribution-header t
+				       :cache-atoms t)
 		    stream)
     (finish-output stream)))
 
@@ -20,7 +21,8 @@
     (write-sequence (make-node-message (make-instance 'send
 						      :to-pid to-pid
 						      :message message)
-				       :distribution-header t)
+				       :distribution-header t
+				       :cache-atoms t)
 		    stream)
     (finish-output stream)))
 
@@ -31,7 +33,8 @@
     (write-sequence (make-node-message (make-instance 'link
 						      :from-pid from-pid
 						      :to-pid to-pid)
-				       :distribution-header t)
+				       :distribution-header t
+				       :cache-atoms t)
 		    stream)
     (finish-output stream)))
 
@@ -42,7 +45,8 @@
     (write-sequence (make-node-message (make-instance 'unlink
 						      :from-pid from-pid
 						      :to-pid to-pid)
-				       :distribution-header t)
+				       :distribution-header t
+				       :cache-atoms t)
 		    stream)
     (finish-output stream)))
 
@@ -58,14 +62,16 @@
 ;; Where Length = D + N + M
 ;;
 
-(defun make-node-message (control-message &key (distribution-header nil))
+(defun make-node-message (control-message &key (distribution-header nil) (cache-atoms nil))
   (if distribution-header
-      (let ((dh (make-distribution-header))
-	    (cm (encode-control-message control-message)))
-	(concatenate 'vector
-		     (uint32-to-bytes (+ (length dh) (length cm)))
-		     dh
-		     cm))
+      (let ((cached-atoms (when cache-atoms (make-atom-cache-entries))))
+	(let ((cm (encode-control-message control-message
+					  :atom-cache-entries cached-atoms))
+	      (dh (make-distribution-header cached-atoms)))
+	  (concatenate 'vector
+		       (uint32-to-bytes (+ (length dh) (length cm)))
+		       dh
+		       cm)))
       (let ((cm (encode-control-message control-message :version-tag t)))
 	(concatenate 'vector
 		     (uint32-to-bytes (1+ (length cm)))

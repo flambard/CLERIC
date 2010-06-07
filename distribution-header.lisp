@@ -109,8 +109,8 @@
 				      pos))) ))))))
 
 
-(defun make-distribution-header ()
-  ;; I'm lazy
+(defun make-distribution-header (&optional cached-atoms)
+  ;; TODO: Encode the cached atom references!
   (vector +protocol-version+ +distribution-header-tag+ 0))
 
 
