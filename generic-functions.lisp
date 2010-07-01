@@ -22,6 +22,14 @@
 
 
 ;;;;
+;;;; ARITY
+;;;;
+
+(defgeneric arity (tuple-or-fun)
+  (:documentation "Returns the arity of an Erlang tuple or fun."))
+
+
+;;;;
 ;;;; SIZE
 ;;;;
 
