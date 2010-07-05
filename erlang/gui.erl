@@ -169,9 +169,11 @@ loop(Listener) ->
 	    ok;
 	{gs, exit_menuitem, click, _Data, _Args} ->
 	    gs:stop(),
+	    exit(Listener, quit),
 	    exit(normal);
 	{gs, the_window, destroy, _Data, _Args} ->
 	    gs:stop(),
+	    exit(Listener, quit),
 	    exit(normal);
 	{gs, _ID, _EventType, _Data, _Args} = Msg ->
 	    io:format("Got unrecognized gs message: ~p\n", [Msg]);
