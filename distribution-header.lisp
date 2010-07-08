@@ -101,8 +101,9 @@
 	   ;; Read AtomCacheRefs and return a vector of atoms.
 	   (loop
 	      for flags in (subseq half-bytes 0 number-of-refs)
-	      for (atom p) = (decode-atom-cache-ref
-			      flags bytes use-long-atoms pos1)
+	      for (atom p) = (multiple-value-list
+			      (decode-atom-cache-ref
+			       flags bytes use-long-atoms pos1))
 	      do (setf pos1 p)
 	      collect atom into atoms
 	      finally (return (values (coerce atoms 'vector)
