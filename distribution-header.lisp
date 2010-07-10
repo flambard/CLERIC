@@ -59,7 +59,7 @@
 	  ((/= tag +distribution-header-tag+)
 	   (error 'unexpected-message-tag-error
 		  :received-tag tag
-		  :expected-tag +distribution-header-tag+))
+		  :expected-tags +distribution-header-tag+))
 	  ((= 0 number-of-refs)
 	   (values (vector)))
 	  (t
@@ -86,7 +86,7 @@
       ((/= tag +distribution-header-tag+)
        (error 'unexpected-message-tag-error
 	      :received-tag tag
-	      :expected-tag +distribution-header-tag+))
+	      :expected-tags +distribution-header-tag+))
       ((= 0 number-of-refs)
        (values (vector)
 	       (+ 2 pos)))
@@ -107,12 +107,54 @@
 	      do (setf pos1 p)
 	      collect atom into atoms
 	      finally (return (values (coerce atoms 'vector)
-				      pos))) ))))))
+				      pos1))) ))))))
 
 
-(defun make-distribution-header ()
-  ;; I'm lazy
-  (vector +protocol-version+ +distribution-header-tag+ 0))
+(defun make-distribution-header (&optional (cached-atoms #()))
+  (concatenate 'vector
+	       (vector +protocol-version+
+		       +distribution-header-tag+
+		       (length cached-atoms))
+	       (encode-atom-cache-refs cached-atoms)))
+
+(defun encode-atom-cache-refs (entries)
+  (loop
+     with currently-unused = #b000
+     with long-atoms = (long-atoms-p entries)
+     for (atom new-p index internal) across entries
+     collect (logior index (if new-p (ash 1 3) 0)) into half-bytes
+     nconc (if new-p
+	       (let ((atom-string (symbol-name atom)))
+		 `(,internal
+		   ,@(if long-atoms
+			 (coerce (uint16-to-bytes (length atom-string)) 'list)
+			 (list (length atom-string)))
+		   ,@(map 'list #'char-code atom-string)))
+	       `(,internal)) into refs
+     finally
+       (nconc half-bytes
+	      (list (logior (if long-atoms 1 0)
+			    (ash currently-unused 1))))
+       (return (concatenate 'vector (encode-flags half-bytes) refs)) ))
+
+(defun encode-flags (half-bytes)
+  (loop
+     for least-significant = (pop half-bytes)
+     for most-significant  = (or (pop half-bytes) 0)
+     while least-significant
+     collect (logior least-significant (ash most-significant 4)) ))
+
+
+(defun long-atoms-p (entries)
+  (loop
+     for (atom new . nil) across entries
+     thereis (and new (long-atom-p atom))))
+
+(defun long-atom-p (atom)
+  (< 255 (atom-length atom)))
+  
+(defun atom-length (atom)
+  (length (symbol-name atom)))
 
 
 ;;; Helper functions
@@ -125,8 +167,9 @@
   (loop ;; Read Flags and divide into half-bytes
      with fbytes = (1+ (floor (/ number-of-refs 2)))
      for byte across (subseq bytes pos (+ pos fbytes))
-     collect (ldb (byte 4 0) byte)   ;; Least significant half byte
-     collect (ldb (byte 4 4) byte))) ;; Most significant half byte
+     collect (ldb (byte 4 0) byte) into half-bytes ;; Least significant
+     collect (ldb (byte 4 4) byte) into half-bytes ;; Most significant
+     finally (return (values half-bytes (+ pos fbytes))) ))
 
 
 (defun read-atom-cache-ref (flags stream &optional long-atoms)

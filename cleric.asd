@@ -24,6 +24,10 @@
 		      :depends-on ("package"))
 	       (:file "atom-cache"
 		      :depends-on ("package"))
+	       (:file "atom-cache-entries"
+		      :depends-on ("package"
+				   "atom-cache"
+				   "special-variables"))
 	       (:file "special-variables"
 		      :depends-on ("package"))
 	       (:file "byte-functions"

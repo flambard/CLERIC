@@ -22,6 +22,10 @@
 		(:needs "package"))
 	       ("atom-cache"
 		(:needs "package"))
+	       ("atom-cache-entries"
+		(:needs "package"
+			"atom-cache"
+			"special-variables"))
 	       ("special-variables"
 		(:needs "package"))
 	       ("byte-functions"

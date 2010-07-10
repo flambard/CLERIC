@@ -5,21 +5,25 @@
 ;;;; Encode Erlang term
 ;;;;
 
-(defmethod encode ((x symbol) &key &allow-other-keys)
+(defmethod encode ((x symbol) &key atom-cache-entries &allow-other-keys)
   (cond
     ((and (null x) *lisp-nil-is-erlang-empty-list*)
      (encode-external-nil))
     ((and (null x) *lisp-nil-symbol-is-erlang-false*)
-     (encode '|false|))
+     (encode '|false| :atom-cache-entries atom-cache-entries))
     ((and (eq T x) *lisp-t-symbol-is-erlang-true*)
-     (encode '|true|))
-    ((> 256 (length (symbol-name x)))
-     (encode-external-small-atom x))
+     (encode '|true| :atom-cache-entries atom-cache-entries))
     (t
-     ;; When and how to use atom cache ref?
-     ;; First, check if *atom-cache* is not nil.
-     ;; Then check if the atom is cached.
-     (encode-external-atom x)) ))
+     (let ((index (when atom-cache-entries
+		    (make-atom-cache-entry x atom-cache-entries))))
+       (cond
+	 (index ;; Use an atom cache reference
+	  (encode-external-atom-cache-ref index))
+	   ;; Encode the atom as usual
+	 ((> 256 (length (symbol-name x)))
+	  (encode-external-small-atom x))
+	 (t
+	  (encode-external-atom x)) ))) ))
 
 (defmethod encode ((x erlang-binary) &key &allow-other-keys)
   (if (= 8 (bits-in-last-byte x))
@@ -49,9 +53,9 @@
     (t
      (encode-external-large-big x))))
 
-(defmethod encode ((x list) &key &allow-other-keys)
+(defmethod encode ((x list) &key atom-cache-entries &allow-other-keys)
   (if x
-      (encode-external-list x)
+      (encode-external-list x atom-cache-entries)
       (encode-external-nil)))
 
 (defmethod encode ((x string) &key &allow-other-keys)
@@ -73,10 +77,10 @@
       (encode-external-reference x) ;; Perhaps always use new reference?
       (encode-external-new-reference x)))
 
-(defmethod encode ((x erlang-tuple) &key &allow-other-keys)
+(defmethod encode ((x erlang-tuple) &key atom-cache-entries &allow-other-keys)
   (if (> 256 (length (elements x)))
-      (encode-external-small-tuple x)
-      (encode-external-large-tuple x)))
+      (encode-external-small-tuple x atom-cache-entries)
+      (encode-external-large-tuple x atom-cache-entries)))
 
 
 ;;;;
@@ -339,15 +343,10 @@
 ;; +----+-------------------+
 ;;
 
-(defun encode-external-atom-cache-ref (atom)
-  ;; Insert atom into cache...
-  (declare (ignore atom))
+(defun encode-external-atom-cache-ref (reference-index)
   (concatenate 'vector
 	       (vector +atom-cache-ref+)
-	       #| atom -> index, how? |#)
-  (error 'not-implemented-error
-	 :comment "There must be a vector of cached atoms defined to refer to.\
-If this function is entered it means that this atom is cached."))
+	       (vector reference-index)))
 
 (defun read-external-atom-cache-ref (stream) ;; OBSOLETE?
   ;; Assume tag +atom-cache-ref+ is read
@@ -939,8 +938,9 @@ If this function is entered it means that this atom is cached."))
 ;; +-----+--------+----------+------+
 ;;
 
-(defun encode-external-list (list)
-  (multiple-value-bind (elements tail length) (list-contents-to-bytes list)
+(defun encode-external-list (list &optional atom-cache-entries)
+  (multiple-value-bind (elements tail length)
+      (list-contents-to-bytes list atom-cache-entries)
     (concatenate 'vector
 		 (vector +list-ext+)
 		 (uint32-to-bytes length)
@@ -958,17 +958,21 @@ If this function is entered it means that this atom is cached."))
 
 ;;; Helper functions
 
-(defun list-contents-to-bytes (list)
+(defun list-contents-to-bytes (list &optional atom-cache-entries)
   (loop
      with bytes = #()
      for (element . tail) on list
      for length upfrom 1
-     do (setf bytes (concatenate 'vector bytes (encode element)))
+     do (setf bytes (concatenate
+		     'vector
+		     bytes
+		     (encode element :atom-cache-entries atom-cache-entries)))
      finally
        (let ((tail-bytes (if (and (null tail)
 				  *lisp-nil-at-tail-is-erlang-empty-list*)
 			     (encode-external-nil)
-			     (encode tail))))
+			     (encode tail
+				     :atom-cache-entries atom-cache-entries))))
 	 (return (values bytes tail-bytes length))) ))
 
 (defun read-list-contents (stream length)
@@ -1223,10 +1227,13 @@ If this function is entered it means that this atom is cached."))
 ;; +-----+-------+----------+
 ;;
 
-(defun encode-external-small-tuple (tuple)
+(defun encode-external-small-tuple (tuple atom-cache-entries)
   (concatenate 'vector
 	       (vector +small-tuple-ext+ (erlang-tuple-arity tuple))
-	       (mapconc-vector #'encode (elements tuple))))
+	       (mapconc-vector
+		#'(lambda (element)
+		    (encode element :atom-cache-entries atom-cache-entries))
+		(elements tuple))))
 
 (defun read-external-small-tuple (stream) ;; OBSOLETE?
   ;; Assume tag +small-tuple-ext+ is read
@@ -1249,11 +1256,14 @@ If this function is entered it means that this atom is cached."))
 ;; +-----+-------+----------+
 ;;
 
-(defun encode-external-large-tuple (tuple)
+(defun encode-external-large-tuple (tuple atom-cache-entries)
   (concatenate 'vector
 	       (vector +large-tuple-ext+)
 	       (uint32-to-bytes (erlang-tuple-arity tuple))
-	       (mapconc-vector #'encode (elements tuple))))
+	       (mapconc-vector
+		#'(lambda (element)
+		    (encode element :atom-cache-entries atom-cache-entries))
+		(elements tuple))))
 
 (defun read-external-large-tuple (stream)
   ;; Assume tag +large-tuple-ext+ is read
@@ -1286,4 +1296,4 @@ If this function is entered it means that this atom is cached."))
      for (element pos1) = (multiple-value-list (decode bytes :start pos))
      do (setf pos pos1)
      collect element into elements
-     finally (return (values elements pos))))
+     finally (return (values (coerce elements 'vector) pos))))
