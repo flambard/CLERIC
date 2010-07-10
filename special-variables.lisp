@@ -10,9 +10,6 @@
 (defvar *remote-nodes* (list)
   "Remote nodes connected to.")
 
-(defvar *atom-cache* nil
-  "An atom cache.")
-
 (defvar *cached-atoms* #()
   "A vector of cached atoms.")
 

@@ -9,6 +9,9 @@
 	    :type '(array symbol (8 256))
 	    :read-only t))
 
+(defvar *atom-cache* (make-atom-cache)
+  "An atom cache.")
+
 (defun print-atom-cache (cache stream)
   (print-unreadable-object (cache stream :type t :identity t)
     (format stream "~a/2048"
