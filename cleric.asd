@@ -42,6 +42,8 @@
 		      :depends-on ("package"
 				   "constants"
 				   "conditions"
+				   "atom-cache"
+				   "special-variables"
 				   "byte-functions"))
 	       (:file "ieee-floats" ;; Needs IEEE-Floats library
 		      :depends-on ("package"

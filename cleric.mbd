@@ -40,6 +40,8 @@
 		(:needs "package"
 			"constants"
 			"conditions"
+			"atom-cache"
+			"special-variables"
 			"byte-functions"))
 	       ("ieee-floats" ;; Needs IEEE-Floats library
 		(:needs "package"
