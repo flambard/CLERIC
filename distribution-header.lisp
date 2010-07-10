@@ -59,7 +59,7 @@
 	  ((/= tag +distribution-header-tag+)
 	   (error 'unexpected-message-tag-error
 		  :received-tag tag
-		  :expected-tag +distribution-header-tag+))
+		  :expected-tags +distribution-header-tag+))
 	  ((= 0 number-of-refs)
 	   (values (vector)))
 	  (t
@@ -86,7 +86,7 @@
       ((/= tag +distribution-header-tag+)
        (error 'unexpected-message-tag-error
 	      :received-tag tag
-	      :expected-tag +distribution-header-tag+))
+	      :expected-tags +distribution-header-tag+))
       ((= 0 number-of-refs)
        (values (vector)
 	       (+ 2 pos)))
