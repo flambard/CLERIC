@@ -1296,4 +1296,4 @@
      for (element pos1) = (multiple-value-list (decode bytes :start pos))
      do (setf pos pos1)
      collect element into elements
-     finally (return (values elements pos))))
+     finally (return (values (coerce elements 'vector) pos))))
