@@ -125,8 +125,9 @@
   (loop ;; Read Flags and divide into half-bytes
      with fbytes = (1+ (floor (/ number-of-refs 2)))
      for byte across (subseq bytes pos (+ pos fbytes))
-     collect (ldb (byte 4 0) byte)   ;; Least significant half byte
-     collect (ldb (byte 4 4) byte))) ;; Most significant half byte
+     collect (ldb (byte 4 0) byte) into half-bytes ;; Least significant
+     collect (ldb (byte 4 4) byte) into half-bytes ;; Most significant
+     finally (return (values half-bytes (+ pos fbytes))) ))
 
 
 (defun read-atom-cache-ref (flags stream &optional long-atoms)
