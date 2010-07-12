@@ -100,3 +100,45 @@
    receive-node-messages
 
    ))
+
+
+(defpackage :bert
+  (:documentation "BERT (Binary ERlang Term).")
+  (:use :cl :cleric)
+  (:shadow encode decode)
+  (:export
+
+   ;; Classes
+   erlang-binary
+   erlang-tuple
+
+   ;; Functions and methods
+   encode
+   decode
+   binary
+   bytes
+   bits-in-last-byte
+   size
+   string-to-binary
+   bytes-to-binary
+   binary-to-string
+   tuple
+   elements
+   arity
+   
+   ;; Special variables
+   *lisp-t-symbol-is-erlang-true*
+   *lisp-nil-is-erlang-empty-list*
+   *lisp-nil-symbol-is-erlang-false*
+   *lisp-nil-at-tail-is-erlang-empty-list*
+   *lisp-string-is-erlang-binary*
+   *erlang-true-is-lisp-t-symbol*
+   *erlang-false-is-lisp-nil-symbol*
+   *erlang-string-is-lisp-string*
+
+   ;; Conditions
+   untranslatable-lisp-object-error
+   unexpected-message-length-error
+   unexpected-message-tag-error
+   
+   ))
