@@ -30,5 +30,8 @@
     (push remote-node *remote-nodes*)
     t))
 
+(defun remote-node-accept-connect (listening-socket)
+  (node-accept-connect listening-socket))
+
 (defun find-connected-remote-node (node-name) ;; Make NODE-NAME a node designator
   (find node-name *remote-nodes* :key #'remote-node-name :test #'string=)) ;; Perhaps also check full name?

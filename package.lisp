@@ -46,6 +46,7 @@
    remote-node-name
    remote-node-host
    remote-node-connect
+   remote-node-accept-connect
    encode-control-message
    decode-control-message
    node
