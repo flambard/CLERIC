@@ -6,7 +6,7 @@
 		       (:print-object print-atom-cache))
   "Erlang atom cache"
   (segments (make-array '(8 256) :element-type 'symbol :initial-element nil)
-	    :type '(array symbol (8 256))
+	    :type (array symbol (8 256))
 	    :read-only t))
 
 (defvar *atom-cache* (make-atom-cache)
