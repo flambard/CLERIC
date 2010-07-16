@@ -6,6 +6,10 @@
 (in-package :bert)
 
 
+(defgeneric translate-complex-type (object)
+  (:documentation "Translates tuples with the 'bert' tag to corresponding Lisp objects and vice versa."))
+
+
 (defclass bert-time ()
   ((megaseconds :reader megaseconds :initarg :megaseconds)
    (seconds :reader seconds :initarg :seconds)
@@ -27,6 +31,18 @@
     (encode (tuple '|bert| '|regex| (string-to-binary source) options))))
 
 
+(defmethod encode ((dict hash-table))
+  (encode
+   (tuple '|bert| '|dict|
+	  (loop
+	     for key being the hash-keys in dict using (hash-value value)
+	     collect (tuple key value)) )))
+
+
+(defmethod encode (object)
+  (cleric:encode object :version-tag t))
+
+
 (deftype bert-translatable ()
   "A type that encompasses all types of Lisp objects that can be translated to BERT objects."
   '(satisfies bert-translatable-p))
@@ -42,26 +58,11 @@
      nil)))
 
 
-(defmethod encode (object)
-  (cleric:encode object :version-tag t))
-
-(defmethod encode ((dict hash-table))
-  (encode
-   (tuple '|bert| '|dict|
-	  (loop
-	     for key being the hash-keys in dict using (hash-value value)
-	     collect (tuple key value)) )))
-
-
 (defun complex-type-p (bert-term)
   (when (and (typep bert-term 'tuple) (> 0 (arity bert-term)))
     (let ((first-element (aref (elements bert-term) 0)))
       (and (symbolp first-element)
 	   (string= "bert" (symbol-name first-element))))))
-
-
-(defgeneric translate-complex-type (object)
-  (:documentation "Translates tuples with the 'bert' tag to corresponding Lisp objects and vice versa."))
 
 
 (defun decode (bytes)
