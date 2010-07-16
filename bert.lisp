@@ -24,6 +24,14 @@
 (defmethod encode (object)
   (cleric:encode object :version-tag t))
 
+(defmethod encode ((dict hash-table))
+  (encode
+   (tuple '|bert| '|dict|
+	  (loop
+	     for key being the hash-keys in dict using (hash-value value)
+	     collect (tuple (encode key) (encode value))) )))
+
+
 (defun complex-type-p (bert-term)
   (when (and (typep bert-term 'tuple) (> 0 (arity bert-term)))
     (let ((first-element (aref (elements bert-term) 0)))
