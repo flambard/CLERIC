@@ -12,6 +12,11 @@
    (microseconds :reader microseconds :initarg :microseconds))
   (:documentation "BERT time data type"))
 
+(defmethod encode ((time bert-time))
+  (with-slots (megaseconds seconds microseconds) time
+    (encode (tuple '|bert| '|time| megaseconds seconds microseconds))))
+
+
 (defclass bert-regex ()
   ((source :reader regex-source :initarg :source)
    (options :reader regex-options :initarg :options))
