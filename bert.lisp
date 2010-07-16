@@ -16,9 +16,12 @@
    (microseconds :reader microseconds :initarg :microseconds))
   (:documentation "BERT time data type"))
 
-(defmethod encode ((time bert-time))
+(defmethod translate-complex-type ((time bert-time))
   (with-slots (megaseconds seconds microseconds) time
-    (encode (tuple '|bert| '|time| megaseconds seconds microseconds))))
+    (tuple '|bert| '|time| megaseconds seconds microseconds)))
+
+(defmethod encode ((time bert-time))
+  (encode (translate-complex-type time)))
 
 
 (defclass bert-regex ()
@@ -26,17 +29,22 @@
    (options :reader regex-options :initarg :options))
   (:documentation "BERT regex data type"))
 
-(defmethod encode ((regex bert-regex))
+(defmethod translate-complex-type ((regex bert-regex))
   (with-slots (source options) regex
-    (encode (tuple '|bert| '|regex| (string-to-binary source) options))))
+    (tuple '|bert| '|regex| (string-to-binary source) options)))
+
+(defmethod encode ((regex bert-regex))
+  (encode (translate-complex-type regex)))
 
 
+(defmethod translate-complex-type ((dict hash-table))
+  (tuple '|bert| '|dict|
+	 (loop
+	    for key being the hash-keys in dict using (hash-value value)
+	    collect (tuple key value)) ))
+  
 (defmethod encode ((dict hash-table))
-  (encode
-   (tuple '|bert| '|dict|
-	  (loop
-	     for key being the hash-keys in dict using (hash-value value)
-	     collect (tuple key value)) )))
+  (encode (translate-complex-type dict)))
 
 
 (defmethod encode (object)
