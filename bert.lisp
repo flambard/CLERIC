@@ -22,6 +22,11 @@
    (options :reader regex-options :initarg :options))
   (:documentation "BERT regex data type"))
 
+(defmethod encode ((regex bert-regex))
+  (with-slots (source options) regex
+    (encode (tuple '|bert| '|regex| (string-to-binary source) options))))
+
+
 (deftype bert-translatable ()
   "A type that encompasses all types of Lisp objects that can be translated to BERT objects."
   '(satisfies bert-translatable-p))
