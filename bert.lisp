@@ -29,7 +29,7 @@
    (tuple '|bert| '|dict|
 	  (loop
 	     for key being the hash-keys in dict using (hash-value value)
-	     collect (tuple (encode key) (encode value))) )))
+	     collect (tuple key value)) )))
 
 
 (defun complex-type-p (bert-term)
