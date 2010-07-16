@@ -9,6 +9,9 @@
 (defgeneric translate-complex-type (object)
   (:documentation "Translates tuples with the 'bert' tag to corresponding Lisp objects and vice versa."))
 
+(defgeneric encode (object &key berp-header)
+  (:documentation "Encodes the BERT-translatable object to a vector of bytes."))
+
 
 (defclass bert-time ()
   ((megaseconds :reader megaseconds :initarg :megaseconds)
@@ -20,7 +23,7 @@
   (with-slots (megaseconds seconds microseconds) time
     (tuple '|bert| '|time| megaseconds seconds microseconds)))
 
-(defmethod encode ((time bert-time))
+(defmethod encode ((time bert-time) &key &allow-other-keys)
   (encode (translate-complex-type time)))
 
 
@@ -33,7 +36,7 @@
   (with-slots (source options) regex
     (tuple '|bert| '|regex| (string-to-binary source) options)))
 
-(defmethod encode ((regex bert-regex))
+(defmethod encode ((regex bert-regex) &key &allow-other-keys)
   (encode (translate-complex-type regex)))
 
 
@@ -43,12 +46,19 @@
 	    for key being the hash-keys in dict using (hash-value value)
 	    collect (tuple key value)) ))
   
-(defmethod encode ((dict hash-table))
+(defmethod encode ((dict hash-table) &key &allow-other-keys)
   (encode (translate-complex-type dict)))
 
 
-(defmethod encode (object)
+(defmethod encode (object &key &allow-other-keys)
   (cleric:encode object :version-tag t))
+
+
+(defmethod encode :around (object &key berp-header)
+  (let ((bytes (call-next-method object :berp-header nil)))
+    (if berp-header
+	(concatenate 'vector (cleric::uint32-to-bytes (length bytes)) bytes)
+	bytes)))
 
 
 (deftype bert-translatable ()
