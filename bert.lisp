@@ -6,6 +6,17 @@
 (in-package :bert)
 
 
+(defclass bert-time ()
+  ((megaseconds :reader megaseconds :initarg :megaseconds)
+   (seconds :reader seconds :initarg :seconds)
+   (microseconds :reader microseconds :initarg :microseconds))
+  (:documentation "BERT time data type"))
+
+(defclass bert-regex ()
+  ((source :reader regex-source :initarg :source)
+   (options :reader regex-options :initarg :options))
+  (:documentation "BERT regex data type"))
+
 (deftype bert-translatable ()
   "A type that encompasses all types of Lisp objects that can be translated to BERT objects."
   '(satisfies bert-translatable-p))
@@ -13,7 +24,7 @@
 (defun bert-translatable-p (object)
   "Returns true if OBJECT is translatable to an Erlang object."
   (typecase object
-    ((or integer float symbol string hash-table erlang-tuple erlang-binary time regex)
+    ((or integer float symbol string hash-table erlang-tuple erlang-binary bert-time bert-regex)
      t)
     (list
      (every #'bert-translatable-p object))
