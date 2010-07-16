@@ -45,7 +45,7 @@
 	 (loop
 	    for key being the hash-keys in dict using (hash-value value)
 	    collect (tuple key value)) ))
-  
+
 (defmethod encode ((dict hash-table) &key &allow-other-keys)
   (encode (translate-complex-type dict)))
 
@@ -76,7 +76,7 @@
      nil)))
 
 
-(defun complex-type-p (bert-term)
+(defun complex-bert-term-p (bert-term)
   (when (and (typep bert-term 'tuple) (> 0 (arity bert-term)))
     (let ((first-element (aref (elements bert-term) 0)))
       (and (symbolp first-element)
