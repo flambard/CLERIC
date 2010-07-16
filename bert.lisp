@@ -24,6 +24,17 @@
 (defmethod encode (object)
   (cleric:encode object :version-tag t))
 
+(defun complex-type-p (bert-term)
+  (when (and (typep bert-term 'tuple) (> 0 (arity bert-term)))
+    (let ((first-element (aref (elements bert-term) 0)))
+      (and (symbolp first-element)
+	   (string= "bert" (symbol-name first-element))))))
+
+
+(defgeneric translate-complex-type (object)
+  (:documentation "Translates tuples with the 'bert' tag to corresponding Lisp objects and vice versa."))
+
+
 (defun decode (bytes)
   (cleric:decode bytes :version-tag t))
 
