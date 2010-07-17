@@ -13,6 +13,16 @@
   (:documentation "Encodes the BERT-translatable object to a vector of bytes."))
 
 
+(defvar true (tuple '|bert| '|true|)
+  "BERT boolean true term.")
+
+(defvar false (tuple '|bert| '|false|)
+  "BERT boolean false term.")
+
+(defun boolean (value)
+  (if value true false))
+
+
 (defclass bert-time ()
   ((megaseconds :reader megaseconds :initarg :megaseconds)
    (seconds :reader seconds :initarg :seconds)

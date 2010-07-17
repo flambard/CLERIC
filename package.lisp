@@ -127,6 +127,7 @@
    tuple
    elements
    arity
+   boolean
    
    ;; Special variables
    *lisp-t-symbol-is-erlang-true*
@@ -137,6 +138,8 @@
    *erlang-true-is-lisp-t-symbol*
    *erlang-false-is-lisp-nil-symbol*
    *erlang-string-is-lisp-string*
+   true
+   false
 
    ;; Conditions
    untranslatable-lisp-object-error
