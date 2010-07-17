@@ -143,5 +143,5 @@
 
 
 (defun decode (bytes)
-  (cleric:decode bytes :version-tag t))
+  (translate-complex-terms (cleric:decode bytes :version-tag t)))
 
