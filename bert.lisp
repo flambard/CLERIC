@@ -128,7 +128,8 @@
      do (let* ((elements (elements tuple))
 	       (key (aref elements 0))
 	       (value (aref elements 1)))
-	  (setf (gethash key hash) value))))
+	  (setf (gethash key hash) value))
+     finally (return hash)))
 
 (defun translate-time-term (megaseconds seconds microseconds)
   (make-instance 'bert-time
