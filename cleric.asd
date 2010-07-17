@@ -66,6 +66,12 @@
 				   "md5"
 				   "atom-cache"
 				   "type-erlang-translatable"))
+	       (:file "bert"
+		      :depends-on ("package"
+				   "conditions"
+				   "generic-functions"
+				   "special-variables"
+				   "classes"))
 	       (:file "handshake"
 		      :depends-on ("package"
 				   "conditions"

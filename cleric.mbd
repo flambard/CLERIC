@@ -64,6 +64,12 @@
 			"md5"
 			"atom-cache"
 			"type-erlang-translatable"))
+	       ("bert"
+		(:needs "package"
+			"conditions"
+			"generic-functions"
+			"special-variables"
+			"classes"))
 	       ("handshake"
 		(:needs "package"
 			"conditions"
