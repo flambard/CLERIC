@@ -130,14 +130,7 @@
    boolean
    
    ;; Special variables
-   *lisp-t-symbol-is-erlang-true*
-   *lisp-nil-is-erlang-empty-list*
-   *lisp-nil-symbol-is-erlang-false*
-   *lisp-nil-at-tail-is-erlang-empty-list*
    *lisp-string-is-erlang-binary*
-   *erlang-true-is-lisp-t-symbol*
-   *erlang-false-is-lisp-nil-symbol*
-   *erlang-string-is-lisp-string*
    true
    false
 
