@@ -71,12 +71,8 @@
   object)
 
 
-(defmethod encode (object &key &allow-other-keys)
-  (cleric:encode (translate-complex-type object) :version-tag t))
-
-
-(defmethod encode :around (object &key berp-header)
-  (let ((bytes (call-next-method object :berp-header nil)))
+(defmethod encode (object &key berp-header)
+  (let ((bytes (cleric:encode (translate-complex-type object) :version-tag t)))
     (if berp-header
 	(concatenate 'vector (cleric::uint32-to-bytes (length bytes)) bytes)
 	bytes)))
