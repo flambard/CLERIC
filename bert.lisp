@@ -7,7 +7,7 @@
 
 
 (defgeneric translate-complex-type (object)
-  (:documentation "Translates tuples with the 'bert' tag to corresponding Lisp objects and vice versa."))
+  (:documentation "Translates tuples with the 'bert' tag to corresponding Lisp objects."))
 
 (defgeneric encode (object &key berp-header)
   (:documentation "Encodes the BERT-translatable object to a vector of bytes."))
