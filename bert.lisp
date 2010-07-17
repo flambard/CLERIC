@@ -56,6 +56,10 @@
 	    for key being the hash-keys in dict using (hash-value value)
 	    collect (tuple key value)) ))
 
+
+(defmethod translate-complex-type ((nil-symbol (eql nil)))
+  (declare (ignore nil-symbol))
+  (tuple '|bert| '|nil|))
 (defmethod encode ((dict hash-table) &key &allow-other-keys)
   (encode (translate-complex-type dict)))
 
