@@ -57,6 +57,20 @@
   (tuple '|bert| '|nil|))
 
 
+(defmethod translate-complex-type ((tuple erlang-tuple))
+  (with-slots (elements) tuple
+    (make-instance 'erlang-tuple
+		   :elements (map 'vector #'translate-complex-type elements))))
+
+
+(defmethod translate-complex-type ((lst list))
+  (mapcar #'translate-complex-type lst))
+
+
+(defmethod translate-complex-type (object)
+  object)
+
+
 (defmethod encode (object &key &allow-other-keys)
   (cleric:encode (translate-complex-type object) :version-tag t))
 
