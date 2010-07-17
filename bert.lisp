@@ -13,14 +13,16 @@
   (:documentation "Encodes the BERT-translatable object to a vector of bytes."))
 
 
-(defvar true (tuple '|bert| '|true|)
+(defun boolean (value)
+  (if value
+      (tuple '|bert| '|true|)
+      (tuple '|bert| '|false|)))
+
+(defconstant true (boolean t) ;(make-instance 'erlang-tuple :elements #('|bert| '|true|)) ;(load-time-value (tuple '|bert| '|true|))
   "BERT boolean true term.")
 
-(defvar false (tuple '|bert| '|false|)
+(defconstant false (boolean nil) ;(make-instance 'erlang-tuple :elements #('|bert| '|false|)) ;(load-time-value (tuple '|bert| '|false|))
   "BERT boolean false term.")
-
-(defun boolean (value)
-  (if value true false))
 
 
 (defclass bert-time ()
