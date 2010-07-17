@@ -83,7 +83,7 @@
   (typep bert-term '(or list erlang-tuple)))
 
 (defun complex-bert-term-p (bert-term)
-  (when (and (typep bert-term 'tuple) (> 0 (arity bert-term)))
+  (when (and (typep bert-term 'erlang-tuple) (> 0 (arity bert-term)))
     (let ((first-element (aref (elements bert-term) 0)))
       (and (symbolp first-element)
 	   (string= "bert" (symbol-name first-element))))))
