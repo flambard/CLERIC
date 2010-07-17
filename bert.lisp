@@ -76,6 +76,12 @@
      nil)))
 
 
+(defun simple-bert-term-p (bert-term)
+  (typep bert-term '(or integer float symbol string erlang-binary)))
+
+(defun compound-bert-term-p (bert-term)
+  (typep bert-term '(or list erlang-tuple)))
+
 (defun complex-bert-term-p (bert-term)
   (when (and (typep bert-term 'tuple) (> 0 (arity bert-term)))
     (let ((first-element (aref (elements bert-term) 0)))
