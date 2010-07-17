@@ -106,7 +106,9 @@
      (translate-complex-term term))
     ((typep term 'erlang-tuple)
      (with-slots (elements) term
-       (map-into elements #'translate-complex-terms elements)))
+       (make-instance
+	'erlang-tuple
+	:elements (map 'vector #'translate-complex-terms elements))))
     (t
      (error "~a is not a BERT term." term)) ))
 
