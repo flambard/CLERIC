@@ -48,7 +48,8 @@
   (tuple '|bert| '|dict|
 	 (loop
 	    for key being the hash-keys in dict using (hash-value value)
-	    collect (tuple key value)) ))
+	    collect (tuple (translate-complex-type key)
+			   (translate-complex-type value))) ))
 
 
 (defmethod translate-complex-type ((nil-symbol (eql nil)))
