@@ -33,9 +33,6 @@
   (with-slots (megaseconds seconds microseconds) time
     (tuple '|bert| '|time| megaseconds seconds microseconds)))
 
-(defmethod encode ((time bert-time) &key &allow-other-keys)
-  (encode (translate-complex-type time)))
-
 
 (defclass bert-regex ()
   ((source :reader regex-source :initarg :source)
@@ -45,9 +42,6 @@
 (defmethod translate-complex-type ((regex bert-regex))
   (with-slots (source options) regex
     (tuple '|bert| '|regex| (string-to-binary source) options)))
-
-(defmethod encode ((regex bert-regex) &key &allow-other-keys)
-  (encode (translate-complex-type regex)))
 
 
 (defmethod translate-complex-type ((dict hash-table))
@@ -60,12 +54,10 @@
 (defmethod translate-complex-type ((nil-symbol (eql nil)))
   (declare (ignore nil-symbol))
   (tuple '|bert| '|nil|))
-(defmethod encode ((dict hash-table) &key &allow-other-keys)
-  (encode (translate-complex-type dict)))
 
 
 (defmethod encode (object &key &allow-other-keys)
-  (cleric:encode object :version-tag t))
+  (cleric:encode (translate-complex-type object) :version-tag t))
 
 
 (defmethod encode :around (object &key berp-header)
