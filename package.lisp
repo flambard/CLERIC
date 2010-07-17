@@ -111,6 +111,8 @@
    ;; Classes
    erlang-binary
    erlang-tuple
+   bert-time
+   bert-regex
 
    ;; Functions and methods
    encode
