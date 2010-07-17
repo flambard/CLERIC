@@ -107,17 +107,17 @@
   (assert (typep term 'erlang-tuple))
   (with-slots (elements) term
     (assert (string= "bert" (symbol-name (aref elements 0))))
-    (ecase (aref elements 1)
-      (|nil| nil)
-      (|true| t)
-      (|false| nil)
-      (|dict|
+    (ecase (intern (symbol-name (aref elements 1)) :keyword)
+      (:|nil| nil)
+      (:|true| t)
+      (:|false| nil)
+      (:|dict|
        (translate-dict-term (aref elements 2)))
-      (|time|
+      (:|time|
        (translate-time-term (aref elements 2)
 			    (aref elements 3)
 			    (aref elements 4)))
-      (|regex|
+      (:|regex|
        (translate-regex-term (aref elements 2)
 			     (aref elements 3))) )))
 
