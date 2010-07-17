@@ -89,6 +89,59 @@
 	   (string= "bert" (symbol-name first-element))))))
 
 
+(defun translate-complex-terms (term)
+  (cond
+    ((simple-bert-term-p term)
+     term)
+    ((listp term)
+     (mapcar #'translate-complex-terms term))
+    ((complex-bert-term-p term)
+     (translate-complex-term term))
+    ((typep term 'erlang-tuple)
+     (with-slots (elements) term
+       (map-into elements #'translate-complex-terms elements)))
+    (t
+     (error "~a is not a BERT term." term)) ))
+
+(defun translate-complex-term (term)
+  (assert (typep term 'erlang-tuple))
+  (with-slots (elements) term
+    (assert (string= "bert" (symbol-name (aref elements 0))))
+    (ecase (aref elements 1)
+      (|nil| nil)
+      (|true| t)
+      (|false| nil)
+      (|dict|
+       (translate-dict-term (aref elements 2)))
+      (|time|
+       (translate-time-term (aref elements 2)
+			    (aref elements 3)
+			    (aref elements 4)))
+      (|regex|
+       (translate-regex-term (aref elements 2)
+			     (aref elements 3))) )))
+
+(defun translate-dict-term (dict)
+  (loop
+     with hash = (make-hash-table)
+     for tuple in dict
+     do (let* ((elements (elements tuple))
+	       (key (aref elements 0))
+	       (value (aref elements 1)))
+	  (setf (gethash key hash) value))))
+
+(defun translate-time-term (megaseconds seconds microseconds)
+  (make-instance 'bert-time
+		 :megaseconds megaseconds
+		 :seconds seconds
+		 :microseconds microseconds))
+
+(defun translate-regex-term (source options)
+  (make-instance 'bert-regex
+		 :source source
+		 :options options))
+
+
 (defun decode (bytes)
   (cleric:decode bytes :version-tag t))
 
