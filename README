@@ -3,6 +3,8 @@ CLERIC -- Common Lisp Erlang Interface
 CLERIC is an implementation of the Erlang distribution protocol, comparable with
 erl_interface and jinterface.
 
+CLERIC also includes a BERT serializer.
+
 Homepage: http://common-lisp.net/project/cleric/
 
 
