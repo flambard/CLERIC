@@ -12,16 +12,16 @@
 (defgeneric encode (object &key berp-header)
   (:documentation "Encodes the BERT-translatable object to a vector of bytes."))
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun boolean (value)
+    (if value
+	(tuple '|bert| '|true|)
+	(tuple '|bert| '|false|))) )
 
-(defun boolean (value)
-  (if value
-      (tuple '|bert| '|true|)
-      (tuple '|bert| '|false|)))
-
-(defconstant true (boolean t) ;(make-instance 'erlang-tuple :elements #('|bert| '|true|)) ;(load-time-value (tuple '|bert| '|true|))
+(defconstant true (boolean t)
   "BERT boolean true term.")
 
-(defconstant false (boolean nil) ;(make-instance 'erlang-tuple :elements #('|bert| '|false|)) ;(load-time-value (tuple '|bert| '|false|))
+(defconstant false (boolean nil)
   "BERT boolean false term.")
 
 
