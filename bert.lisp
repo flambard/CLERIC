@@ -55,7 +55,7 @@
 
 
 (defmethod translate-complex-type ((nil-symbol (eql nil)))
-  (declare (ignore nil-symbol))
+  (declare (ignorable nil-symbol))
   (tuple '|bert| '|nil|))
 
 

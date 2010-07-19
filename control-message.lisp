@@ -177,7 +177,7 @@
 	    :atom-cache-entries atom-cache-entries)))
 
 (defmethod encode-control-message ((object node-link) &key atom-cache-entries &allow-other-keys)
-  (declare (ignore object))
+  (declare (ignorable object))
   (encode (tuple +cm-node-link+)
 	  :atom-cache-entries atom-cache-entries))
 
