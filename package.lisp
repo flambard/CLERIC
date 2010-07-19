@@ -127,7 +127,7 @@
    tuple
    elements
    arity
-   boolean
+   bool
    
    ;; Special variables
    *lisp-string-is-erlang-binary*

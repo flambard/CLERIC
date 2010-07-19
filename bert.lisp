@@ -13,15 +13,15 @@
   (:documentation "Encodes the BERT-translatable object to a vector of bytes."))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun boolean (value)
+  (defun bool (value)
     (if value
 	(tuple '|bert| '|true|)
 	(tuple '|bert| '|false|))) )
 
-(defconstant true (boolean t)
+(defconstant true (bool t)
   "BERT boolean true term.")
 
-(defconstant false (boolean nil)
+(defconstant false (bool nil)
   "BERT boolean false term.")
 
 
