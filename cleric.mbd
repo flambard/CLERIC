@@ -34,6 +34,7 @@
 		(:needs "package"))
 	       ("classes"
 		(:needs "package"
+			"generic-functions"
 			"special-variables"))
 	       ("type-erlang-translatable"
 		(:needs "package"

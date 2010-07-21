@@ -36,6 +36,7 @@
 		      :depends-on ("package"))
 	       (:file "classes"
 		      :depends-on ("package"
+				   "generic-functions"
 				   "special-variables"))
 	       (:file "type-erlang-translatable"
 		      :depends-on ("package"

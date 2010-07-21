@@ -264,7 +264,7 @@
 
 (defun read-compressed-erlang-term (stream)
   (let ((uncompressed-size (read-uint32 stream)))
-    (declare (ignore stream uncompressed-size))
+    (declare (ignore uncompressed-size))
     (error 'not-implemented-error
 	   :comment "Reading compressed Erlang terms is unsupported.")))
 
