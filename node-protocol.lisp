@@ -99,7 +99,7 @@
        unless (eq message 'tick) collect message)))
 
 
-(defconstant +tock+ #(0 0 0 0))
+(defconstant-not-eql +tock+ #(0 0 0 0))
 
 (defun read-node-message (stream)
   (let ((length (handler-case (read-uint32 stream)

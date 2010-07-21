@@ -18,10 +18,10 @@
 	(tuple '|bert| '|true|)
 	(tuple '|bert| '|false|))) )
 
-(defconstant true (bool t)
+(cleric::defconstant-not-eql true (bool t)
   "BERT boolean true term.")
 
-(defconstant false (bool nil)
+(cleric::defconstant-not-eql false (bool nil)
   "BERT boolean false term.")
 
 

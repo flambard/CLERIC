@@ -11,6 +11,8 @@
   :license "MIT License"
   :depends-on (:usocket :md5 :ieee-floats)
   :components ((:file "package")
+	       (:file "macros"
+		      :depends-on ("package"))
 	       (:file "generic-functions"
 		      :depends-on ("package"
 				   "constants"))
@@ -68,6 +70,7 @@
 				   "type-erlang-translatable"))
 	       (:file "bert"
 		      :depends-on ("package"
+				   "macros"
 				   "conditions"
 				   "generic-functions"
 				   "special-variables"
@@ -86,6 +89,7 @@
 				   "classes"))
 	       (:file "node-protocol"
 		      :depends-on ("package"
+				   "macros"
 				   "conditions"
 				   "distribution-header"
 				   "classes"
