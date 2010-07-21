@@ -6,7 +6,7 @@ erl_interface and jinterface.
 
 CLERIC also includes a [BERT](http://bert-rpc.org/) serializer.
 
-Homepage: [http://common-lisp.net/project/cleric/](http://common-lisp.net/project/cleric/)
+Homepage: <http://common-lisp.net/project/cleric/>
 
 
 How to install
