@@ -7,10 +7,12 @@
 (defsystem :cleric
   :description "Common Lisp Erlang Interface - An implementation of the Erlang distribution protocol."
   :author "Markus Flambard <mflambard@common-lisp.net>"
-  :version "0.0.3"
+  :version "0.0.6"
   :license "MIT License"
   :depends-on (:usocket :md5 :ieee-floats)
   :components ((:file "package")
+	       (:file "macros"
+		      :depends-on ("package"))
 	       (:file "generic-functions"
 		      :depends-on ("package"
 				   "constants"))
@@ -34,6 +36,7 @@
 		      :depends-on ("package"))
 	       (:file "classes"
 		      :depends-on ("package"
+				   "generic-functions"
 				   "special-variables"))
 	       (:file "type-erlang-translatable"
 		      :depends-on ("package"
@@ -66,6 +69,13 @@
 				   "md5"
 				   "atom-cache"
 				   "type-erlang-translatable"))
+	       (:file "bert"
+		      :depends-on ("package"
+				   "macros"
+				   "conditions"
+				   "generic-functions"
+				   "special-variables"
+				   "classes"))
 	       (:file "handshake"
 		      :depends-on ("package"
 				   "conditions"
@@ -80,6 +90,7 @@
 				   "classes"))
 	       (:file "node-protocol"
 		      :depends-on ("package"
+				   "macros"
 				   "conditions"
 				   "distribution-header"
 				   "classes"
