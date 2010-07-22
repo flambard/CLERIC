@@ -4,7 +4,7 @@
   (:development t)
   (:author "Markus Flambard <mflambard@common-lisp.net>")
   (:home-page "http://common-lisp.net/project/cleric/")
-  (:version 0 0 5)
+  (:version 0 0 6)
   (:license :mit)
   (:documentation "Common Lisp Erlang Interface - An implementation of the Erlang distribution protocol.")
   (:needs :usocket :md5 :ieee-floats)
