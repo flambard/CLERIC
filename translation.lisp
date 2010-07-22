@@ -813,7 +813,7 @@
   (let ((length (aref bytes pos))
 	(sign (if (= 1 (aref bytes (1+ pos))) -1 1))
 	(pos2 (+ 2 pos)))
-    (values (* sign (bytes-to-bignum length pos2))
+    (values (* sign (bytes-to-bignum bytes length pos2))
 	    (+ length pos2))))
 
 
@@ -850,7 +850,7 @@
   (let ((length (bytes-to-uint32 bytes pos))
 	(sign (if (= 1 (aref bytes (+ 4 pos))) -1 1))
 	(pos5 (+ 5 pos)))
-    (values (* sign (bytes-to-bignum length pos5))
+    (values (* sign (bytes-to-bignum bytes length pos5))
 	    (+ length pos5))))
 
 
