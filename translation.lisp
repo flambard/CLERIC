@@ -568,33 +568,23 @@
 
 (defun decode-external-fun (bytes &optional (pos 0))
   (let ((free-vars-length (bytes-to-uint32 bytes pos)))
-    (multiple-value-bind (pid pos1) (decode-erlang-pid bytes (+ pos 4))
-      (multiple-value-bind (module pos2) (decode-erlang-atom bytes pos1)
-	(multiple-value-bind (index pos3) (decode-erlang-integer bytes pos2)
-	  (multiple-value-bind (uniq pos4) (decode-erlang-integer bytes pos3)
-	    (loop
-	       repeat free-vars-length
-	       for (free-var p) = (multiple-value-list
-				   (decode bytes :start pos4))
-	       do (setf pos4 p)
-	       collect free-var into free-vars
-	       finally (return (values (make-instance 'erlang-internal-fun
-						      :pid pid
-						      :module module
-						      :index index
-						      :uniq uniq
-						      :free-vars free-vars)
-				       pos)) )))))))
-		    
-  
-;;; Consider creating a macro MULTIPLE-VALUE-BIND*
-;;
-;; (multiple-value-bind* (((pid pos1) (decode-erlang-pid bytes (+ pos 4)))
-;;                        ((module pos2) (decode-erlang-atom bytes pos1))
-;;                        ((index pos3) (decode-erlang-integer bytes pos2))
-;;                        ((uniq pos4) (decode-erlang-integer bytes pos3)))
-;;   body...)
-;;
+    (multiple-value-bind* (((pid pos1) (decode-erlang-pid bytes (+ pos 4)))
+			   ((module pos2) (decode-erlang-atom bytes pos1))
+			   ((index pos3) (decode-erlang-integer bytes pos2))
+			   ((uniq pos4) (decode-erlang-integer bytes pos3)))
+      (loop
+	 repeat free-vars-length
+	 for (free-var p) = (multiple-value-list
+			     (decode bytes :start pos4))
+	 do (setf pos4 p)
+	 collect free-var into free-vars
+	 finally (return (values (make-instance 'erlang-internal-fun
+						:pid pid
+						:module module
+						:index index
+						:uniq uniq
+						:free-vars free-vars)
+				 pos)) ))))
 
 
 ;; NEW_FUN_EXT
@@ -636,28 +626,28 @@
 	(uniq (subseq bytes (+ 5 pos) (+ 21 pos)))
 	(index (bytes-to-uint32 (+ 21 pos)))
 	(free-vars-length (bytes-to-uint32 bytes (+ 25 pos))))
-    (multiple-value-bind (module pos1) (decode-erlang-atom bytes (+ 29 pos))
-      (multiple-value-bind (old-index pos2) (decode-erlang-integer bytes pos1)
-	(multiple-value-bind (old-uniq pos3) (decode-erlang-integer bytes pos2)
-	  (multiple-value-bind (pid pos4) (decode-erlang-pid bytes pos3)
-	    (loop
-	       repeat free-vars-length
-	       for (free-var p) = (multiple-value-list
-				   (decode bytes :start pos4))
-	       do (setf pos4 p)
-	       collect free-var into free-vars
-	       finally (return (progn
-				 (assert (= p (+ size pos)))
-				 (values (make-instance 'erlang-internal-fun
-							:arity arity
-							:uniq uniq
-							:index index
-							:module module
-							:old-index old-index
-							:old-uniq old-uniq
-							:pid pid
-							:free-vars free-vars)
-					 p)) ))))))))
+    (multiple-value-bind* (((module pos1) (decode-erlang-atom bytes (+ 29 pos)))
+			   ((old-index pos2) (decode-erlang-integer bytes pos1))
+			   ((old-uniq pos3) (decode-erlang-integer bytes pos2))
+			   ((pid pos4) (decode-erlang-pid bytes pos3)))
+      (loop
+	 repeat free-vars-length
+	 for (free-var p) = (multiple-value-list
+			     (decode bytes :start pos4))
+	 do (setf pos4 p)
+	 collect free-var into free-vars
+	 finally (return (progn
+			   (assert (= p (+ size pos)))
+			   (values (make-instance 'erlang-internal-fun
+						  :arity arity
+						  :uniq uniq
+						  :index index
+						  :module module
+						  :old-index old-index
+						  :old-uniq old-uniq
+						  :pid pid
+						  :free-vars free-vars)
+				   p)) )))))
 
 
 
@@ -685,14 +675,14 @@
 		 :arity (read-erlang-integer stream)))
 
 (defun decode-external-export (bytes &optional (pos 0))
-  (multiple-value-bind (module pos1) (decode-erlang-atom bytes pos)
-    (multiple-value-bind (function pos2) (decode-erlang-atom bytes pos1)
-      (multiple-value-bind (arity pos3) (decode-erlang-integer bytes pos2)
-	(values (make-instance 'erlang-external-fun
-			       :module module
-			       :function function
-			       :arity arity)
-		pos3)))))
+  (multiple-value-bind* (((module pos1) (decode-erlang-atom bytes pos))
+			 ((function pos2) (decode-erlang-atom bytes pos1))
+			 ((arity pos3) (decode-erlang-integer bytes pos2)))
+    (values (make-instance 'erlang-external-fun
+			   :module module
+			   :function function
+			   :arity arity)
+	    pos3)))
 
 
 ;;;;
@@ -984,11 +974,10 @@
 (defun decode-list-contents (bytes length &optional (pos 0))
   (if (= 0 length)
       (decode bytes :start pos)
-      (multiple-value-bind (term new-pos) (decode bytes :start pos)
-	(multiple-value-bind (tail end-pos)
-	    (decode-list-contents bytes (1- length) new-pos)
-	  (values (cons term tail)
-		  end-pos) ))))
+      (multiple-value-bind* (((term new-pos) (decode bytes :start pos))
+			     ((tail end-pos)
+			      (decode-list-contents bytes (1- length) new-pos)))
+	(values (cons term tail) end-pos) )))
 
 
 ;;;;

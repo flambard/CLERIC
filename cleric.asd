@@ -59,6 +59,7 @@
 				   "constants"))
 	       (:file "translation"
 		      :depends-on ("package"
+				   "macros"
 				   "conditions"
 				   "byte-functions"
 				   "generic-functions"

@@ -57,6 +57,7 @@
 			"constants"))
 	       ("translation"
 		(:needs "package"
+			"macros"
 			"conditions"
 			"byte-functions"
 			"generic-functions"
