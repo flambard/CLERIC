@@ -119,7 +119,6 @@
    decode
    binary
    bytes
-   bits-in-last-byte
    size
    string-to-binary
    bytes-to-binary
