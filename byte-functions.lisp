@@ -20,11 +20,11 @@
 
 (defun bytes-to-signed-int32 (bytes &optional (pos 0))
   (let ((int 0))
-    (setf (ldb (byte 7 24) int) (svref bytes (+ 0 pos))) ;; All bits except the sign
-    (setf (ldb (byte 8 16) int) (svref bytes (+ 1 pos)))
-    (setf (ldb (byte 8 8) int) (svref bytes (+ 2 pos)))
-    (setf (ldb (byte 8 0) int) (svref bytes (+ 3 pos)))
-    (if (= 1 (ldb (byte 1 7) (svref bytes (+ 0 pos)))) ;; The sign bit
+    (setf (ldb (byte 7 24) int) (aref bytes (+ 0 pos))) ;; All bits except the sign
+    (setf (ldb (byte 8 16) int) (aref bytes (+ 1 pos)))
+    (setf (ldb (byte 8 8) int) (aref bytes (+ 2 pos)))
+    (setf (ldb (byte 8 0) int) (aref bytes (+ 3 pos)))
+    (if (= 1 (ldb (byte 1 7) (aref bytes (+ 0 pos)))) ;; The sign bit
 	(- (1+ (logxor int #x7FFFFFFF))) ;; Two's complement
 	int)))
 
