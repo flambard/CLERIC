@@ -44,7 +44,7 @@
 
 
 (defun string-to-bytes (string)
-  (map 'simple-array #'char-code string))
+  (map 'simple-vector #'char-code string))
 
 (defun bytes-to-string (bytes &optional length (pos 0))
   (map 'string #'code-char (subseq bytes pos (when length (+ pos length)))))
