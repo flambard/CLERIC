@@ -638,7 +638,7 @@
 	 collect free-var into free-vars
 	 finally (return (progn
 			   (assert (= p (+ size pos)))
-			   (values (make-instance 'erlang-internal-fun
+			   (values (make-instance 'erlang-new-internal-fun
 						  :arity arity
 						  :uniq uniq
 						  :index index
