@@ -77,15 +77,11 @@
   (:documentation "Erlang fun in internal format."))
 
 (defclass erlang-new-internal-fun (erlang-internal-fun)
-  ((new-uniq :initarg :uniq)
+  ((index :initarg :old-index)
+   (uniq :initarg :old-uniq)
+   (new-uniq :initarg :uniq)
    (new-index :initarg :index))
   (:documentation "Erlang fun in new internal format."))
-
-;; (defmethod old-uniq ((fun erlang-new-internal-fun))
-;;   (slot-value fun 'uniq))
-
-;; (defmethod old-index ((fun erlang-new-internal-fun))
-;;   (slot-value fun 'index))
 
 
 (defclass erlang-identifier (erlang-object)
