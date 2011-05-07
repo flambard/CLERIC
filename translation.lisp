@@ -534,7 +534,7 @@
 ;;;;
 ;;;; Erlang function ("Fun")
 ;;;;
-    
+
 ;; FUN_EXT
 ;; +-----+---------+-----+--------+-------+------+-----------+
 ;; |  1  |     4   |     |        |       |      |           |
@@ -627,8 +627,10 @@
 	(index (bytes-to-uint32 (+ 21 pos)))
 	(free-vars-length (bytes-to-uint32 bytes (+ 25 pos))))
     (multiple-value-bind* (((module pos1) (decode-erlang-atom bytes (+ 29 pos)))
-			   ((old-index pos2) (decode-erlang-integer bytes pos1))
-			   ((old-uniq pos3) (decode-erlang-integer bytes pos2))
+			   ((;old-index
+                             pos2) (decode-erlang-integer bytes pos1))
+			   ((;old-uniq
+                             pos3) (decode-erlang-integer bytes pos2))
 			   ((pid pos4) (decode-erlang-pid bytes pos3)))
       (loop
 	 repeat free-vars-length
@@ -643,8 +645,8 @@
 						  :uniq uniq
 						  :index index
 						  :module module
-						  :old-index old-index
-						  :old-uniq old-uniq
+						  ;:old-index old-index
+						  ;:old-uniq old-uniq
 						  :pid pid
 						  :free-vars free-vars)
 				   p)) )))))
