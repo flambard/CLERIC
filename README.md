@@ -14,7 +14,13 @@ Please see the `doc/` directory for further documentation. The latest documentat
 How to install
 --------------
 
-The easiest way to install CLERIC is to use [ASDF-Install](http://common-lisp.net/project/asdf-install/):
+CLERIC is easily installed with [Quicklisp](http://www.quicklisp.org/) or [ASDF-Install](http://common-lisp.net/project/asdf-install/).
+
+Using Quicklisp:
+
+    > (ql:quickload :cleric)
+
+Using ASDF-Install:
 
     > (asdf-install:install :cleric)
 
@@ -31,4 +37,4 @@ To check out the latest code, use git:
 - [CL-MD5](http://www.cliki.net/CL-MD5)
 - [IEEE-Floats](http://common-lisp.net/project/ieee-floats/)
 
-ASDF-Install will download and install these libraries automatically when installing CLERIC.
+Quicklisp and ASDF-Install will download and install these libraries automatically when installing CLERIC.
