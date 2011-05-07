@@ -1,2 +1,4 @@
-*.dfsl
+*.*fsl
+*.*fasl
+
 *.beam
