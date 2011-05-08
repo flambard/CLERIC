@@ -4,96 +4,99 @@
   (:development t)
   (:author "Markus Flambard <mflambard@common-lisp.net>")
   (:home-page "http://common-lisp.net/project/cleric/")
-  (:version 0 0 6)
+  (:version 0 0 8)
   (:license :mit)
   (:documentation "Common Lisp Erlang Interface - An implementation of the Erlang distribution protocol.")
   (:needs :usocket :md5 :ieee-floats)
-  (:components ("package")
-	       ("macros"
-		(:needs "package"))
-	       ("generic-functions"
-		(:needs "package"
-			"constants"))
-	       ("remote-node"
-		(:needs "package"
-			"atom-cache"
-			"special-variables"))
-	       ("conditions"
-		(:needs "package"))
-	       ("constants"
-		(:needs "package"))
-	       ("atom-cache"
-		(:needs "package"))
-	       ("atom-cache-entries"
-		(:needs "package"
-			"atom-cache"
-			"special-variables"))
-	       ("special-variables"
-		(:needs "package"))
-	       ("byte-functions"
-		(:needs "package"))
-	       ("classes"
-		(:needs "package"
-			"generic-functions"
-			"special-variables"))
-	       ("type-erlang-translatable"
-		(:needs "package"
-			"classes"))
-	       ("distribution-header"
-		(:needs "package"
-			"constants"
-			"conditions"
-			"atom-cache"
-			"special-variables"
-			"byte-functions"))
-	       ("ieee-floats" ;; Needs IEEE-Floats library
-		(:needs "package"
-			"byte-functions"))
-	       ("epmd"
-		(:needs "package"
-			"conditions"
-			"remote-node"
-			"byte-functions"
-			"constants"))
-	       ("translation"
-		(:needs "package"
-			"conditions"
-			"byte-functions"
-			"generic-functions"
-			"constants"
-			"special-variables"
-			"classes"
-			"ieee-floats"
-			"md5"
-			"atom-cache"
-			"type-erlang-translatable"))
-	       ("bert"
-		(:needs "package"
-			"macros"
-			"conditions"
-			"generic-functions"
-			"special-variables"
-			"classes"))
-	       ("handshake"
-		(:needs "package"
-			"conditions"
-			"byte-functions"
-			"constants"))
-	       ("md5" ;; Needs MD5 library
-		(:needs "package"))
-	       ("control-message"
-		(:needs "package"
-			"generic-functions"
-			"constants"
-			"classes"))
-	       ("node-protocol"
-		(:needs "package"
-			"macros"
-			"conditions"
-			"distribution-header"
-			"classes"
-			"translation"
-			"byte-functions"
-			"control-message"
-			"remote-node"))
-	       ))
+  (:components
+   ("src" module
+          (:components ("package")
+                       ("macros"
+                        (:needs "package"))
+                       ("generic-functions"
+                        (:needs "package"
+                                "constants"))
+                       ("remote-node"
+                        (:needs "package"
+                                "atom-cache"
+                                "special-variables"))
+                       ("conditions"
+                        (:needs "package"))
+                       ("constants"
+                        (:needs "package"))
+                       ("atom-cache"
+                        (:needs "package"))
+                       ("atom-cache-entries"
+                        (:needs "package"
+                                "atom-cache"
+                                "special-variables"))
+                       ("special-variables"
+                        (:needs "package"))
+                       ("byte-functions"
+                        (:needs "package"))
+                       ("classes"
+                        (:needs "package"
+                                "generic-functions"
+                                "special-variables"))
+                       ("type-erlang-translatable"
+                        (:needs "package"
+                                "classes"))
+                       ("distribution-header"
+                        (:needs "package"
+                                "constants"
+                                "conditions"
+                                "atom-cache"
+                                "special-variables"
+                                "byte-functions"))
+                       ("ieee-floats" ;; Needs IEEE-Floats library
+                        (:needs "package"
+                                "byte-functions"))
+                       ("epmd"
+                        (:needs "package"
+                                "conditions"
+                                "remote-node"
+                                "byte-functions"
+                                "constants"))
+                       ("translation"
+                        (:needs "package"
+                                "macros"
+                                "conditions"
+                                "byte-functions"
+                                "generic-functions"
+                                "constants"
+                                "special-variables"
+                                "classes"
+                                "ieee-floats"
+                                "md5"
+                                "atom-cache"
+                                "type-erlang-translatable"))
+                       ("bert"
+                        (:needs "package"
+                                "macros"
+                                "conditions"
+                                "generic-functions"
+                                "special-variables"
+                                "classes"))
+                       ("handshake"
+                        (:needs "package"
+                                "conditions"
+                                "byte-functions"
+                                "constants"))
+                       ("md5" ;; Needs MD5 library
+                        (:needs "package"))
+                       ("control-message"
+                        (:needs "package"
+                                "generic-functions"
+                                "constants"
+                                "classes"))
+                       ("node-protocol"
+                        (:needs "package"
+                                "macros"
+                                "conditions"
+                                "distribution-header"
+                                "classes"
+                                "translation"
+                                "byte-functions"
+                                "control-message"
+                                "remote-node"))
+                       ))))

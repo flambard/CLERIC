@@ -165,5 +165,6 @@
 
 
 (defun decode (bytes)
-  (translate-complex-terms (cleric:decode bytes :version-tag t)))
+  (multiple-value-bind (term pos) (cleric:decode bytes :version-tag t)
+    (values (translate-complex-terms term) pos)))
 
