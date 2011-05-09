@@ -38,9 +38,7 @@
              (:file "byte-functions"
                     :depends-on ("package"))
              (:file "classes"
-                    :depends-on ("package"
-                                 "generic-functions"
-                                 "special-variables"))
+                    :depends-on ("package"))
              (:file "type-erlang-translatable"
                     :depends-on ("package"
                                  "classes"))
@@ -62,29 +60,29 @@
                                  "constants"))
              (:file "translation"
                     :depends-on ("package"
-                                 "macros"
                                  "conditions"
                                  "byte-functions"
                                  "generic-functions"
                                  "constants"
                                  "special-variables"
                                  "classes"
-                                 "ieee-floats"
-                                 "md5"
                                  "atom-cache"
-                                 "type-erlang-translatable"))
-             (:file "bert"
-                    :depends-on ("package"
-                                 "macros"
-                                 "conditions"
-                                 "generic-functions"
-                                 "special-variables"
-                                 "classes"))
+                                 "erlang-atom"
+                                 "erlang-binary"
+                                 "erlang-float"
+                                 "erlang-fun"
+                                 "erlang-integer"
+                                 "erlang-list"
+                                 "erlang-pid"
+                                 "erlang-port"
+                                 "erlang-reference"
+                                 "erlang-tuple"))
              (:file "handshake"
                     :depends-on ("package"
                                  "conditions"
                                  "byte-functions"
-                                 "constants"))
+                                 "constants"
+                                 "md5"))
              (:file "md5" ;; Needs MD5 library
                     :depends-on ("package"))
              (:file "control-message"
@@ -102,6 +100,85 @@
                                  "byte-functions"
                                  "control-message"
                                  "remote-node"))
+             (:file "erlang-atom"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "special-variables"
+                                 "byte-functions"))
+             (:file "erlang-binary"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "special-variables"
+                                 "classes"
+                                 "byte-functions"))
+             (:file "erlang-float"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "ieee-floats"
+                                 "byte-functions"))
+             (:file "erlang-fun"
+                    :depends-on ("package"
+                                 "macros"
+                                 "constants"
+                                 "conditions"
+                                 "special-variables"
+                                 "classes"
+                                 "byte-functions"))
+             (:file "erlang-integer"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "byte-functions"))
+             (:file "erlang-list"
+                    :depends-on ("package"
+                                 "macros"
+                                 "constants"
+                                 "conditions"
+                                 "special-variables"
+                                 "byte-functions"))
+             (:file "erlang-pid"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "special-variables"
+                                 "classes"
+                                 "byte-functions"))
+             (:file "erlang-port"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "classes"
+                                 "byte-functions"))
+             (:file "erlang-reference"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "classes"
+                                 "byte-functions"))
+             (:file "erlang-tuple"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "classes"
+                                 "byte-functions"))
+             (:file "bert"
+                    :depends-on ("package"
+                                 "macros"
+                                 "generic-functions"
+                                 "classes"
+                                 "erlang-atom"
+                                 "erlang-binary"
+                                 "erlang-float"
+                                 "erlang-fun"
+                                 "erlang-integer"
+                                 "erlang-list"
+                                 "erlang-pid"
+                                 "erlang-port"
+                                 "erlang-reference"
+                                 "erlang-tuple"))
              ))))
 
 (asdf:defsystem :cleric-test
