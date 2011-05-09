@@ -70,7 +70,6 @@
                                  "special-variables"
                                  "classes"
                                  "ieee-floats"
-                                 "md5"
                                  "atom-cache"
                                  "type-erlang-translatable"))
              (:file "bert"
@@ -84,7 +83,8 @@
                     :depends-on ("package"
                                  "conditions"
                                  "byte-functions"
-                                 "constants"))
+                                 "constants"
+                                 "md5"))
              (:file "md5" ;; Needs MD5 library
                     :depends-on ("package"))
              (:file "control-message"
