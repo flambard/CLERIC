@@ -1,6 +1,5 @@
 (in-package :cleric)
 
-
 ;;;;
 ;;;; Encode Erlang term
 ;;;;
@@ -15,15 +14,15 @@
      (encode '|true| :atom-cache-entries atom-cache-entries))
     (t
      (let ((index (when atom-cache-entries
-		    (make-atom-cache-entry x atom-cache-entries))))
+                    (make-atom-cache-entry x atom-cache-entries))))
        (cond
-	 (index ;; Use an atom cache reference
-	  (encode-external-atom-cache-ref index))
-	   ;; Encode the atom as usual
-	 ((> 256 (length (symbol-name x)))
-	  (encode-external-small-atom x))
-	 (t
-	  (encode-external-atom x)) ))) ))
+         (index ;; Use an atom cache reference
+          (encode-external-atom-cache-ref index))
+         ;; Encode the atom as usual
+         ((> 256 (length (symbol-name x)))
+          (encode-external-small-atom x))
+         (t
+          (encode-external-atom x)) ))) ))
 
 (defmethod encode ((x erlang-binary) &key &allow-other-keys)
   (if (= 8 (bits-in-last-byte x))
@@ -40,7 +39,7 @@
 (defmethod encode ((x erlang-internal-fun) &key &allow-other-keys)
   ;; Determine if the Fun is new or old
   (error 'not-implemented-error
-	 :comment "One needs to determine whether the Fun is old or new."))
+         :comment "One needs to determine whether the Fun is old or new."))
 
 (defmethod encode ((x integer) &key &allow-other-keys)
   (typecase x
@@ -60,11 +59,11 @@
 
 (defmethod encode ((x string) &key &allow-other-keys)
   (cond (*lisp-string-is-erlang-binary*
-	 (encode (make-instance 'erlang-binary :bytes (string-to-bytes x))))
-	((> 65536 (length x))
-	 (encode-external-string x))
-	(t
-	 (encode-external-list (map 'list #'char-code x)))))
+         (encode (string-to-binary x)))
+        ((> 65536 (length x))
+         (encode-external-string x))
+        (t
+         (encode-external-list (map 'list #'char-code x)))))
 
 (defmethod encode ((x erlang-pid) &key &allow-other-keys)
   (encode-external-pid x))
@@ -92,9 +91,9 @@
   (when version-tag
     (let ((version (aref bytes start)))
       (unless (= version +protocol-version+)
-	(error 'unexpected-message-tag-error
-	       :received-tag version
-	       :expected-tags (list +protocol-version+))))
+        (error 'unexpected-message-tag-error
+               :received-tag version
+               :expected-tags (list +protocol-version+))))
     (incf start))
   (let ((tag (aref bytes start)))
     (case tag
@@ -148,41 +147,41 @@
        (decode-compressed-erlang-term bytes (1+ start)))
       (otherwise
        (error 'unexpected-message-tag-error
-	      :received-tag tag
-	      :expected-tags (list +new-float-ext+
-				   +bit-binary-ext+
-				   +atom-cache-ref+
-				   +small-integer-ext+
-				   +integer-ext+
-				   +float-ext+
-				   +atom-ext+
-				   +reference-ext+
-				   +port-ext+
-				   +pid-ext+
-				   +small-tuple-ext+
-				   +large-tuple-ext+
-				   +nil-ext+
-				   +string-ext+
-				   +list-ext+
-				   +binary-ext+
-				   +small-big-ext+
-				   +large-big-ext+
-				   +new-fun-ext+
-				   +export-ext+
-				   +new-reference-ext+
-				   +small-atom-ext+
-				   +fun-ext+
-				   +compressed-term+)
-	      )) )))
+              :received-tag tag
+              :expected-tags (list +new-float-ext+
+                                   +bit-binary-ext+
+                                   +atom-cache-ref+
+                                   +small-integer-ext+
+                                   +integer-ext+
+                                   +float-ext+
+                                   +atom-ext+
+                                   +reference-ext+
+                                   +port-ext+
+                                   +pid-ext+
+                                   +small-tuple-ext+
+                                   +large-tuple-ext+
+                                   +nil-ext+
+                                   +string-ext+
+                                   +list-ext+
+                                   +binary-ext+
+                                   +small-big-ext+
+                                   +large-big-ext+
+                                   +new-fun-ext+
+                                   +export-ext+
+                                   +new-reference-ext+
+                                   +small-atom-ext+
+                                   +fun-ext+
+                                   +compressed-term+)
+              )) )))
 
 
 (defun read-erlang-term (stream &optional (use-version-tag nil))
   (when use-version-tag
     (let ((version (read-byte stream)))
       (unless (= version +protocol-version+)
-	(error 'unexpected-message-tag-error
-	       :received-tag version
-	       :expected-tags (list +protocol-version+)))))
+        (error 'unexpected-message-tag-error
+               :received-tag version
+               :expected-tags (list +protocol-version+)))))
   (let ((tag (read-byte stream)))
     (case tag
       (#.+new-float-ext+
@@ -235,44 +234,44 @@
        (read-compressed-erlang-term stream))
       (otherwise
        (error 'unexpected-message-tag-error
-	      :received-tag tag
-	      :expected-tags (list +new-float-ext+
-				   +bit-binary-ext+
-				   +atom-cache-ref+
-				   +small-integer-ext+
-				   +integer-ext+
-				   +float-ext+
-				   +atom-ext+
-				   +reference-ext+
-				   +port-ext+
-				   +pid-ext+
-				   +small-tuple-ext+
-				   +large-tuple-ext+
-				   +nil-ext+
-				   +string-ext+
-				   +list-ext+
-				   +binary-ext+
-				   +small-big-ext+
-				   +large-big-ext+
-				   +new-fun-ext+
-				   +export-ext+
-				   +new-reference-ext+
-				   +small-atom-ext+
-				   +fun-ext+
-				   +compressed-term+)
-	      )) )))
+              :received-tag tag
+              :expected-tags (list +new-float-ext+
+                                   +bit-binary-ext+
+                                   +atom-cache-ref+
+                                   +small-integer-ext+
+                                   +integer-ext+
+                                   +float-ext+
+                                   +atom-ext+
+                                   +reference-ext+
+                                   +port-ext+
+                                   +pid-ext+
+                                   +small-tuple-ext+
+                                   +large-tuple-ext+
+                                   +nil-ext+
+                                   +string-ext+
+                                   +list-ext+
+                                   +binary-ext+
+                                   +small-big-ext+
+                                   +large-big-ext+
+                                   +new-fun-ext+
+                                   +export-ext+
+                                   +new-reference-ext+
+                                   +small-atom-ext+
+                                   +fun-ext+
+                                   +compressed-term+)
+              )) )))
 
 (defun read-compressed-erlang-term (stream)
   (let ((uncompressed-size (read-uint32 stream)))
     (declare (ignore uncompressed-size))
     (error 'not-implemented-error
-	   :comment "Reading compressed Erlang terms is unsupported.")))
+           :comment "Reading compressed Erlang terms is unsupported.")))
 
 (defun decode-compressed-erlang-term (bytes &optional (pos 0))
   (let ((uncompressed-size (bytes-to-uint32 bytes pos)))
     (declare (ignore uncompressed-size))
     (error 'not-implemented-error
-	   :comment "Decoding compressed Erlang terms is unsupported.")))
+           :comment "Decoding compressed Erlang terms is unsupported.")))
 
 
 ;;;;
