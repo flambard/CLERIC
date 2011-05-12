@@ -164,21 +164,6 @@
                                  "conditions"
                                  "classes"
                                  "byte-functions"))
-             (:file "bert"
-                    :depends-on ("package"
-                                 "macros"
-                                 "generic-functions"
-                                 "classes"
-                                 "erlang-atom"
-                                 "erlang-binary"
-                                 "erlang-float"
-                                 "erlang-fun"
-                                 "erlang-integer"
-                                 "erlang-list"
-                                 "erlang-pid"
-                                 "erlang-port"
-                                 "erlang-reference"
-                                 "erlang-tuple"))
              ))))
 
 (asdf:defsystem :cleric-test
@@ -193,3 +178,15 @@
 (defmethod asdf:perform ((op asdf:test-op) (system (eql (asdf:find-system :cleric))))
   (asdf:load-system :cleric-test)
   (asdf:test-system :cleric-test))
+
+(asdf:defsystem :bert
+  :description "BERT serializer."
+  :author "Markus Flambard <mflambard@common-lisp.net>"
+  :version "0.0.8"
+  :license "MIT License"
+  :depends-on (:cleric)
+  :components
+  ((:module :src
+            :components
+            ((:file "bert"))
+            )))
