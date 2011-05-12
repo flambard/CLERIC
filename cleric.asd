@@ -9,7 +9,7 @@
   :author "Markus Flambard <mflambard@common-lisp.net>"
   :version "0.0.8"
   :license "MIT License"
-  :depends-on (:usocket :md5 :ieee-floats)
+  :depends-on (:usocket :md5 :ieee-floats :alexandria)
   :components
   ((:module :src
             :components
@@ -184,7 +184,7 @@
   :author "Markus Flambard <mflambard@common-lisp.net>"
   :version "0.0.8"
   :license "MIT License"
-  :depends-on (:cleric)
+  :depends-on (:cleric :alexandria)
   :components
   ((:module :src
             :components

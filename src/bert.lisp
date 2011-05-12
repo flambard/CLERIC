@@ -56,11 +56,13 @@
 	(tuple '|bert| '|true|)
 	(tuple '|bert| '|false|))) )
 
-(cleric::defconstant-not-eql true (bool t)
-  "BERT boolean true term.")
+(alexandria:define-constant true (bool t)
+  :test #'equalp
+  :documentation "BERT boolean true term.")
 
-(cleric::defconstant-not-eql false (bool nil)
-  "BERT boolean false term.")
+(alexandria:define-constant false (bool nil)
+  :test #'equalp
+  :documentation "BERT boolean false term.")
 
 
 (defclass bert-time ()
