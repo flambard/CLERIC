@@ -19,6 +19,20 @@
 ;;; Encode/Decode
 ;;;
 
+(defmethod encode ((x list) &key atom-cache-entries &allow-other-keys)
+  (if x
+      (encode-external-list x atom-cache-entries)
+      (encode-external-nil)))
+
+(defmethod encode ((x string) &key &allow-other-keys)
+  (cond (*lisp-string-is-erlang-binary*
+         (encode (string-to-binary x)))
+        ((> 65536 (length x))
+         (encode-external-string x))
+        (t
+         (encode-external-list (map 'list #'char-code x)))))
+
+
 ;; NIL_EXT
 ;; +-----+
 ;; |  1  |

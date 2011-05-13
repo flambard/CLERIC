@@ -57,6 +57,12 @@
 ;;; Encode/Decode
 ;;;
 
+(defmethod encode ((x erlang-binary) &key &allow-other-keys)
+  (if (= 8 (bits-in-last-byte x))
+      (encode-external-binary x)
+      (encode-external-bit-binary x)))
+
+
 ;; BINARY_EXT
 ;; +-----+-----+------+
 ;; |  1  |  4  |  Len |

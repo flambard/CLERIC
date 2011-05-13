@@ -30,6 +30,12 @@
 ;;; Encode/Decode
 ;;;
 
+(defmethod encode ((x erlang-reference) &key &allow-other-keys)
+  (if (= 4 (length (slot-value x 'id)))
+      (encode-external-reference x) ;; Perhaps always use new reference?
+      (encode-external-new-reference x)))
+
+
 ;; REFERENCE_EXT
 ;; +-----+------+----+----------+
 ;; |  1  |   N  |  4 |     1    |

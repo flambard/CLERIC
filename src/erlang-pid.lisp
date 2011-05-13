@@ -44,6 +44,9 @@
 ;;; Encode/Decode
 ;;;
 
+(defmethod encode ((x erlang-pid) &key &allow-other-keys)
+  (encode-external-pid x))
+
 (defun read-erlang-pid (stream) ;; OBSOLETE?
   (let ((tag (read-byte stream)))
     (case tag

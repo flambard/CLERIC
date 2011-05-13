@@ -59,6 +59,16 @@
 ;;; Encode/Decode
 ;;;
 
+
+(defmethod encode ((x erlang-external-fun) &key &allow-other-keys)
+  (encode-external-export x))
+
+(defmethod encode ((x erlang-internal-fun) &key &allow-other-keys)
+  ;; Determine if the Fun is new or old
+  (error 'not-implemented-error
+         :comment "One needs to determine whether the Fun is old or new."))
+
+
 ;; FUN_EXT
 ;; +-----+---------+-----+--------+-------+------+-----------+
 ;; |  1  |     4   |     |        |       |      |           |

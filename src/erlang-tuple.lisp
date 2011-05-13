@@ -44,6 +44,11 @@
 ;;; Encode/Decode
 ;;;
 
+(defmethod encode ((x erlang-tuple) &key atom-cache-entries &allow-other-keys)
+  (if (> 256 (length (elements x)))
+      (encode-external-small-tuple x atom-cache-entries)
+      (encode-external-large-tuple x atom-cache-entries)))
+
 (defun read-erlang-tuple (stream &optional use-version-tag) ;; OBSOLETE?
   (when use-version-tag
     (let ((version (read-byte stream)))

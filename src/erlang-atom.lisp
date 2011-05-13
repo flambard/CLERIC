@@ -16,6 +16,26 @@
 ;;; Encode/Decode
 ;;;
 
+(defmethod encode ((x symbol) &key atom-cache-entries &allow-other-keys)
+  (cond
+    ((and (null x) *lisp-nil-is-erlang-empty-list*)
+     (encode-external-nil))
+    ((and (null x) *lisp-nil-symbol-is-erlang-false*)
+     (encode '|false| :atom-cache-entries atom-cache-entries))
+    ((and (eq T x) *lisp-t-symbol-is-erlang-true*)
+     (encode '|true| :atom-cache-entries atom-cache-entries))
+    (t
+     (let ((index (when atom-cache-entries
+                    (make-atom-cache-entry x atom-cache-entries))))
+       (cond
+         (index ;; Use an atom cache reference
+          (encode-external-atom-cache-ref index))
+         ;; Encode the atom as usual
+         ((> 256 (length (symbol-name x)))
+          (encode-external-small-atom x))
+         (t
+          (encode-external-atom x)) ))) ))
+
 (defun read-erlang-atom (stream) ;; OBSOLETE?
   (let* ((tag (read-byte stream))
          (symbol (case tag
