@@ -58,7 +58,7 @@
                                  "remote-node"
                                  "byte-functions"
                                  "constants"))
-             (:file "translation"
+             (:file "decode"
                     :depends-on ("package"
                                  "conditions"
                                  "byte-functions"
@@ -89,14 +89,14 @@
                     :depends-on ("package"
                                  "generic-functions"
                                  "constants"
-                                 "classes"))
+                                 "classes"
+                                 "decode"))
              (:file "node-protocol"
                     :depends-on ("package"
                                  "macros"
                                  "conditions"
                                  "distribution-header"
                                  "classes"
-                                 "translation"
                                  "byte-functions"
                                  "control-message"
                                  "remote-node"))
