@@ -37,7 +37,8 @@
   (length (elements tuple)))
 
 (defmethod match-p ((a erlang-tuple) (b erlang-tuple))
-  (every #'match-p (elements a) (elements b)))
+  (and (= (arity a) (arity b))
+       (every #'match-p (elements a) (elements b))))
 
 
 ;;;

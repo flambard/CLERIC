@@ -9,7 +9,8 @@
 ;;;
 
 (defmethod match-p ((a list) (b list))
-  (every #'match-p a b))
+  (and (alexandria:length= a b)
+       (every #'match-p a b)))
 
 
 ;;;

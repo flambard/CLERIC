@@ -50,7 +50,10 @@
   (length (bytes x)))
 
 (defmethod match-p ((a erlang-binary) (b erlang-binary))
-  (every #'= (bytes a) (bytes b)))
+  (let ((a-bytes (bytes a))
+        (b-bytes (bytes b)))
+    (and (alexandria:length= a-bytes b-bytes)
+         (every #'= (bytes a) (bytes b)))))
 
 
 ;;;
