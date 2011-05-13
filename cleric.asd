@@ -158,6 +158,12 @@
                                  "conditions"
                                  "classes"
                                  "byte-functions"))
+             (:file "erlang-string"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "special-variables"
+                                 "byte-functions"))
              (:file "erlang-tuple"
                     :depends-on ("package"
                                  "constants"
