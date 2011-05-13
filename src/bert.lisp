@@ -50,19 +50,17 @@
 (defgeneric encode (object &key berp-header)
   (:documentation "Encodes the BERT-translatable object to a vector of bytes."))
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun bool (value)
-    (if value
-	(tuple '|bert| '|true|)
-	(tuple '|bert| '|false|))) )
 
-(alexandria:define-constant true (bool t)
-  :test #'equalp
+(alexandria:define-constant true (tuple '|bert| '|true|)
+  :test #'match-p
   :documentation "BERT boolean true term.")
 
-(alexandria:define-constant false (bool nil)
-  :test #'equalp
+(alexandria:define-constant false (tuple '|bert| '|false|)
+  :test #'match-p
   :documentation "BERT boolean false term.")
+
+(defun bool (value)
+  (if value true false))
 
 
 (defclass bert-time ()
