@@ -5,6 +5,14 @@
 ;;;;
 
 ;;;
+;;; Methods
+;;;
+
+(defmethod match-p ((a float) (b float))
+  (= a b))
+
+
+;;;
 ;;; Encode/Decode
 ;;;
 

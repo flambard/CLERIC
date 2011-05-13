@@ -5,6 +5,17 @@
 ;;;;
 
 ;;;
+;;; Methods
+;;;
+
+(defmethod match-p ((a list) (b list))
+  (every #'match-p a b))
+
+(defmethod match-p ((a string) (b string))
+  (string= a b))
+
+
+;;;
 ;;; Encode/Decode
 ;;;
 

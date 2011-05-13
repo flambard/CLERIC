@@ -49,6 +49,9 @@
   "The byte-size of Erlang binary X."
   (length (bytes x)))
 
+(defmethod match-p ((a erlang-binary) (b erlang-binary))
+  (every #'= (bytes a) (bytes b)))
+
 
 ;;;
 ;;; Encode/Decode

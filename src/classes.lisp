@@ -26,3 +26,8 @@
 (defmethod make-instance :around ((class (eql 'erlang-identifier)) &rest initargs &key &allow-other-keys)
   (declare (ignore initargs))
   (error "Not possible to make an instance of class ~s" class))
+
+(defmethod match-p ((a erlang-identifier) (b erlang-identifier))
+  (and (eq (node a) (node b))
+       (every #'= (slot-value a 'id) (slot-value b 'id))
+       (= (slot-value a 'creation) (slot-value b 'creation))))

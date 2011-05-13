@@ -30,6 +30,7 @@
    ;; Class methods and functions
    encode
    decode
+   match-p
    bytes
    bits-in-last-byte
    module

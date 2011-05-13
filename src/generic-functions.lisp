@@ -24,6 +24,17 @@
 
 
 ;;;;
+;;;; MATCH-P - Predicate for comparing Erlang objects
+;;;;
+
+(defgeneric match-p (object-a object-b)
+  (:documentation "Predicate for testing if two Erlang objects match."))
+
+(defmethod match-p (a b)
+  nil)
+
+
+;;;;
 ;;;; ARITY
 ;;;;
 

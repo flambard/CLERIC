@@ -34,6 +34,26 @@
     (with-slots (module arity function) object
       (format stream "~a:~a/~a" module function arity))))
 
+(defmethod match-p ((a erlang-fun) (b erlang-fun))
+  (and (= (arity a) (arity b))
+       (eq (module a) (module b))))
+
+(defmethod match-p ((a erlang-external-fun) (b erlang-external-fun))
+  (and (call-next-method) ;; Correct?
+       (eq (slot-value a 'function) (slot-value b 'function))))
+
+(defmethod match-p ((a erlang-internal-fun) (b erlang-internal-fun))
+  (and (call-next-method) ;; Correct?
+       (match-p (slot-value a 'pid) (slot-value b 'pid))
+       (= (slot-value a 'index) (slot-value b 'index))
+       (= (slot-value a 'uniq) (slot-value b 'uniq))
+       (match-p (free-vars a) (free-vars b))))
+
+(defmethod match-p ((a erlang-new-internal-fun) (b erlang-new-internal-fun))
+  (and (call-next-method) ;; Correct?
+       (every #'= (slot-value a 'new-uniq) (slot-value b 'new-uniq))
+       (= (slot-value a 'new-index) (slot-value b 'new-index))))
+
 
 ;;;
 ;;; Encode/Decode

@@ -36,6 +36,9 @@
 (defun erlang-tuple-arity (tuple)
   (length (elements tuple)))
 
+(defmethod match-p ((a erlang-tuple) (b erlang-tuple))
+  (every #'match-p (elements a) (elements b)))
+
 
 ;;;
 ;;; Encode/Decode

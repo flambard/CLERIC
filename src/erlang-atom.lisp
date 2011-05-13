@@ -5,6 +5,14 @@
 ;;;;
 
 ;;;
+;;; Methods
+;;;
+
+(defmethod match-p ((a symbol) (b symbol))
+  (eql a b)) ;; What about symbols in different packages?
+
+
+;;;
 ;;; Encode/Decode
 ;;;
 
