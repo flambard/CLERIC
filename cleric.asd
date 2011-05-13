@@ -178,15 +178,3 @@
 (defmethod asdf:perform ((op asdf:test-op) (system (eql (asdf:find-system :cleric))))
   (asdf:load-system :cleric-test)
   (asdf:test-system :cleric-test))
-
-(asdf:defsystem :bert
-  :description "BERT serializer."
-  :author "Markus Flambard <mflambard@common-lisp.net>"
-  :version "0.0.8"
-  :license "MIT License"
-  :depends-on (:cleric :alexandria)
-  :components
-  ((:module :src
-            :components
-            ((:file "bert"))
-            )))
