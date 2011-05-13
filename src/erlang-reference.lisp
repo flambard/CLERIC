@@ -31,7 +31,7 @@
 ;;;
 
 (defmethod encode ((x erlang-reference) &key &allow-other-keys)
-  (if (= 4 (length (slot-value x 'id)))
+  (if (alexandria:length= 4 (slot-value x 'id))
       (encode-external-reference x) ;; Perhaps always use new reference?
       (encode-external-new-reference x)))
 
