@@ -10,12 +10,9 @@
   (:documentation "Erlang fun in external format (module:function/arity)."))
 
 ;;; fun F/A or fun (...) -> ...
-(defclass erlang-internal-fun (erlang-fun)
-  ((pid :initarg :pid)
-   (index :initarg :index)
-   (uniq :initarg :uniq)
-   (free-vars :reader free-vars :initarg :free-vars))
-  (:documentation "Erlang fun in internal format."))
+(defclass erlang-old-internal-fun (erlang-internal-fun)
+  ()
+  (:documentation "Erlang fun in old internal-format"))
 
 (defclass erlang-new-internal-fun (erlang-internal-fun)
   ((index :initarg :old-index)
@@ -63,10 +60,13 @@
 (defmethod encode ((x erlang-external-fun) &key &allow-other-keys)
   (encode-external-export x))
 
-(defmethod encode ((x erlang-internal-fun) &key &allow-other-keys)
-  ;; Determine if the Fun is new or old
+(defmethod encode ((x erlang-old-internal-fun) &key &allow-other-keys)
   (error 'not-implemented-error
-         :comment "One needs to determine whether the Fun is old or new."))
+         :comment "Just haven't implemented it yet."))
+
+(defmethod encode ((x erlang-new-internal-fun) &key &allow-other-keys)
+  (error 'not-implemented-error
+         :comment "Just haven't implemented it yet."))
 
 
 ;; FUN_EXT
@@ -91,7 +91,7 @@
 (defun read-external-fun (stream) ;; OBSOLETE?
   ;; Assume tag +fun-ext+ is read
   (let ((free-vars-length (read-uint32 stream)))
-    (make-instance 'erlang-internal-fun
+    (make-instance 'erlang-old-internal-fun
                    :pid (read-erlang-pid stream)
                    :module (read-erlang-atom stream)
                    :index (read-erlang-integer stream)
@@ -112,7 +112,7 @@
                              (decode bytes :start pos4))
          do (setf pos4 p)
          collect free-var into free-vars
-         finally (return (values (make-instance 'erlang-internal-fun
+         finally (return (values (make-instance 'erlang-old-internal-fun
                                                 :pid pid
                                                 :module module
                                                 :index index

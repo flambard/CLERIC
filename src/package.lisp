@@ -11,7 +11,7 @@
    ;; Classes
    erlang-binary
    erlang-external-fun
-   erlang-internal-fun
+   erlang-old-internal-fun
    erlang-new-internal-fun
    erlang-pid
    erlang-port
