@@ -40,6 +40,11 @@
       (try-connect-again ()
         (remote-node-connect remote-node cookie))) ))
 
+(defun listen-for-remote-node ()
+  (usocket:socket-listen usocket:*wildcard-host*
+                         usocket:*auto-port*
+                         :element-type '(unsigned-byte 8)))
+
 (defun remote-node-accept-connect (listening-socket)
   (node-accept-connect listening-socket))
 
