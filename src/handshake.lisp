@@ -147,10 +147,9 @@
        (error "This should not happen (as usual).")) ) ))
 
 
-(defun node-accept-connect (listening-socket)
-  (let ((active-socket (usocket:socket-accept listening-socket)))
-    ;; TODO: Perform handshake.
-    ))
+(defun perform-server-handshake (stream cookie)
+  (error 'not-implemented-error
+         :comment "Sorry, server side handshake is not implemented yet."))
 
 
 (defun equal-digests (d1 d2)
