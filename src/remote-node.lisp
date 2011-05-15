@@ -21,6 +21,9 @@
     (with-slots (port node-type name host) object
       (format stream "(~a) ~a@~a [~a]" node-type name host port))))
 
+(defmethod socket-stream ((node remote-node))
+  (usocket:socket-stream (remote-node-socket node)))
+
 (defun remote-node-connect (remote-node cookie)
   "Connect and perform handshake with a remote node."
   (let ((socket

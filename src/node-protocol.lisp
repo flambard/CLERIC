@@ -4,7 +4,7 @@
 (defun reg-send (from-pid to-name node message) ;; Merge with SEND in the future
   "Send a message to a registered Pid."
   (let* ((remote-node (find-connected-remote-node node))
-	 (stream (usocket:socket-stream (remote-node-socket remote-node))))
+         (stream (socket-stream remote-node)))
     (write-sequence (make-node-message (make-instance 'reg-send
 						      :from-pid from-pid
 						      :to-name (make-symbol to-name)
@@ -17,7 +17,7 @@
 (defun send (to-pid message)
   "Send a message to Pid."
   (let* ((remote-node (find-connected-remote-node (node to-pid)))
-	 (stream (usocket:socket-stream (remote-node-socket remote-node))))
+         (stream (socket-stream remote-node)))
     (write-sequence (make-node-message (make-instance 'send
 						      :to-pid to-pid
 						      :message message)
@@ -29,7 +29,7 @@
 (defun link (from-pid to-pid)
   "Create a link between two Pids."
   (let* ((remote-node (find-connected-remote-node (node to-pid)))
-	 (stream (usocket:socket-stream (remote-node-socket remote-node))))
+         (stream (socket-stream remote-node)))
     (write-sequence (make-node-message (make-instance 'link
 						      :from-pid from-pid
 						      :to-pid to-pid)
@@ -41,7 +41,7 @@
 (defun unlink (from-pid to-pid)
   "Remove a link between two Pids."
   (let* ((remote-node (find-connected-remote-node (node to-pid)))
-	 (stream (usocket:socket-stream (remote-node-socket remote-node))))
+         (stream (socket-stream remote-node)))
     (write-sequence (make-node-message (make-instance 'unlink
 						      :from-pid from-pid
 						      :to-pid to-pid)
