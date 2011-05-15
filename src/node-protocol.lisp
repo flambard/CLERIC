@@ -99,7 +99,8 @@
        unless (eq message 'tick) collect message)))
 
 
-(defconstant-not-eql +tock+ #(0 0 0 0))
+(alexandria:define-constant +tock+ #(0 0 0 0)
+  :test #'equalp)
 
 (defun read-node-message (stream)
   (let ((length (handler-case (read-uint32 stream)

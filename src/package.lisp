@@ -11,7 +11,7 @@
    ;; Classes
    erlang-binary
    erlang-external-fun
-   erlang-internal-fun
+   erlang-old-internal-fun
    erlang-new-internal-fun
    erlang-pid
    erlang-port
@@ -30,6 +30,7 @@
    ;; Class methods and functions
    encode
    decode
+   match-p
    bytes
    bits-in-last-byte
    module
@@ -92,51 +93,11 @@
 
    ;; EPMD Functions
    epmd-lookup-node
-   
+
    ;; Connection functions
    reg-send
    send
    link
    unlink
    receive-node-messages
-
-   ))
-
-
-(defpackage :bert
-  (:documentation "BERT (Binary ERlang Term).")
-  (:use :cl :cleric)
-  (:shadow encode decode)
-  (:export
-
-   ;; Classes
-   erlang-binary
-   erlang-tuple
-   bert-time
-   bert-regex
-
-   ;; Functions and methods
-   encode
-   decode
-   binary
-   bytes
-   size
-   string-to-binary
-   bytes-to-binary
-   binary-to-string
-   tuple
-   elements
-   arity
-   bool
-   
-   ;; Special variables
-   *lisp-string-is-erlang-binary*
-   true
-   false
-
-   ;; Conditions
-   untranslatable-lisp-object-error
-   unexpected-message-length-error
-   unexpected-message-tag-error
-   
    ))

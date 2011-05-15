@@ -3,6 +3,44 @@
 ;; See http://bert-rpc.org/
 ;;
 
+(defpackage :bert
+  (:documentation "BERT (Binary ERlang Term).")
+  (:use :cl :cleric)
+  (:shadow encode decode)
+  (:export
+
+   ;; Classes
+   erlang-binary
+   erlang-tuple
+   bert-time
+   bert-regex
+
+   ;; Functions and methods
+   encode
+   decode
+   binary
+   bytes
+   size
+   string-to-binary
+   bytes-to-binary
+   binary-to-string
+   tuple
+   elements
+   arity
+   bool
+
+   ;; Special variables
+   *lisp-string-is-erlang-binary*
+   true
+   false
+
+   ;; Conditions
+   untranslatable-lisp-object-error
+   unexpected-message-length-error
+   unexpected-message-tag-error
+   ))
+
+
 (in-package :bert)
 
 
@@ -12,17 +50,17 @@
 (defgeneric encode (object &key berp-header)
   (:documentation "Encodes the BERT-translatable object to a vector of bytes."))
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun bool (value)
-    (if value
-	(tuple '|bert| '|true|)
-	(tuple '|bert| '|false|))) )
 
-(cleric::defconstant-not-eql true (bool t)
-  "BERT boolean true term.")
+(alexandria:define-constant true (tuple '|bert| '|true|)
+  :test #'match-p
+  :documentation "BERT boolean true term.")
 
-(cleric::defconstant-not-eql false (bool nil)
-  "BERT boolean false term.")
+(alexandria:define-constant false (tuple '|bert| '|false|)
+  :test #'match-p
+  :documentation "BERT boolean false term.")
+
+(defun bool (value)
+  (if value true false))
 
 
 (defclass bert-time ()

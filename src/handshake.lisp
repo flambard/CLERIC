@@ -165,4 +165,5 @@
 
 
 (defun equal-digests (d1 d2)
-  (every #'= d1 d2))
+  (and (alexandria:length= d1 d2)
+       (every #'= d1 d2)))
