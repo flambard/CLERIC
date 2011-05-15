@@ -109,53 +109,42 @@
     (end-of-file () (error 'connection-closed-error))))
 
 
-(defun node-connect (host port cookie)
-  (let* ((socket (handler-case (usocket:socket-connect
-				host port :element-type '(unsigned-byte 8))
-		   (usocket:connection-refused-error ()
-		     (error 'node-unreachable-error))))
-	 (stream (usocket:socket-stream socket)))
-    (write-sequence (make-name-message +highest-version-supported+ *this-node*)
-		    stream)
-    (finish-output stream)
-    (let ((status (read-status-message stream)))
-      (cond
-	((or (string= status "ok")
-	     (string= status "ok_simultaneous"))
-	 (multiple-value-bind (version flags challenge full-node-name)
-	     (read-challenge-message stream)
-	   ;; (declare (ignore version flags full-node-name))
-	   (format t "FULL-NODE-NAME: ~a, VERSION: ~a, FLAGS: ~b~&"
-		   full-node-name version flags)
-	   (let ((new-challenge (generate-challenge))
-		 (digest (calculate-digest challenge cookie)))
-	     (write-sequence (make-challenge-reply-message new-challenge digest)
-			     stream)
-	     (finish-output stream)
-	     (unless (equal-digests (calculate-digest new-challenge cookie)
-				    (read-challenge-ack-message stream))
-	       (usocket:socket-close socket)
-	       ;; Error and close socket!
-	       (error 'handshake-failed-error
-		      :reason "Received incorrect digest"))
-	     socket))) ;; Connect successful
-	((string= status "nok")
-	 (usocket:socket-close socket)
-	 (signal 'try-again
-		 :reason "Busy with other ongoing handshake"))
-	((string= status "not_allowed")
-	 (usocket:socket-close socket)
-	 (error 'handshake-failed-error
-		:reason "Connection not allowed"))
-	((string= status "alive")
-	 ;; Already connected! (confused)
-	 ;; What to do?
-	 ;; Close socket?
-	 (error 'not-implemented-error
-		:comment "Already connected. Not sure what to do in this situation."))
-	(t
-	 (usocket:socket-close socket)
-	 (error "This should not happen (as usual).")) ) )))
+(defun perform-client-handshake (stream cookie)
+  (write-sequence (make-name-message +highest-version-supported+ *this-node*)
+                  stream)
+  (finish-output stream)
+  (let ((status (read-status-message stream)))
+    (cond
+      ((or (string= status "ok")
+           (string= status "ok_simultaneous"))
+       (multiple-value-bind (version flags challenge full-node-name)
+           (read-challenge-message stream)
+         ;; (declare (ignore version flags full-node-name))
+         (format t "FULL-NODE-NAME: ~a, VERSION: ~a, FLAGS: ~b~&"
+                 full-node-name version flags)
+         (let ((new-challenge (generate-challenge))
+               (digest (calculate-digest challenge cookie)))
+           (write-sequence (make-challenge-reply-message new-challenge digest)
+                           stream)
+           (finish-output stream)
+           (unless (equal-digests (calculate-digest new-challenge cookie)
+                                  (read-challenge-ack-message stream))
+             (error 'handshake-failed-error
+                    :reason "Received incorrect digest"))
+           t))) ;; Connect successful
+      ((string= status "nok")
+       (signal 'try-again
+               :reason "Busy with other ongoing handshake"))
+      ((string= status "not_allowed")
+       (error 'handshake-failed-error
+              :reason "Connection not allowed"))
+      ((string= status "alive")
+       ;; Already connected! (confused)
+       ;; What to do?
+       (error 'not-implemented-error
+              :comment "Already connected. Not sure what to do in this situation."))
+      (t
+       (error "This should not happen (as usual).")) ) ))
 
 
 (defun node-accept-connect (listening-socket)

@@ -75,6 +75,9 @@
    unexpected-message-length-error
    unexpected-message-tag-error
 
+   ;; Condition restarts
+   try-connect-again-restart
+
    ;; Constants
    +lowest-version-supported+
    +highest-version-supported+

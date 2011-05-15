@@ -8,6 +8,10 @@
   ((reason :reader reason :initarg :reason))
   (:documentation "This condition is signaled when trying to connect to a remote node that is busy."))
 
+(defun try-connect-again-restart (condition)
+  (declare (ignore condition))
+  (invoke-restart 'try-connect-again))
+
 (define-condition handshake-failed-error (error)
   ((reason :reader reason :initarg :reason))
   (:documentation "This error is signaled if the handshake during connection to a remote node fails."))

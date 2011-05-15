@@ -23,12 +23,22 @@
 
 (defun remote-node-connect (remote-node cookie)
   "Connect and perform handshake with a remote node."
-  (let ((socket (node-connect (remote-node-host remote-node)
-			      (remote-node-port remote-node)
-			      cookie)))
-    (setf (slot-value remote-node 'socket) socket)
-    (push remote-node *remote-nodes*)
-    t))
+  (let ((socket
+         (handler-case
+             (usocket:socket-connect host port :element-type '(unsigned-byte 8))
+           (usocket:connection-refused-error ()
+             (error 'node-unreachable-error)) )))
+    (restart-case
+        (handler-bind ((condition #'(lambda (c)
+                                      (declare (ignore c))
+                                      (usocket:socket-close socket) )))
+            (when (perform-client-handshake (usocket:socket-stream socket)
+                                            cookie)
+              (setf (slot-value remote-node 'socket) socket)
+              (push remote-node *remote-nodes*)
+              t))
+      (try-connect-again ()
+        (remote-node-connect remote-node cookie))) ))
 
 (defun remote-node-accept-connect (listening-socket)
   (node-accept-connect listening-socket))
