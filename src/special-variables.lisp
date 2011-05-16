@@ -2,6 +2,9 @@
 
 (in-package :cleric)
 
+(defvar *listening-socket* nil
+  "The listening socket. NIL if not listening.")
+
 (defvar *this-node* "lispnode@localhost"
   "The name and host for this node.")
 

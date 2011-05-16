@@ -48,6 +48,8 @@
    remote-node-host
    remote-node-connect
    remote-node-accept-connect
+   start-listening-for-remote-nodes
+   stop-listening-for-remote-nodes
    encode-control-message
    decode-control-message
    node
@@ -62,6 +64,8 @@
 
    ;; Conditions
    not-implemented-error
+   already-listening-on-socket
+   not-listening-on-socket
    try-again
    handshake-failed-error
    connection-closed-error
@@ -77,6 +81,7 @@
 
    ;; Condition restarts
    try-connect-again-restart
+   start-listening-on-socket-restart
 
    ;; Constants
    +lowest-version-supported+

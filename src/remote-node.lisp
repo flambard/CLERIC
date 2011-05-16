@@ -32,24 +32,54 @@
            (usocket:connection-refused-error ()
              (error 'node-unreachable-error)) )))
     (restart-case
-        (handler-bind ((condition #'(lambda (c)
-                                      (declare (ignore c))
-                                      (usocket:socket-close socket) )))
-            (when (perform-client-handshake (usocket:socket-stream socket)
-                                            cookie)
-              (setf (slot-value remote-node 'socket) socket)
-              (push remote-node *remote-nodes*)
-              t))
+        (handler-bind ((condition #'(lambda (condition)
+                                      (declare (ignore condition))
+                                      (usocket:socket-close socket))))
+          (when (perform-client-handshake (usocket:socket-stream socket)
+                                          cookie)
+            (register-connected-remote-node remote-node socket)))
       (try-connect-again ()
         (remote-node-connect remote-node cookie))) ))
 
-(defun listen-for-remote-node ()
-  (usocket:socket-listen usocket:*wildcard-host*
-                         usocket:*auto-port*
-                         :element-type '(unsigned-byte 8)))
+(defun start-listening-for-remote-nodes ()
+  (if *listening-socket*
+      (error 'already-listening-on-socket) ;; How can we get the port?
+      (progn
+        (setf *listening-socket*
+              (usocket:socket-listen usocket:*wildcard-host*
+                                     usocket:*auto-port*
+                                     :element-type '(unsigned-byte 8)))
+        t))) ;; Return port?
 
-(defun remote-node-accept-connect (listening-socket)
-  (node-accept-connect listening-socket))
+(defun stop-listening-for-remote-nodes ()
+  (when *listening-socket*
+    (usocket:socket-close *listening-socket*)
+    (setf *listening-socket* nil)
+    t))
+
+(defun remote-node-accept-connect (cookie)
+  (restart-case
+      (if *listening-socket*
+          (let ((socket (usocket:socket-accept *listening-socket*)))
+            (handler-case
+                (let ((remote-node (perform-server-handshake
+                                    (usocket:socket-stream socket)
+                                    cookie)))
+                  (when remote-node
+                    (register-connected-remote-node remote-node socket) ))
+              (condition ()
+                (usocket:socket-close socket)
+                nil) ))
+          (error 'not-listening-on-socket) )
+    (start-listening-on-socket ()
+      :report "Start listening on a socket."
+      (start-listening-for-remote-nodes)
+      (remote-node-accept-connect cookie))))
+
+(defun register-connected-remote-node (remote-node socket)
+  (setf (slot-value remote-node 'socket) socket)
+  (push remote-node *remote-nodes*)
+  t)
 
 (defun find-connected-remote-node (node-name) ;; Make NODE-NAME a node designator
   (find node-name *remote-nodes* :key #'remote-node-name :test #'string=)) ;; Perhaps also check full name?
