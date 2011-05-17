@@ -18,6 +18,18 @@
   (error "Not possible to make an instance of class ~s" class))
 
 
+(defclass erlang-internal-fun (erlang-fun)
+  ((pid :initarg :pid)
+   (index :initarg :index)
+   (uniq :initarg :uniq)
+   (free-vars :reader free-vars :initarg :free-vars))
+  (:documentation "Erlang fun in internal format."))
+
+(defmethod make-instance :around ((class (eql 'erlang-internal-fun)) &rest initargs &key &allow-other-keys)
+  (declare (ignore initargs))
+  (error "Not possible to make an instance of class ~s" class))
+
+
 (defclass erlang-identifier (erlang-object)
   ((node :reader node :initarg :node)
    (id :initarg :id)
@@ -26,3 +38,8 @@
 (defmethod make-instance :around ((class (eql 'erlang-identifier)) &rest initargs &key &allow-other-keys)
   (declare (ignore initargs))
   (error "Not possible to make an instance of class ~s" class))
+
+(defmethod match-p ((a erlang-identifier) (b erlang-identifier))
+  (and (eq (node a) (node b))
+       (every #'= (slot-value a 'id) (slot-value b 'id))
+       (= (slot-value a 'creation) (slot-value b 'creation))))

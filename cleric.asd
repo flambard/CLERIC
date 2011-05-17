@@ -9,7 +9,7 @@
   :author "Markus Flambard <mflambard@common-lisp.net>"
   :version "0.0.8"
   :license "MIT License"
-  :depends-on (:usocket :md5 :ieee-floats)
+  :depends-on (:usocket :md5 :ieee-floats :alexandria)
   :components
   ((:module :src
             :components
@@ -58,7 +58,7 @@
                                  "remote-node"
                                  "byte-functions"
                                  "constants"))
-             (:file "translation"
+             (:file "decode"
                     :depends-on ("package"
                                  "conditions"
                                  "byte-functions"
@@ -89,14 +89,14 @@
                     :depends-on ("package"
                                  "generic-functions"
                                  "constants"
-                                 "classes"))
+                                 "classes"
+                                 "decode"))
              (:file "node-protocol"
                     :depends-on ("package"
                                  "macros"
                                  "conditions"
                                  "distribution-header"
                                  "classes"
-                                 "translation"
                                  "byte-functions"
                                  "control-message"
                                  "remote-node"))
@@ -158,6 +158,12 @@
                                  "conditions"
                                  "classes"
                                  "byte-functions"))
+             (:file "erlang-string"
+                    :depends-on ("package"
+                                 "constants"
+                                 "conditions"
+                                 "special-variables"
+                                 "byte-functions"))
              (:file "erlang-tuple"
                     :depends-on ("package"
                                  "constants"
@@ -178,15 +184,3 @@
 (defmethod asdf:perform ((op asdf:test-op) (system (eql (asdf:find-system :cleric))))
   (asdf:load-system :cleric-test)
   (asdf:test-system :cleric-test))
-
-(asdf:defsystem :bert
-  :description "BERT serializer."
-  :author "Markus Flambard <mflambard@common-lisp.net>"
-  :version "0.0.8"
-  :license "MIT License"
-  :depends-on (:cleric)
-  :components
-  ((:module :src
-            :components
-            ((:file "bert"))
-            )))

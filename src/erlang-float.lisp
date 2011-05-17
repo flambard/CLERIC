@@ -5,8 +5,21 @@
 ;;;;
 
 ;;;
+;;; Methods
+;;;
+
+(defmethod match-p ((a float) (b float))
+  (= a b))
+
+
+;;;
 ;;; Encode/Decode
 ;;;
+
+(defmethod encode ((x float) &key &allow-other-keys)
+  ;; Should the old FLOAT_EXT ever be used?
+  (encode-external-new-float (coerce x 'double-float)))
+
 
 ;; NEW_FLOAT_EXT
 ;; +----+------------+

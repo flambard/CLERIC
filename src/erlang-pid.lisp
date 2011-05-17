@@ -35,10 +35,17 @@
 
 ;; Not mentioned in the documentation: Serial only uses the least significant 13 bits!
 
+(defmethod match-p ((a erlang-pid) (b erlang-pid))
+  (and (call-next-method)
+       (every #'= (slot-value a 'serial) (slot-value b 'serial))))
+
 
 ;;;
 ;;; Encode/Decode
 ;;;
+
+(defmethod encode ((x erlang-pid) &key &allow-other-keys)
+  (encode-external-pid x))
 
 (defun read-erlang-pid (stream) ;; OBSOLETE?
   (let ((tag (read-byte stream)))

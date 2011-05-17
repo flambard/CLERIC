@@ -49,10 +49,22 @@
   "The byte-size of Erlang binary X."
   (length (bytes x)))
 
+(defmethod match-p ((a erlang-binary) (b erlang-binary))
+  (let ((a-bytes (bytes a))
+        (b-bytes (bytes b)))
+    (and (alexandria:length= a-bytes b-bytes)
+         (every #'= (bytes a) (bytes b)))))
+
 
 ;;;
 ;;; Encode/Decode
 ;;;
+
+(defmethod encode ((x erlang-binary) &key &allow-other-keys)
+  (if (= 8 (bits-in-last-byte x))
+      (encode-external-binary x)
+      (encode-external-bit-binary x)))
+
 
 ;; BINARY_EXT
 ;; +-----+-----+------+

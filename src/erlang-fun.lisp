@@ -10,12 +10,9 @@
   (:documentation "Erlang fun in external format (module:function/arity)."))
 
 ;;; fun F/A or fun (...) -> ...
-(defclass erlang-internal-fun (erlang-fun)
-  ((pid :initarg :pid)
-   (index :initarg :index)
-   (uniq :initarg :uniq)
-   (free-vars :reader free-vars :initarg :free-vars))
-  (:documentation "Erlang fun in internal format."))
+(defclass erlang-old-internal-fun (erlang-internal-fun)
+  ()
+  (:documentation "Erlang fun in old internal-format"))
 
 (defclass erlang-new-internal-fun (erlang-internal-fun)
   ((index :initarg :old-index)
@@ -34,10 +31,43 @@
     (with-slots (module arity function) object
       (format stream "~a:~a/~a" module function arity))))
 
+(defmethod match-p ((a erlang-fun) (b erlang-fun))
+  (and (= (arity a) (arity b))
+       (eq (module a) (module b))))
+
+(defmethod match-p ((a erlang-external-fun) (b erlang-external-fun))
+  (and (call-next-method) ;; Correct?
+       (eq (slot-value a 'function) (slot-value b 'function))))
+
+(defmethod match-p ((a erlang-internal-fun) (b erlang-internal-fun))
+  (and (call-next-method) ;; Correct?
+       (match-p (slot-value a 'pid) (slot-value b 'pid))
+       (= (slot-value a 'index) (slot-value b 'index))
+       (= (slot-value a 'uniq) (slot-value b 'uniq))
+       (match-p (free-vars a) (free-vars b))))
+
+(defmethod match-p ((a erlang-new-internal-fun) (b erlang-new-internal-fun))
+  (and (call-next-method) ;; Correct?
+       (every #'= (slot-value a 'new-uniq) (slot-value b 'new-uniq))
+       (= (slot-value a 'new-index) (slot-value b 'new-index))))
+
 
 ;;;
 ;;; Encode/Decode
 ;;;
+
+
+(defmethod encode ((x erlang-external-fun) &key &allow-other-keys)
+  (encode-external-export x))
+
+(defmethod encode ((x erlang-old-internal-fun) &key &allow-other-keys)
+  (error 'not-implemented-error
+         :comment "Just haven't implemented it yet."))
+
+(defmethod encode ((x erlang-new-internal-fun) &key &allow-other-keys)
+  (error 'not-implemented-error
+         :comment "Just haven't implemented it yet."))
+
 
 ;; FUN_EXT
 ;; +-----+---------+-----+--------+-------+------+-----------+
@@ -61,7 +91,7 @@
 (defun read-external-fun (stream) ;; OBSOLETE?
   ;; Assume tag +fun-ext+ is read
   (let ((free-vars-length (read-uint32 stream)))
-    (make-instance 'erlang-internal-fun
+    (make-instance 'erlang-old-internal-fun
                    :pid (read-erlang-pid stream)
                    :module (read-erlang-atom stream)
                    :index (read-erlang-integer stream)
@@ -82,7 +112,7 @@
                              (decode bytes :start pos4))
          do (setf pos4 p)
          collect free-var into free-vars
-         finally (return (values (make-instance 'erlang-internal-fun
+         finally (return (values (make-instance 'erlang-old-internal-fun
                                                 :pid pid
                                                 :module module
                                                 :index index

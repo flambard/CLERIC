@@ -5,8 +5,27 @@
 ;;;;
 
 ;;;
+;;; Methods
+;;;
+
+(defmethod match-p ((a integer) (b integer))
+  (= a b))
+
+
+;;;
 ;;; Encode/Decode
 ;;;
+
+(defmethod encode ((x integer) &key &allow-other-keys)
+  (typecase x
+    ((unsigned-byte 8)
+     (encode-external-small-integer x))
+    ((integer #.(- (expt 2 31)) #.(1- (expt 2 31)))
+     (encode-external-integer x))
+    ((integer #.(- (expt 2 2040)) #.(expt 2 2040))
+     (encode-external-small-big x))
+    (t
+     (encode-external-large-big x))))
 
 (defun read-erlang-integer (stream) ;; OBSOLETE?
   (let ((tag (read-byte stream)))

@@ -23,6 +23,10 @@
 ;;; Encode/Decode
 ;;;
 
+(defmethod encode ((x erlang-port) &key &allow-other-keys)
+  (encode-external-port x))
+
+
 ;; PORT_EXT
 ;; +-----+------+----+----------+
 ;; |  1  |   N  |  4 |     1    |
