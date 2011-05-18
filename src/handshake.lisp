@@ -216,8 +216,27 @@
 ;;;
 
 (defun perform-server-handshake (stream cookie)
-  (error 'not-implemented-error
-         :comment "Sorry, server side handshake is not implemented yet."))
+  (multiple-value-bind (version flags full-node-name) (read-name-message stream)
+    (format t "FULL-NODE-NAME: ~a, VERSION: ~a, FLAGS: ~b~&"
+            full-node-name version flags)
+    ;; TODO: Check if node is allowed to connect to us
+    (write-sequence (make-status-message "ok") stream)
+    (let ((challenge (generate-challenge)))
+      (write-sequence (make-challenge-message +highest-version-supported+
+                                              (capability-flags)
+                                              challenge
+                                              *this-node*)
+                      stream)
+      (finish-output stream)
+      (multiple-value-bind (new-challenge digest)
+          (read-challenge-reply-message stream)
+        (unless (equal-digests (calculate-digest challenge cookie) digest)
+          (error 'handshake-failed-error
+                 :reason "Received incorrect digest"))
+        (write-sequence
+         (make-challenge-ack-message (calculate-digest new-challenge cookie))
+         stream)
+        t)))) ;; Connect successful
 
 
 ;;;
