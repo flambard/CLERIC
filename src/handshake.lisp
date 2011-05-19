@@ -49,7 +49,7 @@
 
 (defun make-status-message (status-string)
   (concatenate 'vector
-               (uint16-to-bytes (length status-string))
+               (uint16-to-bytes (1+ (length status-string)))
                (vector (char-code #\s))
                (string-to-bytes status-string)))
 
