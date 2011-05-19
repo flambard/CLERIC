@@ -14,6 +14,8 @@
   ((:module :src
             :components
             ((:file "package")
+             (:file "listen"
+                    :depends-on ("package"))
              (:file "macros"
                     :depends-on ("package"))
              (:file "generic-functions"
@@ -21,6 +23,7 @@
                                  "constants"))
              (:file "remote-node"
                     :depends-on ("package"
+                                 "listen"
                                  "atom-cache"
                                  "special-variables"))
              (:file "conditions"

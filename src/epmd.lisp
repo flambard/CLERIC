@@ -158,7 +158,7 @@
           (error 'not-listening-on-socket))
     (start-listening-on-socket ()
       :report "Start listening on a socket."
-      (start-listening-for-remote-nodes)
+      (start-listening)
       (epmd-publish node-name))))
 
 

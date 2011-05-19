@@ -42,26 +42,6 @@
       (try-connect-again ()
         (remote-node-connect remote-node cookie))) ))
 
-(defun start-listening-for-remote-nodes ()
-  (if *listening-socket*
-      (error 'already-listening-on-socket)
-      (progn
-        (setf *listening-socket*
-              (usocket:socket-listen usocket:*wildcard-host*
-                                     usocket:*auto-port*
-                                     :element-type '(unsigned-byte 8)))
-        t)))
-
-(defun stop-listening-for-remote-nodes ()
-  (when *listening-socket*
-    (usocket:socket-close *listening-socket*)
-    (setf *listening-socket* nil)
-    t))
-
-(defun listening-port ()
-  (when *listening-socket*
-    (usocket:get-local-port *listening-socket*)))
-
 (defun remote-node-accept-connect (cookie)
   (restart-case
       (if *listening-socket*
@@ -77,7 +57,7 @@
           (error 'not-listening-on-socket) )
     (start-listening-on-socket ()
       :report "Start listening on a socket."
-      (start-listening-for-remote-nodes)
+      (start-listening)
       (remote-node-accept-connect cookie))))
 
 (defun register-connected-remote-node (remote-node socket)

@@ -48,9 +48,6 @@
    remote-node-host
    remote-node-connect
    remote-node-accept-connect
-   start-listening-for-remote-nodes
-   stop-listening-for-remote-nodes
-   listening-port
    encode-control-message
    decode-control-message
    node
@@ -62,6 +59,10 @@
    message
    reason
    to-name
+   listening-p
+   listening-port
+   start-listening
+   stop-listening
 
    ;; Conditions
    not-implemented-error
