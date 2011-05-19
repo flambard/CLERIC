@@ -104,6 +104,7 @@
 
    ;; EPMD Functions
    epmd-publish
+   epmd-published-p
    epmd-unpublish
    epmd-lookup-node
 

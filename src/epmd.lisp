@@ -158,6 +158,8 @@
         (start-listening)
         (epmd-publish node-name)))))
 
+(defun epmd-published-p ()
+  (not (null *epmd-socket*)))
 
 (defun epmd-unpublish ()
   (when *epmd-socket*
