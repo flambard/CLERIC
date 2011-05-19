@@ -101,6 +101,8 @@
    *erlang-string-is-lisp-string*
 
    ;; EPMD Functions
+   epmd-publish
+   epmd-unpublish
    epmd-lookup-node
 
    ;; Connection functions
