@@ -156,6 +156,7 @@
 (defun epmd-unpublish ()
   (when *epmd-socket*
     (usocket:socket-close *epmd-socket*)
+    (setf *epmd-socket* nil)
     t))
 
 
