@@ -38,6 +38,10 @@
   ()
   (:documentation "This error is signaled when trying to connect to a node that is unreachable."))
 
+(define-condition already-registered-on-epmd (error)
+  ()
+  (:documentation "This error is signaled when trying to register on the EPMD when already registered."))
+
 (define-condition epmd-host-unknown-error (error)
   ;; USOCKET:UNKNOWN-ERROR
   ()

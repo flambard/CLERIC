@@ -138,28 +138,26 @@
 ;;;
 
 (defun epmd-publish (&optional (node-name "lispnode"))
-  ;; TODO: Check if we are already registered
-  (restart-case
-      (if *listening-socket*
-          (let* ((socket
-                  (handler-case
-                      (usocket:socket-connect "localhost" +epmd-port+
-                                              :element-type '(unsigned-byte 8))
-                    (usocket:connection-refused-error ()
-                      (error 'epmd-unreachable-error))))
-                 (epmd (usocket:socket-stream socket)))
-            (write-sequence (make-alive2-request node-name (listening-port))
-                            epmd)
-            (finish-output epmd)
-            (let ((creation (read-alive2-response epmd)))
-              (declare (ignore creation))
-              (setf *epmd-socket* socket)
-              t))
-          (error 'not-listening-on-socket))
-    (start-listening-on-socket ()
-      :report "Start listening on a socket."
-      (start-listening)
-      (epmd-publish node-name))))
+  (if *epmd-socket*
+    (error 'already-registered-on-epmd)
+    (restart-case
+        (if *listening-socket*
+            (let* ((socket (handler-case (connect-to-epmd)
+                             (usocket:connection-refused-error ()
+                               (error 'epmd-unreachable-error))))
+                   (epmd (usocket:socket-stream socket)))
+              (write-sequence (make-alive2-request node-name (listening-port))
+                              epmd)
+              (finish-output epmd)
+              (let ((creation (read-alive2-response epmd)))
+                (declare (ignore creation))
+                (setf *epmd-socket* socket)
+                t))
+            (error 'not-listening-on-socket))
+      (start-listening-on-socket ()
+        :report "Start listening on a socket."
+        (start-listening)
+        (epmd-publish node-name)))))
 
 
 (defun epmd-unpublish ()
@@ -197,13 +195,14 @@
         (subseq node-string (1+ pos))
         "localhost"))) ;; OK with localhost??
 
+(defun connect-to-epmd (&optional (host "localhost"))
+  (usocket:socket-connect host +epmd-port+ :element-type '(unsigned-byte 8)))
+
+
 (defmacro with-epmd-connection-stream ((stream-var &optional (host "localhost") (port +epmd-port+)) &body body)
   "Create a local scope where STREAM-VAR is a socket stream connected to the EPMD."
   (let ((socket-var (gensym)))
-    `(let* ((,socket-var (handler-case (usocket:socket-connect
-                                        ,host
-                                        ,port
-                                        :element-type '(unsigned-byte 8))
+    `(let* ((,socket-var (handler-case (connect-to-epmd ,host)
                            (usocket:connection-refused-error ()
                              (error 'epmd-unreachable-error))
                            (usocket:unknown-error ()

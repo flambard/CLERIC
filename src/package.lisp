@@ -72,6 +72,7 @@
    handshake-failed-error
    connection-closed-error
    node-unreachable-error
+   already-registered-on-epmd
    epmd-unreachable-error
    epmd-host-unknown-error
    epmd-response-error
