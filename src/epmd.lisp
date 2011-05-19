@@ -29,9 +29,9 @@
                  (vector +alive2-req+)
                  (uint16-to-bytes port)
                  (vector +node-type-hidden+
-                         +protocol-tcpip4+
-                         +lowest-version-supported+
-                         +highest-version-supported+)
+                         +protocol-tcpip4+)
+                 (uint16-to-bytes +lowest-version-supported+)
+                 (uint16-to-bytes +highest-version-supported+)
                  (uint16-to-bytes node-name-length)
                  (string-to-bytes node-name)
                  (uint16-to-bytes extra-field-length)
