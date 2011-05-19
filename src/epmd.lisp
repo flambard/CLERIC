@@ -113,17 +113,16 @@
                   (lowest-version-supported (read-uint16 stream))
                   (highest-version-supported (read-uint16 stream))
                   (node-name-length (read-uint16 stream))
-                  (node-name (read-bytes-as-string node-name-length epmd))
-                  (extra-field-length (read-uint16 epmd))
-                  (extra-field (read-bytes extra-field-length epmd)))
+                  (node-name (read-bytes-as-string node-name-length stream))
+                  (extra-field-length (read-uint16 stream))
+                  (extra-field (read-bytes extra-field-length stream)))
              (make-instance 'remote-node
                             :port port
                             :node-type (case node-type
                                          (#.+node-type-hidden+ 'hidden)
                                          (#.+node-type-erlang+ 'erlang)
                                          (otherwise
-                                          (error 'malformed-message-error
-                                                 :bytes port2-response)))
+                                          (error 'malformed-message-error)))
                             :protocol protocol
                             :lowest-version lowest-version-supported
                             :highest-version highest-version-supported
@@ -172,7 +171,7 @@
   (with-epmd-connection-stream (epmd host)
     (write-sequence (make-port-please2-request node-name) epmd)
     (finish-output epmd)
-    (read-port-please2-response stream host)))
+    (read-port-please2-response epmd host)))
 
 
 ;;;
