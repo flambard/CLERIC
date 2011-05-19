@@ -183,9 +183,6 @@
            (string= status "ok_simultaneous"))
        (multiple-value-bind (version flags challenge full-node-name)
            (read-challenge-message stream)
-         ;; (declare (ignore version flags full-node-name))
-         (format t "FULL-NODE-NAME: ~a, VERSION: ~a, FLAGS: ~b~&"
-                 full-node-name version flags)
          (let ((new-challenge (generate-challenge))
                (digest (calculate-digest challenge cookie)))
            (write-sequence (make-challenge-reply-message new-challenge digest)
@@ -195,7 +192,7 @@
                                   (read-challenge-ack-message stream))
              (error 'handshake-failed-error
                     :reason "Received incorrect digest"))
-           t))) ;; Connect successful
+           (values full-node-name flags version) ))) ;; Connect successful
       ((string= status "nok")
        (signal 'try-again
                :reason "Busy with other ongoing handshake"))
@@ -217,8 +214,6 @@
 
 (defun perform-server-handshake (stream cookie)
   (multiple-value-bind (version flags full-node-name) (read-name-message stream)
-    (format t "FULL-NODE-NAME: ~a, VERSION: ~a, FLAGS: ~b~&"
-            full-node-name version flags)
     ;; TODO: Check if node is allowed to connect to us
     (write-sequence (make-status-message "ok") stream)
     (let ((challenge (generate-challenge)))
@@ -236,7 +231,7 @@
         (write-sequence
          (make-challenge-ack-message (calculate-digest new-challenge cookie))
          stream)
-        t)))) ;; Connect successful
+        (values full-node-name flags version) )))) ;; Connect successful
 
 
 ;;;

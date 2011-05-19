@@ -35,8 +35,9 @@
         (handler-bind ((condition #'(lambda (condition)
                                       (declare (ignore condition))
                                       (usocket:socket-close socket))))
-          (when (perform-client-handshake (usocket:socket-stream socket)
-                                          cookie)
+          (multiple-value-bind (full-node-name flags version)
+              (perform-client-handshake (usocket:socket-stream socket) cookie)
+            (declare (ignore full-node-name flags version))
             (register-connected-remote-node remote-node socket)))
       (try-connect-again ()
         (remote-node-connect remote-node cookie))) ))
@@ -65,15 +66,14 @@
   (restart-case
       (if *listening-socket*
           (let ((socket (usocket:socket-accept *listening-socket*)))
-            (handler-case
-                (let ((remote-node (perform-server-handshake
-                                    (usocket:socket-stream socket)
-                                    cookie)))
-                  (when remote-node
-                    (register-connected-remote-node remote-node socket) ))
-              (condition ()
-                (usocket:socket-close socket)
-                nil) ))
+            (handler-bind ((condition #'(lambda (condition)
+                                          (declare (ignore condition))
+                                          (usocket:socket-close socket))))
+              (multiple-value-bind (full-node-name flags version)
+                  (perform-server-handshake (usocket:socket-stream socket)
+                                            cookie)
+                (declare (ignore full-node-name flags version))
+                (register-connected-remote-node remote-node socket) )))
           (error 'not-listening-on-socket) )
     (start-listening-on-socket ()
       :report "Start listening on a socket."
