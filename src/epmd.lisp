@@ -137,20 +137,29 @@
 ;;; EPMD API
 ;;;
 
-(defun epmd-publish (port &optional (node-name "lispnode"))
+(defun epmd-publish (&optional (node-name "lispnode"))
   ;; TODO: Check if we are already registered
-  (let* ((socket (handler-case
-                     (usocket:socket-connect "localhost" +epmd-port+
-                                             :element-type '(unsigned-byte 8))
-                   (usocket:connection-refused-error ()
-                     (error 'epmd-unreachable-error))))
-         (epmd (usocket:socket-stream socket)))
-    (write-sequence (make-alive2-request node-name port) epmd)
-    (finish-output epmd)
-    (let ((creation (read-alive2-response epmd)))
-      (declare (ignore creation))
-      (setf *epmd-socket* socket)
-      t)))
+  (restart-case
+      (if *listening-socket*
+          (let* ((socket
+                  (handler-case
+                      (usocket:socket-connect "localhost" +epmd-port+
+                                              :element-type '(unsigned-byte 8))
+                    (usocket:connection-refused-error ()
+                      (error 'epmd-unreachable-error))))
+                 (epmd (usocket:socket-stream socket)))
+            (write-sequence (make-alive2-request node-name (listening-port))
+                            epmd)
+            (finish-output epmd)
+            (let ((creation (read-alive2-response epmd)))
+              (declare (ignore creation))
+              (setf *epmd-socket* socket)
+              t))
+          (error 'not-listening-on-socket))
+    (start-listening-on-socket ()
+      :report "Start listening on a socket."
+      (start-listening-for-remote-nodes)
+      (epmd-publish node-name))))
 
 
 (defun epmd-unpublish ()
