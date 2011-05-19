@@ -50,9 +50,17 @@
                                       (usocket:socket-close socket))))
           (multiple-value-bind (full-node-name flags version)
               (perform-server-handshake (usocket:socket-stream socket) cookie)
-            (declare (ignore full-node-name flags version))
-            ;; Create a remote-node object here
-            (register-connected-remote-node remote-node socket) )))
+            (declare (ignore flags))
+            (register-connected-remote-node
+             (make-instance 'remote-node
+                            :socket socket
+                            :node-type 'erlang ;; Can we get this information from flags?
+                            :lowest-version version
+                            :highest-version version
+                            :name (node-name full-node-name)
+                            :host (node-name full-node-name)
+                            :full-name full-node-name)
+             socket) )))
     (start-listening-on-socket ()
       :report "Start listening on a socket."
       (start-listening)
