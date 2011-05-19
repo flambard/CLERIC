@@ -21,3 +21,9 @@
                                      usocket:*auto-port*
                                      :element-type '(unsigned-byte 8)))
         t)))
+
+(defun accept-connect ()
+  (if *listening-socket*
+      (usocket:socket-accept *listening-socket*
+                             :element-type '(unsigned-byte 8))
+      (error 'not-listening-on-socket)))

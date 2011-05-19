@@ -44,17 +44,15 @@
 
 (defun remote-node-accept-connect (cookie)
   (restart-case
-      (if *listening-socket*
-          (let ((socket (usocket:socket-accept *listening-socket*)))
-            (handler-bind ((condition #'(lambda (condition)
-                                          (declare (ignore condition))
-                                          (usocket:socket-close socket))))
-              (multiple-value-bind (full-node-name flags version)
-                  (perform-server-handshake (usocket:socket-stream socket)
-                                            cookie)
-                (declare (ignore full-node-name flags version))
-                (register-connected-remote-node remote-node socket) )))
-          (error 'not-listening-on-socket) )
+      (let ((socket (accept-connect)))
+        (handler-bind ((condition #'(lambda (condition)
+                                      (declare (ignore condition))
+                                      (usocket:socket-close socket))))
+          (multiple-value-bind (full-node-name flags version)
+              (perform-server-handshake (usocket:socket-stream socket) cookie)
+            (declare (ignore full-node-name flags version))
+            ;; Create a remote-node object here
+            (register-connected-remote-node remote-node socket) )))
     (start-listening-on-socket ()
       :report "Start listening on a socket."
       (start-listening)
