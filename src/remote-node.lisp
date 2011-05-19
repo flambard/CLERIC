@@ -6,7 +6,7 @@
    (atom-cache :reader remote-node-atom-cache :initform (make-atom-cache))
    (port :reader remote-node-port :initarg :port)
    (node-type :initarg :node-type) ;; 'ERLANG or 'HIDDEN
-   (protocol :initarg :protocol) ;; 0 (TCP/IP v4)
+   (protocol :initarg :protocol :initform 0) ;; 0 (TCP/IP v4)
    (lowest-version :initarg :lowest-version)
    (highest-version :initarg :highest-version)
    (name :reader remote-node-name :initarg :name :documentation "The name of the remote node.")
