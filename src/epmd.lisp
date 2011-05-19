@@ -165,6 +165,18 @@
     (setf *epmd-socket* nil)
     t))
 
+(defmacro with-epmd-connection-stream
+    ((stream-var &optional (host "localhost")) &body body)
+  "Create a local scope where STREAM-VAR is a socket stream connected to the EPMD."
+  (let ((socket-var (gensym)))
+    `(let* ((,socket-var (handler-case (connect-to-epmd ,host)
+                           (usocket:connection-refused-error ()
+                             (error 'epmd-unreachable-error))
+                           (usocket:unknown-error ()
+                             (error 'epmd-host-unknown-error))))
+            (,stream-var (usocket:socket-stream ,socket-var)))
+       (unwind-protect (progn ,@body)
+         (usocket:socket-close ,socket-var))) ))
 
 (defun epmd-lookup-node (node-name &optional (host "localhost"))
   "Query the EPMD about a node. Returns a REMOTE-NODE object that represents the node."
@@ -196,16 +208,3 @@
 
 (defun connect-to-epmd (&optional (host "localhost"))
   (usocket:socket-connect host +epmd-port+ :element-type '(unsigned-byte 8)))
-
-
-(defmacro with-epmd-connection-stream ((stream-var &optional (host "localhost") (port +epmd-port+)) &body body)
-  "Create a local scope where STREAM-VAR is a socket stream connected to the EPMD."
-  (let ((socket-var (gensym)))
-    `(let* ((,socket-var (handler-case (connect-to-epmd ,host)
-                           (usocket:connection-refused-error ()
-                             (error 'epmd-unreachable-error))
-                           (usocket:unknown-error ()
-                             (error 'epmd-host-unknown-error))))
-            (,stream-var (usocket:socket-stream ,socket-var)))
-       (unwind-protect (progn ,@body)
-         (usocket:socket-close ,socket-var))) ))
