@@ -28,7 +28,9 @@
   "Connect and perform handshake with a remote node."
   (let ((socket
          (handler-case
-             (usocket:socket-connect host port :element-type '(unsigned-byte 8))
+             (usocket:socket-connect (remote-node-host remote-node)
+                                     (remote-node-port remote-node)
+                                     :element-type '(unsigned-byte 8))
            (usocket:connection-refused-error ()
              (error 'node-unreachable-error)) )))
     (restart-case
