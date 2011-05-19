@@ -231,6 +231,7 @@
         (write-sequence
          (make-challenge-ack-message (calculate-digest new-challenge cookie))
          stream)
+        (finish-output stream)
         (values full-node-name flags version) )))) ;; Connect successful
 
 
