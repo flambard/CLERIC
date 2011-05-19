@@ -50,6 +50,7 @@
    remote-node-accept-connect
    start-listening-for-remote-nodes
    stop-listening-for-remote-nodes
+   listening-port
    encode-control-message
    decode-control-message
    node

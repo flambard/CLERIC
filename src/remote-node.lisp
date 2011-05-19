@@ -43,19 +43,23 @@
 
 (defun start-listening-for-remote-nodes ()
   (if *listening-socket*
-      (error 'already-listening-on-socket) ;; How can we get the port?
+      (error 'already-listening-on-socket)
       (progn
         (setf *listening-socket*
               (usocket:socket-listen usocket:*wildcard-host*
                                      usocket:*auto-port*
                                      :element-type '(unsigned-byte 8)))
-        t))) ;; Return port?
+        t)))
 
 (defun stop-listening-for-remote-nodes ()
   (when *listening-socket*
     (usocket:socket-close *listening-socket*)
     (setf *listening-socket* nil)
     t))
+
+(defun listening-port ()
+  (when *listening-socket*
+    (usocket:get-local-port *listening-socket*)))
 
 (defun remote-node-accept-connect (cookie)
   (restart-case
