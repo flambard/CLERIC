@@ -2,70 +2,86 @@
 
 (in-package :cleric)
 
-
 (defconstant +protocol-tcpip4+ 0)
+
+;;;
+;;; ALIVE2_REQ
+;;
+;; 2 bytes: Total length of following message in bytes
+;; 1 byte:  'x'               [ALIVE2_REQ message]
+;; 2 bytes: Listening port
+;; 1 byte:  72                [hidden node (not Erlang node)]
+;; 1 byte:  0                 [protocol: tcp/ip v4]
+;; 2 bytes: 5                 [lowest version supported]
+;; 2 bytes: 5                 [highest version supported]
+;; 2 bytes: Length of node name
+;; N bytes: Node name
+;; 2 bytes: Length of the Extra field
+;; M bytes: Extra             [???]
+;;
+
+(defun make-alive2-request (node-name port &optional (extra #()))
+  (let* ((node-name-length (length node-name))
+         (extra-field-length (length extra))
+         (message-length (+ 13 node-name-length extra-field-length)))
+    (concatenate 'vector
+                 (uint16-to-bytes message-length)
+                 (vector +alive2-req+)
+                 (uint16-to-bytes port)
+                 (vector +node-type-hidden+
+                         +protocol-tcpip4+
+                         +lowest-version-supported+
+                         +highest-version-supported+)
+                 (uint16-to-bytes node-name-length)
+                 (string-to-bytes node-name)
+                 (uint16-to-bytes extra-field-length)
+                 extra)))
+
+
+;;;
+;;; ALIVE2_RESP
+;;
+;; 1 byte:  'y'               [ALIVE2_RESP message]
+;; 1 byte:  Result            [0 means OK, >0 means ERROR]
+;; 2 bytes: Creation          [?]
+;;
+
+(defun read-alive2-response (stream)
+  (handler-case
+      (let* ((tag (read-byte stream))
+             (result (read-byte stream))
+             (creation (read-uint16 stream)))
+        (cond
+          ((/= tag +alive2-resp+)
+           (error 'unexpected-message-tag-error
+                  :tag tag
+                  :expected-tags (list +alive2-resp+)))
+          ((/= 0 result)
+           (error 'epmd-response-error))
+          (t
+           creation)))
+    (end-of-file () (error 'connection-closed-error))))
 
 
 (defun epmd-publish (port &optional (node-name "lispnode"))
+  ;; TODO: Check if we are already registered
   (let* ((socket (handler-case
                      (usocket:socket-connect "localhost" +epmd-port+
                                              :element-type '(unsigned-byte 8))
                    (usocket:connection-refused-error ()
                      (error 'epmd-unreachable-error))))
          (epmd (usocket:socket-stream socket)))
-    ;;;; ALIVE2_REQ ;;;;
-    ;; 2 bytes: Total length of following message in bytes
-    ;; 1 byte:  'x'               [ALIVE2_REQ message]
-    ;; 2 bytes: Listening port
-    ;; 1 byte:  72                [hidden node (not Erlang node)]
-    ;; 1 byte:  0                 [protocol: tcp/ip v4]
-    ;; 2 bytes: 5                 [lowest version supported]
-    ;; 2 bytes: 5                 [highest version supported]
-    ;; 2 bytes: Length of node name
-    ;; N bytes: Node name
-    ;; 2 bytes: Length of the Extra field
-    ;; M bytes: Extra             [???]
-    (let* ((node-name-length (length node-name))
-           (extra-field-length 0) ; Extra field is empty
-           (message-length (+ 13 node-name-length extra-field-length))
-           (alive2-req (concatenate 'vector
-                                    (uint16-to-bytes message-length)
-                                    (vector +alive2-req+)
-                                    (uint16-to-bytes port)
-                                    (vector +node-type-hidden+
-                                            +protocol-tcpip4+
-                                            +lowest-version-supported+
-                                            +highest-version-supported+)
-                                    (uint16-to-bytes node-name-length)
-                                    (string-to-bytes node-name)
+    (write-sequence (make-alive2-request node-name port) epmd)
+    (finish-output epmd)
+    (let ((creation (read-alive2-response epmd)))
+      (declare (ignore creation))
+      (setf *epmd-socket* socket)
+      t)))
 
-                                    (uint16-to-bytes extra-field-length)
-                                    #| No extra field |#)))
-      (write-sequence alive2-req epmd)
-      (finish-output epmd))
-    ;;;; ALIVE2_RESP ;;;;
-    ;; 1 byte:  'y'               [ALIVE2_RESP message]
-    ;; 1 byte:  Result            [0 means OK, >0 means ERROR]
-    ;; 2 bytes: Creation          [?]
-    (handler-case
-        (let* ((alive2-response (read-bytes 4 epmd))
-               (tag (aref alive2-response 0))
-               (result (aref alive2-response 1))
-               (creation (bytes-to-uint16 (subseq alive2-response 2))))
-          (declare (ignore creation))
-          (cond
-            ((/= tag +alive2-resp+)
-             (error 'unexpected-message-tag-error
-                    :tag tag
-                    :expected-tags (list +alive2-resp+)))
-            ((/= 0 result)
-             (error 'epmd-response-error))
-            (t
-             socket)))
-      (end-of-file () (error 'connection-closed-error))) ))
-
-(defun epmd-unpublish (socket)
-  (usocket:socket-close socket))
+(defun epmd-unpublish ()
+  (when *epmd-socket*
+    (usocket:socket-close *epmd-socket*)
+    t))
 
 (defmacro with-epmd-connection-stream ((stream-var &optional (host "localhost") (port +epmd-port+)) &body body)
   "Create a local scope where STREAM-VAR is a socket stream connected to the EPMD."

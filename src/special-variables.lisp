@@ -2,6 +2,9 @@
 
 (in-package :cleric)
 
+(defvar *epmd-socket* nil
+  "The EPMD socket. NIL if not registered in EPMD.")
+
 (defvar *listening-socket* nil
   "The listening socket. NIL if not listening.")
 
