@@ -136,7 +136,7 @@
 ;;; EPMD API
 ;;;
 
-(defun epmd-publish (&optional (node-name "lispnode"))
+(defun epmd-publish ()
   (if *epmd-socket*
     (error 'already-registered-on-epmd)
     (restart-case
@@ -145,7 +145,8 @@
                              (usocket:connection-refused-error ()
                                (error 'epmd-unreachable-error))))
                    (epmd (usocket:socket-stream socket)))
-              (write-sequence (make-alive2-request node-name (listening-port))
+              (write-sequence (make-alive2-request (node-name *this-node*)
+                                                   (listening-port))
                               epmd)
               (finish-output epmd)
               (let ((creation (read-alive2-response epmd)))
@@ -156,7 +157,7 @@
       (start-listening-on-socket ()
         :report "Start listening on a socket."
         (start-listening)
-        (epmd-publish node-name)))))
+        (epmd-publish)))))
 
 (defun epmd-published-p ()
   (not (null *epmd-socket*)))
