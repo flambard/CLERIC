@@ -569,6 +569,36 @@
 </p>
 
 <p>
+  <a name="cleric_epmd-publish" />
+  [Function]<br>
+  <b>epmd-publish</b> <i></i> => <i><code>T</code></i>
+  <blockquote>
+    Register on the EPMD to become visible to remote nodes.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric_epmd-published-p" />
+  [Function]<br>
+  <b>epmd-published-p</b> <i></i> => <i>boolean</i>
+  <blockquote>
+    Returns <i>true</i> if registered on the EPMD.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric_epmd-unpublish" />
+  [Function]<br>
+  <b>epmd-unpublish</b> <i></i> => <i><code>T</code></i>
+  <blockquote>
+    Unregister from the EPMD to stop being visible to remote nodes.
+  </blockquote>
+  <br>
+</p>
+
+<p>
   <a name="cleric_epmd-lookup-node" />
   [Function]<br>
   <b>epmd-lookup-node</b> <i>node-name <code>&amp;optional</code> host</i> => <i>remote-node</i>
@@ -607,6 +637,27 @@
   <b>link</b> <i>from-pid to-pid</i> => <i>nil</i>
   <blockquote>
     Establish a process link between <i>from-pid</i> and <i>to-pid</i>. Sends a <i>Link</i> control message to the node where the process <i>to-pid</i> is located.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric_listening-p" />
+  [Function]<br>
+  <b>listening-p</b> => <i>boolean</i>
+  <blockquote>
+    Returns <i>true</i> if currently listening on a server socket.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric_listening-port" />
+  [Function]<br>
+  <b>listening-port</b> => <i>port</i>
+  <blockquote>
+    Returns the port number of the listening (server) socket.
+    Returns <code>NIL</code> if not listening on a socket.
   </blockquote>
   <br>
 </p>
@@ -781,6 +832,41 @@
 </p>
 
 <p>
+  <a name="cleric_start-listening" />
+  [Function]<br>
+  <b>start-listening</b> <i></i> => <i><code>T</code></i>
+  <blockquote>
+    <p>Opens a listening (server) socket to which other nodes may connect.</p>
+    <p>To accept connections from remote nodes, use
+      <a href="#cleric_remote-node-accept-connect">
+        <i>remote-node-accept-connect</i>
+    </a></p>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric_start-listening-on-socket-restart" />
+  [Function]<br>
+  <b>start-listening-on-socket-restart</b> <i>condition</i> => <i><code>T</code></i>
+  <blockquote>
+    <p>Invokes the <code>start-listening-on-socket</code> restart.</p>
+    <p><i>condition</i> is ignored.</p>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric_stop-listening" />
+  [Function]<br>
+  <b>stop-listening</b> <i></i> => <i><code>NIL</code></i>
+  <blockquote>
+    Closes the listening (server) socket.
+  </blockquote>
+  <br>
+</p>
+
+<p>
   <a name="cleric_string-to-binary" />
   [Function]<br>
   <b>string-to-binary</b> <i>string</i> => <i>binary</i>
@@ -816,6 +902,17 @@
   <b>trace-token</b> <i>control-message</i> => <i>trace-token</i>
   <blockquote>
     Returns the trace token of <i>control-message</i>.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric_try-connect-again-restart" />
+  [Function]<br>
+  <b>try-connect-again-restart</b> <i>condition</i> => <i><code>T</code></i>
+  <blockquote>
+    <p>Invokes the <code>try-connect-again</code> restart.</p>
+    <p><i>condition</i> is ignored.</p>
   </blockquote>
   <br>
 </p>
@@ -965,6 +1062,24 @@
 <h3>Conditions</h3>
 
 <p>
+  <a name="cleric_already-listening-on-socket" />
+  [Condition]<br>
+  <b>already-listening-on-socket</b>
+  <blockquote>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric_already-registered-on-epmd" />
+  [Condition]<br>
+  <b>already-registered-on-epmd</b>
+  <blockquote>
+  </blockquote>
+  <br>
+</p>
+
+<p>
   <a name="cleric_connection-closed-error" />
   [Condition]<br>
   <b>connection-closed-error</b>
@@ -1040,6 +1155,15 @@
   <a name="cleric_not-implemented-error" />
   [Condition]<br>
   <b>not-implemented-error</b>
+  <blockquote>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric_not-listening-on-socket" />
+  [Condition]<br>
+  <b>not-listening-on-socket</b>
   <blockquote>
   </blockquote>
   <br>
