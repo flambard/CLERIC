@@ -93,13 +93,13 @@
    ;; Special variables
    *this-node*
    *remote-nodes*
-   *lisp-t-symbol-is-erlang-true*
+   *lisp-t-is-erlang-true*
    *lisp-nil-is-erlang-empty-list*
-   *lisp-nil-symbol-is-erlang-false*
+   *lisp-nil-is-erlang-false*
    *lisp-nil-at-tail-is-erlang-empty-list*
    *lisp-string-is-erlang-binary*
-   *erlang-true-is-lisp-t-symbol*
-   *erlang-false-is-lisp-nil-symbol*
+   *erlang-true-is-lisp-t*
+   *erlang-false-is-lisp-nil*
    *erlang-string-is-lisp-string*
 
    ;; EPMD Functions

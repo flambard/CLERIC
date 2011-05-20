@@ -20,9 +20,9 @@
   (cond
     ((and (null x) *lisp-nil-is-erlang-empty-list*)
      (encode-external-nil))
-    ((and (null x) *lisp-nil-symbol-is-erlang-false*)
+    ((and (null x) *lisp-nil-is-erlang-false*)
      (encode '|false| :atom-cache-entries atom-cache-entries))
-    ((and (eq T x) *lisp-t-symbol-is-erlang-true*)
+    ((and (eq T x) *lisp-t-is-erlang-true*)
      (encode '|true| :atom-cache-entries atom-cache-entries))
     (t
      (let ((index (when atom-cache-entries
@@ -55,9 +55,9 @@
                                                 +small-atom-ext+
                                                 +compressed-term+))) )))
     (cond
-      ((and (eq symbol '|true|) *erlang-true-is-lisp-t-symbol*)
+      ((and (eq symbol '|true|) *erlang-true-is-lisp-t*)
        T)
-      ((and (eq symbol '|false|) *erlang-false-is-lisp-nil-symbol*)
+      ((and (eq symbol '|false|) *erlang-false-is-lisp-nil*)
        NIL)
       (t
        symbol)) ))
@@ -82,9 +82,9 @@
                                        +small-atom-ext+
                                        +compressed-term+))) )
       (cond
-        ((and (eq symbol '|true|) *erlang-true-is-lisp-t-symbol*)
+        ((and (eq symbol '|true|) *erlang-true-is-lisp-t*)
          (values T pos2))
-        ((and (eq symbol '|false|) *erlang-false-is-lisp-nil-symbol*)
+        ((and (eq symbol '|false|) *erlang-false-is-lisp-nil*)
          (values NIL pos2))
         (t
          (values symbol pos2))) )))

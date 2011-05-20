@@ -19,7 +19,7 @@
 (defvar *cached-atoms* #()
   "A vector of cached atoms.")
 
-(defvar *lisp-t-symbol-is-erlang-true*
+(defvar *lisp-t-is-erlang-true*
   NIL
   "Send the Lisp T to Erlang as 'true' instead of 'T'.")
 
@@ -27,7 +27,7 @@
   T
   "Send the Lisp NIL to Erlang as the empty list instead of as a symbol.")
 
-(defvar *lisp-nil-symbol-is-erlang-false*
+(defvar *lisp-nil-is-erlang-false*
   NIL
   "Send the Lisp NIL to Erlang as 'false' instead of 'NIL'.")
 
@@ -39,11 +39,11 @@
   NIL
   "Send a Lisp string to Erlang as a binary instead of a list.")
 
-(defvar *erlang-true-is-lisp-t-symbol*
+(defvar *erlang-true-is-lisp-t*
   NIL
   "Interpret the Erlang 'true' as T instead of '|true| in Lisp.")
 
-(defvar *erlang-false-is-lisp-nil-symbol*
+(defvar *erlang-false-is-lisp-nil*
   NIL
   "Interpret the Erlang 'false' as NIL instead of '|false| in Lisp.")
 
