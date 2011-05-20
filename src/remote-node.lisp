@@ -55,14 +55,14 @@
             (declare (ignore flags))
             (register-connected-remote-node
              (make-instance 'remote-node
-                            :socket socket
                             :node-type 'erlang ;; Can we get this information from flags?
                             :lowest-version version
                             :highest-version version
                             :name (node-name full-node-name)
                             :host (node-name full-node-name)
                             :full-name full-node-name)
-             socket) )))
+             socket)
+            full-node-name)))
     (start-listening-on-socket ()
       :report "Start listening on a socket."
       (start-listening)
