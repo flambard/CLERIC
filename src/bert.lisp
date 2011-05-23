@@ -30,6 +30,7 @@
    #:bool
 
    ;; Special variables
+   #:*atom-symbol-package*
    #:*lisp-string-is-erlang-binary*
    #:true
    #:false
@@ -166,19 +167,19 @@
   (assert (typep term 'erlang-tuple))
   (with-slots (elements) term
     (assert (string= "bert" (symbol-name (aref elements 0))))
-    (ecase (intern (symbol-name (aref elements 1)) :keyword)
-      (:|nil| nil)
-      (:|true| t)
-      (:|false| nil)
-      (:|dict|
+    (alexandria:eswitch ((aref elements 1) :test #'string= :key #'symbol-name)
+      ("nil" nil)
+      ("true" t)
+      ("false" nil)
+      ("dict"
        (translate-dict-term (aref elements 2)))
-      (:|time|
+      ("time"
        (translate-time-term (aref elements 2)
-			    (aref elements 3)
-			    (aref elements 4)))
-      (:|regex|
+                            (aref elements 3)
+                            (aref elements 4)))
+      ("regex"
        (translate-regex-term (aref elements 2)
-			     (aref elements 3))) )))
+                             (aref elements 3))) )))
 
 (defun translate-dict-term (dict)
   (loop

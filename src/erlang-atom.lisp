@@ -8,6 +8,11 @@
 ;;; Methods
 ;;;
 
+(defun make-atom (string)
+  (if *atom-symbol-package*
+      (intern string *atom-symbol-package*)
+      (make-symbol string)))
+
 (defmethod match-p ((a symbol) (b symbol))
   (eql a b)) ;; What about symbols in different packages?
 
@@ -138,7 +143,7 @@
 (defun decode-external-atom (bytes &optional (pos 0))
   (let ((length (bytes-to-uint16 bytes pos))
         (pos2 (+ 2 pos)))
-    (values (intern (bytes-to-string bytes length pos2))
+    (values (make-atom (bytes-to-string bytes length pos2))
             (+ pos2 length))))
 
 
@@ -166,5 +171,5 @@
 (defun decode-external-small-atom (bytes &optional (pos 0))
   (let ((length (aref bytes pos))
         (pos1 (1+ pos)))
-    (values (intern (bytes-to-string bytes length pos1))
+    (values (make-atom (bytes-to-string bytes length pos1))
             (+ pos1 length))))

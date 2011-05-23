@@ -197,6 +197,20 @@
 <h3>Variables</h3>
 
 <p>
+  <a name="bert_STatom-symbol-packageST" />
+  [Special variable]<br>
+  <b>*atom-symbol-package*</b>
+  <blockquote>
+    <p>
+      Inherited from <code>CLERIC</code>.
+      See <a href="#cleric_STatom-symbol-packageST">
+        cleric:*atom-symbol-package*</a>.
+    </p>
+  </blockquote>
+  <br>
+</p>
+
+<p>
   <a name="bert_STlisp-string-is-erlang-binaryST" />
   [Special variable]<br>
   <b>*lisp-string-is-erlang-binary*</b>
@@ -663,6 +677,18 @@
 </p>
 
 <p>
+  <a name="cleric_make-atom" />
+  [Function]<br>
+  <b>make-atom</b> <i>string</i> => <i>symbol</i>
+  <blockquote>
+    Creates a symbol with name <i>string</i> which is interned in the package
+    defined by
+    <a href="#cleric_STatom-symbol-packageST">*atom-symbol-package*</a>.
+  </blockquote>
+  <br>
+</p>
+
+<p>
   <a name="cleric_make-pid" />
   [Function]<br>
   <b>make-pid</b> => <i>pid</i>
@@ -938,6 +964,16 @@
 </p>
 
 <h3>Variables</h3>
+
+<p>
+  <a name="cleric_STatom-symbol-packageST" />
+  [Special variable]<br>
+  <b>*atom-symbol-package*</b>
+  <blockquote>
+    Initial value: <code>:KEYWORD</code>
+  </blockquote>
+  <br>
+</p>
 
 <p>
   <a name="cleric_STerlang-false-is-lisp-nilST" />

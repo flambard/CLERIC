@@ -30,6 +30,7 @@
    ;; Class methods and functions
    #:encode
    #:decode
+   #:make-atom
    #:match-p
    #:bytes
    #:bits-in-last-byte
@@ -91,6 +92,7 @@
    #:+highest-version-supported+
 
    ;; Special variables
+   #:*atom-symbol-package*
    #:*this-node*
    #:*remote-nodes*
    #:*lisp-t-is-erlang-true*

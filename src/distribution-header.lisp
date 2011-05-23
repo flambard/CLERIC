@@ -180,7 +180,7 @@
 	(let* ((len (if long-atoms
 			(read-uint16 stream)
 			(read-byte stream)))
-	       (atom (intern (read-bytes-as-string len stream))))
+	       (atom (make-atom (read-bytes-as-string len stream))))
 	  (atom-cache-add atom
 			  *atom-cache*
 			  segment-index
@@ -201,7 +201,7 @@
 	      (progn
 		(setf len (aref bytes (1+ pos)))
 		(setf pos1 (+ 2 pos))))
-	  (let ((atom (intern (bytes-to-string bytes len pos1))))
+	  (let ((atom (make-atom (bytes-to-string bytes len pos1))))
 	    (atom-cache-add atom
 			    *atom-cache*
 			    segment-index
