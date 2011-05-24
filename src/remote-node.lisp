@@ -46,29 +46,27 @@
         (remote-node-connect remote-node cookie))) ))
 
 (defun remote-node-accept-connect (cookie)
-  (restart-case
-      (let ((socket (accept-connect)))
-        (handler-bind ((condition #'(lambda (condition)
-                                      (declare (ignore condition))
-                                      (usocket:socket-close socket))))
-          (multiple-value-bind (full-node-name flags version)
-              (perform-server-handshake (usocket:socket-stream socket) cookie)
-            (declare (ignore flags))
-            (register-connected-remote-node
-             (make-instance 'remote-node
-                            :node-type 'erlang ;; Can we get this information from flags?
-                            :lowest-version version
-                            :highest-version version
-                            :name (node-name full-node-name)
-                            :host (node-name full-node-name)
-                            :full-name full-node-name)
-             socket)
-            full-node-name)))
-    (start-listening-on-socket ()
-      :report "Start listening on a socket."
-      :test (lambda (condition) (typep condition 'not-listening-on-socket))
-      (start-listening)
-      (remote-node-accept-connect cookie))))
+  (let ((socket (restart-case (accept-connect)
+                  (start-listening-on-socket ()
+                    :report "Start listening on a socket."
+                    (start-listening)
+                    (accept-connect)) )))
+    (handler-bind ((condition #'(lambda (condition)
+                                  (declare (ignore condition))
+                                  (usocket:socket-close socket))))
+      (multiple-value-bind (full-node-name flags version)
+          (perform-server-handshake (usocket:socket-stream socket) cookie)
+        (declare (ignore flags))
+        (register-connected-remote-node
+         (make-instance 'remote-node
+                        :node-type 'erlang ;; Can we get this information from flags?
+                        :lowest-version version
+                        :highest-version version
+                        :name (node-name full-node-name)
+                        :host (node-name full-node-name)
+                        :full-name full-node-name)
+         socket)
+        full-node-name))))
 
 (defun register-connected-remote-node (remote-node socket)
   (setf (slot-value remote-node 'socket) socket)
