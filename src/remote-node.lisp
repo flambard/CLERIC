@@ -66,6 +66,7 @@
             full-node-name)))
     (start-listening-on-socket ()
       :report "Start listening on a socket."
+      :test (lambda (condition) (typep condition 'not-listening-on-socket))
       (start-listening)
       (remote-node-accept-connect cookie))))
 
