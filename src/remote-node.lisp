@@ -40,7 +40,8 @@
           (multiple-value-bind (full-node-name flags version)
               (perform-client-handshake (usocket:socket-stream socket) cookie)
             (declare (ignore full-node-name flags version))
-            (register-connected-remote-node remote-node socket)))
+            (setf (slot-value remote-node 'socket) socket)
+            (register-connected-remote-node remote-node)))
       (try-connect-again ()
         :test try-again-condition-p
         (remote-node-connect remote-node cookie))) ))
@@ -59,17 +60,16 @@
         (declare (ignore flags))
         (register-connected-remote-node
          (make-instance 'remote-node
+                        :socket socket
                         :node-type 'erlang ;; Can we get this information from flags?
                         :lowest-version version
                         :highest-version version
                         :name (node-name full-node-name)
                         :host (node-name full-node-name)
-                        :full-name full-node-name)
-         socket)
+                        :full-name full-node-name))
         full-node-name))))
 
-(defun register-connected-remote-node (remote-node socket)
-  (setf (slot-value remote-node 'socket) socket)
+(defun register-connected-remote-node (remote-node)
   (push remote-node *remote-nodes*)
   t)
 
