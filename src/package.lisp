@@ -84,6 +84,7 @@
    #:unexpected-message-tag-error
 
    ;; Condition restarts
+   #:try-again-condition-p
    #:try-connect-again-restart
    #:start-listening-on-socket-restart
 

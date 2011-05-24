@@ -42,7 +42,7 @@
             (declare (ignore full-node-name flags version))
             (register-connected-remote-node remote-node socket)))
       (try-connect-again ()
-        :test (lambda (condition) (typep condition 'try-again))
+        :test try-again-condition-p
         (remote-node-connect remote-node cookie))) ))
 
 (defun remote-node-accept-connect (cookie)

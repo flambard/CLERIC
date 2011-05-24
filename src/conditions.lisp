@@ -20,6 +20,9 @@
   ((reason :reader reason :initarg :reason))
   (:documentation "This condition is signaled when trying to connect to a remote node that is busy."))
 
+(defun try-again-condition-p (condition)
+  (typep condition 'try-again))
+
 (defun try-connect-again-restart (condition)
   (declare (ignore condition))
   (invoke-restart 'try-connect-again))
