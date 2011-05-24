@@ -200,10 +200,8 @@
        (error 'handshake-failed-error
               :reason "Connection not allowed"))
       ((string= status "alive")
-       ;; Already connected! (confused)
-       ;; What to do?
-       (error 'not-implemented-error
-              :comment "Already connected. Not sure what to do in this situation."))
+       (error 'handshake-failed-error
+              :reason "Already connected."))
       (t
        (error "This should not happen (as usual).")) ) ))
 
