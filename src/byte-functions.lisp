@@ -1,4 +1,4 @@
-(in-package :cleric)
+(in-package :cleric-bops)
 
 (defun bytes-to-unsigned-integer (bytes &optional (number-of-bytes nil) (pos 0))
   (let ((n (if number-of-bytes number-of-bytes (length bytes))))

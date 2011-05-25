@@ -1,7 +1,32 @@
+(defpackage #:cleric-bops
+  (:documentation "Common byte operations used internally by CLERIC and BERT.")
+  (:use #:cl)
+  (:export
+
+   #:bytes-to-signed-int32
+   #:bytes-to-string
+   #:bytes-to-uint16
+   #:bytes-to-uint32
+   #:bytes-to-unsigned-integer
+
+   #:read-bytes
+   #:read-bytes-as-string
+   #:read-signed-int32
+   #:read-uint16
+   #:read-uint32
+
+   #:uint16-to-bytes
+   #:uint32-to-bytes
+   #:unsigned-integer-to-bytes
+
+   #:string-to-bytes
+
+   ))
+
 (defpackage #:common-lisp-erlang-interface
   (:documentation "CLERIC (Common Lisp Erlang Interface) - An implementation of the Erlang distribution protocol.")
   (:nicknames #:cleric)
-  (:use #:cl)
+  (:use #:cl #:cleric-bops)
   (:export
 
    ;; Type
@@ -113,7 +138,7 @@
 (defpackage #:cleric-epmd
   (:documentation
    "Functions for querying the EPMD (Erlang Port Mapper Daemon).")
-  (:use #:cl #:cleric)
+  (:use #:cl #:cleric #:cleric-bops)
   (:export
 
    #:publish
