@@ -43,16 +43,16 @@
          (extra-field-length (length extra))
          (message-length (+ 13 node-name-length extra-field-length)))
     (concatenate 'vector
-                 (uint16-to-bytes message-length)
+                 (cleric::uint16-to-bytes message-length)
                  (vector +alive2-req+)
-                 (uint16-to-bytes port)
+                 (cleric::uint16-to-bytes port)
                  (vector +node-type-hidden+
                          +protocol-tcpip4+)
-                 (uint16-to-bytes +lowest-version-supported+)
-                 (uint16-to-bytes +highest-version-supported+)
-                 (uint16-to-bytes node-name-length)
-                 (string-to-bytes node-name)
-                 (uint16-to-bytes extra-field-length)
+                 (cleric::uint16-to-bytes +lowest-version-supported+)
+                 (cleric::uint16-to-bytes +highest-version-supported+)
+                 (cleric::uint16-to-bytes node-name-length)
+                 (cleric::string-to-bytes node-name)
+                 (cleric::uint16-to-bytes extra-field-length)
                  extra)))
 
 
@@ -66,8 +66,8 @@
 
 (defun read-alive2-response (stream)
   (handler-case
-      (let* ((tag (read-byte stream))
-             (result (read-byte stream))
+      (let* ((tag (cleric::read-byte stream))
+             (result (cleric::read-byte stream))
              (creation (read-uint16 stream)))
         (cond
           ((/= tag +alive2-resp+)
@@ -91,9 +91,9 @@
 
 (defun make-port-please2-request (node-name)
   (concatenate 'vector
-               (uint16-to-bytes (1+ (length node-name)))
+               (cleric::uint16-to-bytes (1+ (length node-name)))
                (vector +port-please2-req+)
-               (string-to-bytes node-name)))
+               (cleric::string-to-bytes node-name)))
 
 
 ;;;
@@ -115,8 +115,8 @@
 
 (defun read-port-please2-response (stream host)
   (handler-case
-      (let ((tag (read-byte stream))
-            (result (read-byte stream)))
+      (let ((tag (cleric::read-byte stream))
+            (result (cleric::read-byte stream)))
         (cond
           ((/= tag +port2-resp+)
            (error 'unexpected-message-tag-error
@@ -126,14 +126,14 @@
            nil) ;; No nodes with that name.
           (t
            (let* ((port (read-uint16 stream))
-                  (node-type (read-byte stream))
-                  (protocol (read-byte stream))
+                  (node-type (cleric::read-byte stream))
+                  (protocol (cleric::read-byte stream))
                   (lowest-version-supported (read-uint16 stream))
                   (highest-version-supported (read-uint16 stream))
                   (node-name-length (read-uint16 stream))
-                  (node-name (read-bytes-as-string node-name-length stream))
+                  (node-name (cleric::read-bytes-as-string node-name-length stream))
                   (extra-field-length (read-uint16 stream))
-                  (extra-field (read-bytes extra-field-length stream)))
+                  (extra-field (cleric::read-bytes extra-field-length stream)))
              (make-instance 'remote-node
                             :port port
                             :node-type (case node-type
