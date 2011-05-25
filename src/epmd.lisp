@@ -11,6 +11,7 @@
 (defconstant +alive2-req+       (char-code #\x))
 (defconstant +alive2-resp+      (char-code #\y))
 (defconstant +port-please2-req+ (char-code #\z))
+(defconstant +names-req+        (char-code #\n))
 
 ;; Node type tags
 (defconstant +node-type-hidden+ 72)
@@ -151,6 +152,35 @@
 
 
 ;;;
+;;; NAMES_REQ
+;;
+;; 2 bytes: Total length of following message
+;; 1 byte:  'n'            [NAMES_REQ message]
+;;
+
+(defun make-names-request ()
+  (concatenate 'vector
+               (uint16-to-bytes 1)
+               (vector +names-req+)))
+
+
+;;;
+;;; NAMES_RESP
+;;
+;; 4 bytes: EPMDPortNo     Why do we get this?
+;; N bytes: NodeInfo
+;;
+
+(defun read-names-response (stream)
+  (values (handler-case (read-bytes 4 stream)
+            (end-of-file () (error 'connection-closed-error)))
+          (coerce (loop
+                     for byte = (read-byte stream nil)
+                     while byte collect (code-char byte))
+                  'string)))
+
+
+;;;
 ;;; EPMD API
 ;;;
 
@@ -209,6 +239,17 @@
     (write-sequence (make-port-please2-request node-name) epmd)
     (finish-output epmd)
     (read-port-please2-response epmd host)))
+
+(defun print-all-registered-nodes (&optional (host "localhost") (stream t))
+  "Query the EPMD about all registered nodes and print the information."
+  (with-epmd-connection-stream (epmd host)
+    (write-sequence (make-names-request) epmd)
+    (finish-output epmd)
+    (multiple-value-bind (epmd-port node-info)
+        (read-names-response epmd)
+      (declare (ignore epmd-port))
+      (princ node-info stream)
+      t)))
 
 
 ;;;

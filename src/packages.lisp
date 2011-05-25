@@ -145,6 +145,7 @@
    #:published-p
    #:unpublish
    #:lookup-node
+   #:print-all-registered-nodes
 
    #:already-registered
    #:unreachable-error
