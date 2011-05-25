@@ -927,6 +927,198 @@
 
 
 <hr>
+<a name="CLERIC-BOPD" />
+<h2>The CLERIC-BOPS package</h2>
+
+<p>
+  The <code>CLERIC-BOPS</code> package contains common byte operation functions
+  used in CLERIC.
+</p>
+
+<h3>Functions</h3>
+
+<p>
+  <a name="cleric-bops_bytes-to-signed-int32" />
+  [Function]<br>
+    <b>bytes-to-signed-int32</b> <i>bytes <code>&amp;optional</code> pos</i> =>
+    <i>signed-int32</i>
+  <blockquote>
+    <p>
+      <i>pos</i> defaults to <code>0</code>.
+    </p>
+    <p>
+      Converts four bytes at position <i>pos</i> in byte vector <i>bytes</i> to a
+      32-bit signed integer.
+    </p>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_bytes-to-string" />
+  [Function]<br>
+    <b>bytes-to-string</b> <i>bytes <code>&amp;optional</code> length pos</i> =>
+    <i>string</i>
+  <blockquote>
+    <p>
+      <i>length</i> defaults to <code>NIL</code>.
+      <br/>
+      <i>pos</i> defaults to <code>0</code>.
+    </p>
+    <p>
+      Converts bytes at <i>pos</i> in <i>bytes</i> to a string. If <i>length</i>
+      is given, <i>length</i> number of bytes is converted, otherwise all bytes.
+    </p>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_bytes-to-uint16" />
+  [Function]<br>
+    <b>bytes-to-uint16</b> <i>bytes <code>&amp;optional</code> pos</i> =>
+    <i>uint16</i>
+  <blockquote>
+    <p>
+      <i>pos</i> defaults to <code>0</code>.
+    </p>
+    <p>
+      Converts two bytes at position <i>pos</i> in byte vector <i>bytes</i> to a
+      16-bit unsigned integer.
+    </p>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_bytes-to-uint32" />
+  [Function]<br>
+    <b>bytes-to-uint32</b> <i>bytes <code>&amp;optional</code> pos</i> =>
+    <i>uint32</i>
+  <blockquote>
+    <p>
+      <i>pos</i> defaults to <code>0</code>.
+    </p>
+    <p>
+      Converts four bytes at position <i>pos</i> in byte vector <i>bytes</i> to a
+      32-bit unsigned integer.
+    </p>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_bytes-to-unsigned-integer" />
+  [Function]<br>
+    <b>bytes-to-unsigned-integer</b>
+    <i>bytes <code>&amp;optional</code> number-of-bytes pos</i> => <i>uint</i>
+  <blockquote>
+    <p>
+      <i>number-of-bytes</i> defaults to <code>NIL</code>.
+      <br/>
+      <i>pos</i> defaults to <code>0</code>.
+    </p>
+    <p>
+      Converts <i>number-of-bytes</i> bytes at position <i>pos</i> in byte vector
+      <i>bytes</i> to an unsigned integer.
+    </p>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_read-bytes" />
+  [Function]<br>
+    <b>read-bytes</b> <i>n stream</i> => <i>bytes</i>
+  <blockquote>
+    Reads an <i>n</i> length byte vector from <i>stream</i>.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_read-bytes-as-string" />
+  [Function]<br>
+    <b>read-bytes-as-string</b> <i>n stream</i> => <i>string</i>
+  <blockquote>
+    Reads an <i>n</i> length string from <i>stream</i>.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_read-signed-int32" />
+  [Function]<br>
+    <b>read-signed-int32</b> <i>stream</i> => <i>signed-int32</i>
+  <blockquote>
+    Reads a 32-bit signed integer (four bytes) from <i>stream</i>.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_read-uint16" />
+  [Function]<br>
+    <b>read-uint16</b> <i>stream</i> => <i>uint16</i>
+  <blockquote>
+    Reads a 16-bit unsigned integer (two bytes) from <i>stream</i>.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_read-uint32" />
+  [Function]<br>
+    <b>read-uint32</b> <i>stream</i> => <i>uint32</i>
+  <blockquote>
+    Reads a 32-bit unsigned integer (four bytes) from <i>stream</i>.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_uint16-to-bytes" />
+  [Function]<br>
+  <b>uint16-to-bytes</b> <i>int</i> => <i>bytes</i>
+  <blockquote>
+    Converts 16-bit unsigned integer <i>int</i> to a two-byte vector.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_uint32-to-bytes" />
+  [Function]<br>
+  <b>uint32-to-bytes</b> <i>int</i> => <i>bytes</i>
+  <blockquote>
+    Converts 32-bit unsigned integer <i>int</i> to a four-byte vector.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_unsigned-integer-to-bytes" />
+  [Function]<br>
+  <b>unsigned-integer-to-bytes</b> <i>uint number-of-bytes</i> => <i>bytes</i>
+  <blockquote>
+    Converts unsigned integer <i>uint</i> to a vector of bytes of length
+    <i>number-of-bytes</i>.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-bops_string-to-bytes" />
+  [Function]<br>
+  <b>string-to-bytes</b> <i>string</i> => <i>bytes</i>
+  <blockquote>
+    Converts <i>string</i> to a vector of bytes.
+  </blockquote>
+  <br>
+</p>
+
+
+<hr>
 <a name="CLERIC-EPMD" />
 <h2>The CLERIC-EPMD package</h2>
 
