@@ -13,56 +13,56 @@
   :components
   ((:module :src
             :components
-            ((:file "package")
+            ((:file "packages")
              (:file "listen"
-                    :depends-on ("package"))
+                    :depends-on ("packages"))
              (:file "macros"
-                    :depends-on ("package"))
+                    :depends-on ("packages"))
              (:file "generic-functions"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"))
              (:file "remote-node"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "listen"
                                  "atom-cache"
                                  "special-variables"))
              (:file "conditions"
-                    :depends-on ("package"))
+                    :depends-on ("packages"))
              (:file "constants"
-                    :depends-on ("package"))
+                    :depends-on ("packages"))
              (:file "atom-cache"
-                    :depends-on ("package"))
+                    :depends-on ("packages"))
              (:file "atom-cache-entries"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "atom-cache"
                                  "special-variables"))
              (:file "special-variables"
-                    :depends-on ("package"))
+                    :depends-on ("packages"))
              (:file "bops"
-                    :depends-on ("package"))
+                    :depends-on ("packages"))
              (:file "classes"
-                    :depends-on ("package"))
+                    :depends-on ("packages"))
              (:file "type-erlang-translatable"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "classes"))
              (:file "distribution-header"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "atom-cache"
                                  "special-variables"
                                  "bops"))
              (:file "ieee-floats" ;; Needs IEEE-Floats library
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "bops"))
              (:file "epmd"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "conditions"
                                  "remote-node"
                                  "bops"
                                  "constants"))
              (:file "decode"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "conditions"
                                  "bops"
                                  "generic-functions"
@@ -81,21 +81,21 @@
                                  "erlang-reference"
                                  "erlang-tuple"))
              (:file "handshake"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "conditions"
                                  "bops"
                                  "constants"
                                  "md5"))
              (:file "md5" ;; Needs MD5 library
-                    :depends-on ("package"))
+                    :depends-on ("packages"))
              (:file "control-message"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "generic-functions"
                                  "constants"
                                  "classes"
                                  "decode"))
              (:file "node-protocol"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "macros"
                                  "conditions"
                                  "distribution-header"
@@ -104,26 +104,26 @@
                                  "control-message"
                                  "remote-node"))
              (:file "erlang-atom"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "special-variables"
                                  "bops"))
              (:file "erlang-binary"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "special-variables"
                                  "classes"
                                  "bops"))
              (:file "erlang-float"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "ieee-floats"
                                  "bops"))
              (:file "erlang-fun"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "macros"
                                  "constants"
                                  "conditions"
@@ -131,44 +131,44 @@
                                  "classes"
                                  "bops"))
              (:file "erlang-integer"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "bops"))
              (:file "erlang-list"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "macros"
                                  "constants"
                                  "conditions"
                                  "special-variables"
                                  "bops"))
              (:file "erlang-pid"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "special-variables"
                                  "classes"
                                  "bops"))
              (:file "erlang-port"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "classes"
                                  "bops"))
              (:file "erlang-reference"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "classes"
                                  "bops"))
              (:file "erlang-string"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "special-variables"
                                  "bops"))
              (:file "erlang-tuple"
-                    :depends-on ("package"
+                    :depends-on ("packages"
                                  "constants"
                                  "conditions"
                                  "classes"
