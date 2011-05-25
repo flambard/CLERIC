@@ -5,9 +5,6 @@
 (defvar *atom-symbol-package* :keyword
   "The package in which atom symbols are interned. Symbols are uninterned if NIL.")
 
-(defvar *epmd-socket* nil
-  "The EPMD socket. NIL if not registered in EPMD.")
-
 (defvar *listening-socket* nil
   "The listening socket. NIL if not listening.")
 

@@ -1,8 +1,26 @@
 ;;;; Functions for querying EPMD (Erlang Port Mapped Daemon)
 
-(in-package :cleric)
+(in-package :cleric-epmd)
+
+;;; EPMD port
+(defconstant +epmd-port+ 4369
+  "The default TCP port the EPMD listens on.")
+
+;;; EPMD message tags
+(defconstant +port2-resp+       (char-code #\w))
+(defconstant +alive2-req+       (char-code #\x))
+(defconstant +alive2-resp+      (char-code #\y))
+(defconstant +port-please2-req+ (char-code #\z))
+
+;; Node type tags
+(defconstant +node-type-hidden+ 72)
+(defconstant +node-type-erlang+ 77)
 
 (defconstant +protocol-tcpip4+ 0)
+
+(defvar *epmd-socket* nil
+  "The EPMD socket. NIL if not registered in EPMD.")
+
 
 ;;;
 ;;; ALIVE2_REQ
@@ -196,21 +214,30 @@
 ;;; Helper functions
 ;;;
 
-(defun node-name (node-string)
-  "Return the name part of a node identifier"
-  ;; All characters up to a #\@ is the name
-  (let ((pos (position #\@ node-string)))
-    (if pos
-        (subseq node-string 0 pos)
-        node-string)))
-
-(defun node-host (node-string)
-  "Return the host part of a node identifier"
-  ;; All characters after a #\@ is the host
-  (let ((pos (position #\@ node-string)))
-    (if pos
-        (subseq node-string (1+ pos))
-        "localhost"))) ;; OK with localhost??
-
 (defun connect-to-epmd (&optional (host "localhost"))
   (usocket:socket-connect host +epmd-port+ :element-type '(unsigned-byte 8)))
+
+
+;;;
+;;; Conditions
+;;;
+
+(define-condition already-registered-on-epmd (error)
+  ()
+  (:documentation "This error is signaled when trying to register on the EPMD when already registered."))
+
+(define-condition epmd-host-unknown-error (error)
+  ;; USOCKET:UNKNOWN-ERROR
+  ()
+  (:documentation "This error is signaled if the hostname for EPMD is unresolvable."))
+
+(define-condition epmd-unreachable-error (error)
+  ;; USOCKET:CONNECTION-REFUSED-ERROR
+  ()
+  (:documentation "This error is signaled when the EPMD is unreachable."))
+
+
+(define-condition epmd-response-error (error)
+  ;; Useful?
+  ()
+  (:documentation "This error is signaled when the EPMD sends an error response."))

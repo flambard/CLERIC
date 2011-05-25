@@ -2,11 +2,6 @@
 
 (in-package :cleric)
 
-;;; Node type tags
-(defconstant +node-type-hidden+ 72)
-(defconstant +node-type-erlang+ 77)
-
-
 ;;; Node protocol type tags
 (defconstant +pass-through+ 112)
 (defconstant +protocol-version+ 131)
@@ -77,13 +72,3 @@
   "Lowest version of the Erlang distribution protocol supported.")
 (defconstant +highest-version-supported+ 5
   "Highest version of the Erlang distribution protocol supported.")
-
-;;; EPMD port
-(defconstant +epmd-port+ 4369
-  "The default TCP port the EPMD listens on.")
-
-;;; EPMD message tags
-(defconstant +port2-resp+       (char-code #\w))
-(defconstant +alive2-req+       (char-code #\x))
-(defconstant +alive2-resp+      (char-code #\y))
-(defconstant +port-please2-req+ (char-code #\z))

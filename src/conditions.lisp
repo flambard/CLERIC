@@ -41,26 +41,6 @@
   ()
   (:documentation "This error is signaled when trying to connect to a node that is unreachable."))
 
-(define-condition already-registered-on-epmd (error)
-  ()
-  (:documentation "This error is signaled when trying to register on the EPMD when already registered."))
-
-(define-condition epmd-host-unknown-error (error)
-  ;; USOCKET:UNKNOWN-ERROR
-  ()
-  (:documentation "This error is signaled if the hostname for EPMD is unresolvable."))
-
-(define-condition epmd-unreachable-error (error)
-  ;; USOCKET:CONNECTION-REFUSED-ERROR
-  ()
-  (:documentation "This error is signaled when the EPMD is unreachable."))
-
-
-(define-condition epmd-response-error (error)
-  ;; Useful?
-  ()
-  (:documentation "This error is signaled when the EPMD sends an error response."))
-
 (define-condition malformed-message-error (error)
   ((bytes :reader bytes :initarg :bytes))
   (:documentation "This error is signaled when a protocol message is malformed."))

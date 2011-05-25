@@ -24,6 +24,7 @@
 (defmethod socket-stream ((node remote-node))
   (usocket:socket-stream (remote-node-socket node)))
 
+
 (defun remote-node-connect (remote-node cookie)
   "Connect and perform handshake with a remote node."
   (let ((socket
@@ -69,9 +70,31 @@
                         :full-name full-node-name))
         full-node-name))))
 
+
 (defun register-connected-remote-node (remote-node)
   (push remote-node *remote-nodes*)
   t)
 
 (defun find-connected-remote-node (node-name) ;; Make NODE-NAME a node designator
   (find node-name *remote-nodes* :key #'remote-node-name :test #'string=)) ;; Perhaps also check full name?
+
+
+;;;
+;;; Helper functions
+;;;
+
+(defun node-name (node-string)
+  "Return the name part of a node identifier"
+  ;; All characters up to a #\@ is the name
+  (let ((pos (position #\@ node-string)))
+    (if pos
+        (subseq node-string 0 pos)
+        node-string)))
+
+(defun node-host (node-string)
+  "Return the host part of a node identifier"
+  ;; All characters after a #\@ is the host
+  (let ((pos (position #\@ node-string)))
+    (if pos
+        (subseq node-string (1+ pos))
+        "localhost"))) ;; OK with localhost??

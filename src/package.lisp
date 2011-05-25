@@ -73,10 +73,6 @@
    #:handshake-failed-error
    #:connection-closed-error
    #:node-unreachable-error
-   #:already-registered-on-epmd
-   #:epmd-unreachable-error
-   #:epmd-host-unknown-error
-   #:epmd-response-error
    #:malformed-message-error
    #:malformed-external-erlang-term-error
    #:untranslatable-lisp-object-error
@@ -105,17 +101,29 @@
    #:*erlang-false-is-lisp-nil*
    #:*erlang-string-is-lisp-string*
 
-   ;; EPMD Functions
-   #:epmd-publish
-   #:epmd-published-p
-   #:epmd-unpublish
-   #:epmd-lookup-node
-
    ;; Connection functions
    #:reg-send
    #:send
    #:link
    #:unlink
    #:receive-node-messages
+
+   ))
+
+(defpackage #:cleric-epmd
+  (:documentation
+   "Functions for querying the EPMD (Erlang Port Mapper Daemon).")
+  (:use #:cl #:cleric)
+  (:export
+
+   #:epmd-publish
+   #:epmd-published-p
+   #:epmd-unpublish
+   #:epmd-lookup-node
+
+   #:already-registered-on-epmd
+   #:epmd-unreachable-error
+   #:epmd-host-unknown-error
+   #:epmd-response-error
 
    ))
