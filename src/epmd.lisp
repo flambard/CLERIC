@@ -164,9 +164,10 @@
                                (usocket:connection-refused-error ()
                                  (error 'unreachable-error))))
                      (epmd (usocket:socket-stream socket)))
-                (write-sequence (make-alive2-request (node-name *this-node*)
-                                                     (listening-port))
-                                epmd)
+                (write-sequence
+                 (make-alive2-request (cleric::node-name *this-node*)
+                                      (listening-port))
+                 epmd)
                 (finish-output epmd)
                 (let ((creation (read-alive2-response epmd)))
                   (declare (ignore creation))
