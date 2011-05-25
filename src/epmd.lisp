@@ -75,7 +75,7 @@
                   :tag tag
                   :expected-tags (list +alive2-resp+)))
           ((/= 0 result)
-           (error 'epmd-response-error))
+           (error 'response-error))
           (t
            creation)))
     (end-of-file () (error 'connection-closed-error))))
@@ -154,15 +154,15 @@
 ;;; EPMD API
 ;;;
 
-(defun epmd-publish ()
+(defun publish ()
   (if *epmd-socket*
-      (error 'already-registered-on-epmd)
+      (error 'already-registered)
       (restart-case
           (if (not (listening-p))
               (error 'not-listening-on-socket)
               (let* ((socket (handler-case (connect-to-epmd)
                                (usocket:connection-refused-error ()
-                                 (error 'epmd-unreachable-error))))
+                                 (error 'unreachable-error))))
                      (epmd (usocket:socket-stream socket)))
                 (write-sequence (make-alive2-request (node-name *this-node*)
                                                      (listening-port))
@@ -178,12 +178,12 @@
                   (declare (ignore c))
                   (not (listening-p)))
           (start-listening)
-          (epmd-publish)))))
+          (publish)))))
 
-(defun epmd-published-p ()
+(defun published-p ()
   (not (null *epmd-socket*)))
 
-(defun epmd-unpublish ()
+(defun unpublish ()
   (when *epmd-socket*
     (usocket:socket-close *epmd-socket*)
     (setf *epmd-socket* nil)
@@ -195,14 +195,14 @@
   (let ((socket-var (gensym)))
     `(let* ((,socket-var (handler-case (connect-to-epmd ,host)
                            (usocket:connection-refused-error ()
-                             (error 'epmd-unreachable-error))
+                             (error 'unreachable-error))
                            (usocket:unknown-error ()
-                             (error 'epmd-host-unknown-error))))
+                             (error 'host-unknown-error))))
             (,stream-var (usocket:socket-stream ,socket-var)))
        (unwind-protect (progn ,@body)
          (usocket:socket-close ,socket-var))) ))
 
-(defun epmd-lookup-node (node-name &optional (host "localhost"))
+(defun lookup-node (node-name &optional (host "localhost"))
   "Query the EPMD about a node. Returns a REMOTE-NODE object that represents the node."
   (with-epmd-connection-stream (epmd host)
     (write-sequence (make-port-please2-request node-name) epmd)
@@ -222,22 +222,22 @@
 ;;; Conditions
 ;;;
 
-(define-condition already-registered-on-epmd (error)
+(define-condition already-registered (error)
   ()
   (:documentation "This error is signaled when trying to register on the EPMD when already registered."))
 
-(define-condition epmd-host-unknown-error (error)
+(define-condition host-unknown-error (error)
   ;; USOCKET:UNKNOWN-ERROR
   ()
   (:documentation "This error is signaled if the hostname for EPMD is unresolvable."))
 
-(define-condition epmd-unreachable-error (error)
+(define-condition unreachable-error (error)
   ;; USOCKET:CONNECTION-REFUSED-ERROR
   ()
   (:documentation "This error is signaled when the EPMD is unreachable."))
 
 
-(define-condition epmd-response-error (error)
+(define-condition response-error (error)
   ;; Useful?
   ()
   (:documentation "This error is signaled when the EPMD sends an error response."))

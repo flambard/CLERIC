@@ -116,14 +116,14 @@
   (:use #:cl #:cleric)
   (:export
 
-   #:epmd-publish
-   #:epmd-published-p
-   #:epmd-unpublish
-   #:epmd-lookup-node
+   #:publish
+   #:published-p
+   #:unpublish
+   #:lookup-node
 
-   #:already-registered-on-epmd
-   #:epmd-unreachable-error
-   #:epmd-host-unknown-error
-   #:epmd-response-error
+   #:already-registered
+   #:unreachable-error
+   #:host-unknown-error
+   #:response-error
 
    ))
