@@ -38,7 +38,7 @@
                                  "special-variables"))
              (:file "special-variables"
                     :depends-on ("package"))
-             (:file "byte-functions"
+             (:file "bops"
                     :depends-on ("package"))
              (:file "classes"
                     :depends-on ("package"))
@@ -51,20 +51,20 @@
                                  "conditions"
                                  "atom-cache"
                                  "special-variables"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "ieee-floats" ;; Needs IEEE-Floats library
                     :depends-on ("package"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "epmd"
                     :depends-on ("package"
                                  "conditions"
                                  "remote-node"
-                                 "byte-functions"
+                                 "bops"
                                  "constants"))
              (:file "decode"
                     :depends-on ("package"
                                  "conditions"
-                                 "byte-functions"
+                                 "bops"
                                  "generic-functions"
                                  "constants"
                                  "special-variables"
@@ -83,7 +83,7 @@
              (:file "handshake"
                     :depends-on ("package"
                                  "conditions"
-                                 "byte-functions"
+                                 "bops"
                                  "constants"
                                  "md5"))
              (:file "md5" ;; Needs MD5 library
@@ -100,7 +100,7 @@
                                  "conditions"
                                  "distribution-header"
                                  "classes"
-                                 "byte-functions"
+                                 "bops"
                                  "control-message"
                                  "remote-node"))
              (:file "erlang-atom"
@@ -108,20 +108,20 @@
                                  "constants"
                                  "conditions"
                                  "special-variables"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-binary"
                     :depends-on ("package"
                                  "constants"
                                  "conditions"
                                  "special-variables"
                                  "classes"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-float"
                     :depends-on ("package"
                                  "constants"
                                  "conditions"
                                  "ieee-floats"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-fun"
                     :depends-on ("package"
                                  "macros"
@@ -129,50 +129,50 @@
                                  "conditions"
                                  "special-variables"
                                  "classes"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-integer"
                     :depends-on ("package"
                                  "constants"
                                  "conditions"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-list"
                     :depends-on ("package"
                                  "macros"
                                  "constants"
                                  "conditions"
                                  "special-variables"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-pid"
                     :depends-on ("package"
                                  "constants"
                                  "conditions"
                                  "special-variables"
                                  "classes"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-port"
                     :depends-on ("package"
                                  "constants"
                                  "conditions"
                                  "classes"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-reference"
                     :depends-on ("package"
                                  "constants"
                                  "conditions"
                                  "classes"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-string"
                     :depends-on ("package"
                                  "constants"
                                  "conditions"
                                  "special-variables"
-                                 "byte-functions"))
+                                 "bops"))
              (:file "erlang-tuple"
                     :depends-on ("package"
                                  "constants"
                                  "conditions"
                                  "classes"
-                                 "byte-functions"))
+                                 "bops"))
              ))))
 
 (asdf:defsystem :cleric-test
