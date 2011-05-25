@@ -16,8 +16,8 @@
 
 <p>
   This is the reference document for CLERIC (Common Lisp Erlang Interface).
-  It describes all symbols exported from the <code>CLERIC</code> and
-  <code>CLERIC-EPMD</code> packages.
+  It describes all symbols exported from the <code>CLERIC</code>,
+  <code>CLERIC-BOPS</code>, and <code>CLERIC-EPMD</code> packages.
 </p>
 
 <p>The latest version of this document is available here: <a href="http://common-lisp.net/project/cleric/doc/cleric_reference.html">http://common-lisp.net/project/cleric/doc/cleric_reference.html</a></p>
@@ -1130,6 +1130,36 @@
 <h3>Functions</h3>
 
 <p>
+  <a name="cleric-epmd_lookup-node" />
+  [Function]<br>
+  <b>lookup-node</b> <i>node-name <code>&amp;optional</code> host</i> => <i>remote-node</i>
+  <blockquote>
+    <p><i>host</i> defaults to <code>"localhost"</code>.</p>
+    <p>Queries the EPMD at <i>host</i> for node <i>node-name</i>.
+      If the node exists, a <a href="#cleric_remote-node"><i>remote-node</i></a> object is returned representing that node.
+      Otherwise <code>NIL</code> is returned.</p>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-epmd_print-all-registered-nodes" />
+  [Function]<br>
+  <b>print-all-registered-nodes</b>
+  <i><code>&amp;optional</code> host stream</i> => <i><code>T</code></i>
+  <blockquote>
+    <p>
+      <i>host</i> defaults to <code>"localhost"</code>.
+      <br/>
+      <i>stream</i> defaults to <code>T</code>.
+    </p>
+    Print to <i>stream</i> the names and listening port for all nodes registered
+    on the EPMD at <i>host</i>.
+  </blockquote>
+  <br>
+</p>
+
+<p>
   <a name="cleric-epmd_publish" />
   [Function]<br>
   <b>publish</b> <i></i> => <i><code>T</code></i>
@@ -1155,19 +1185,6 @@
   <b>unpublish</b> <i></i> => <i><code>T</code></i>
   <blockquote>
     Unregister from the EPMD to stop being visible to remote nodes.
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric-epmd_lookup-node" />
-  [Function]<br>
-  <b>lookup-node</b> <i>node-name <code>&amp;optional</code> host</i> => <i>remote-node</i>
-  <blockquote>
-    <p><i>host</i> defaults to <code>"localhost"</code>.</p>
-    <p>Queries the EPMD at <i>host</i> for node <i>node-name</i>.
-      If the node exists, a <a href="#cleric_remote-node"><i>remote-node</i></a> object is returned representing that node.
-      Otherwise <code>NIL</code> is returned.</p>
   </blockquote>
   <br>
 </p>
