@@ -16,7 +16,8 @@
 
 <p>
   This is the reference document for CLERIC (Common Lisp Erlang Interface).
-  It describes all symbols exported from the <code>CLERIC</code> package.
+  It describes all symbols exported from the <code>CLERIC</code> and
+  <code>CLERIC-EPMD</code> packages.
 </p>
 
 <p>The latest version of this document is available here: <a href="http://common-lisp.net/project/cleric/doc/cleric_reference.html">http://common-lisp.net/project/cleric/doc/cleric_reference.html</a></p>
@@ -329,49 +330,6 @@
   <b>encode-control-message</b> <i>control-message <code>&amp;key</code> version-tag atom-cache-entries</i> => <i>bytes</i>
   <blockquote>
     Encodes <i>control-message</i> into a sequence of bytes.
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric_epmd-publish" />
-  [Function]<br>
-  <b>epmd-publish</b> <i></i> => <i><code>T</code></i>
-  <blockquote>
-    Register on the EPMD to become visible to remote nodes.
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric_epmd-published-p" />
-  [Function]<br>
-  <b>epmd-published-p</b> <i></i> => <i>boolean</i>
-  <blockquote>
-    Returns <i>true</i> if registered on the EPMD.
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric_epmd-unpublish" />
-  [Function]<br>
-  <b>epmd-unpublish</b> <i></i> => <i><code>T</code></i>
-  <blockquote>
-    Unregister from the EPMD to stop being visible to remote nodes.
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric_epmd-lookup-node" />
-  [Function]<br>
-  <b>epmd-lookup-node</b> <i>node-name <code>&amp;optional</code> host</i> => <i>remote-node</i>
-  <blockquote>
-    <p><i>host</i> defaults to <code>"localhost"</code>.</p>
-    <p>Queries the EPMD at <i>host</i> for node <i>node-name</i>.
-      If the node exists, a <a href="#cleric_remote-node"><i>remote-node</i></a> object is returned representing that node.
-      Otherwise <code>NIL</code> is returned.</p>
   </blockquote>
   <br>
 </p>
@@ -869,45 +827,9 @@
 </p>
 
 <p>
-  <a name="cleric_already-registered-on-epmd" />
-  [Condition]<br>
-  <b>already-registered-on-epmd</b>
-  <blockquote>
-  </blockquote>
-  <br>
-</p>
-
-<p>
   <a name="cleric_connection-closed-error" />
   [Condition]<br>
   <b>connection-closed-error</b>
-  <blockquote>
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric_epmd-host-unknown-error" />
-  [Condition]<br>
-  <b>epmd-host-unknown-error</b>
-  <blockquote>
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric_epmd-response-error" />
-  [Condition]<br>
-  <b>epmd-response-error</b>
-  <blockquote>
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric_epmd-unreachable-error" />
-  [Condition]<br>
-  <b>epmd-unreachable-error</b>
   <blockquote>
   </blockquote>
   <br>
@@ -998,6 +920,94 @@
   <a name="cleric_untranslatable-lisp-object-error" />
   [Condition]<br>
   <b>untranslatable-lisp-object-error</b>
+  <blockquote>
+  </blockquote>
+  <br>
+</p>
+
+
+<hr>
+<a name="CLERIC-EPMD" />
+<h2>The CLERIC-EPMD package</h2>
+
+<h3>Functions</h3>
+
+<p>
+  <a name="cleric-epmd_publish" />
+  [Function]<br>
+  <b>publish</b> <i></i> => <i><code>T</code></i>
+  <blockquote>
+    Register on the EPMD to become visible to remote nodes.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-epmd_published-p" />
+  [Function]<br>
+  <b>published-p</b> <i></i> => <i>boolean</i>
+  <blockquote>
+    Returns <i>true</i> if registered on the EPMD.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-epmd_unpublish" />
+  [Function]<br>
+  <b>unpublish</b> <i></i> => <i><code>T</code></i>
+  <blockquote>
+    Unregister from the EPMD to stop being visible to remote nodes.
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-epmd_lookup-node" />
+  [Function]<br>
+  <b>lookup-node</b> <i>node-name <code>&amp;optional</code> host</i> => <i>remote-node</i>
+  <blockquote>
+    <p><i>host</i> defaults to <code>"localhost"</code>.</p>
+    <p>Queries the EPMD at <i>host</i> for node <i>node-name</i>.
+      If the node exists, a <a href="#cleric_remote-node"><i>remote-node</i></a> object is returned representing that node.
+      Otherwise <code>NIL</code> is returned.</p>
+  </blockquote>
+  <br>
+</p>
+
+<h3>Conditions</h3>
+
+<p>
+  <a name="cleric-epmd_already-registered" />
+  [Condition]<br>
+  <b>already-registered</b>
+  <blockquote>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-epmd_host-unknown-error" />
+  [Condition]<br>
+  <b>host-unknown-error</b>
+  <blockquote>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-epmd_response-error" />
+  [Condition]<br>
+  <b>response-error</b>
+  <blockquote>
+  </blockquote>
+  <br>
+</p>
+
+<p>
+  <a name="cleric-epmd_unreachable-error" />
+  [Condition]<br>
+  <b>unreachable-error</b>
   <blockquote>
   </blockquote>
   <br>
