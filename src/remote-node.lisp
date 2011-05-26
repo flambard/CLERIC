@@ -83,3 +83,6 @@
 
 (defun remote-node-sockets ()
   (mapcar #'remote-node-socket *remote-nodes*))
+
+(defun connected-remote-nodes ()
+  (mapcar #'remote-node-name *remote-nodes*))

@@ -74,6 +74,7 @@
    #:remote-node-host
    #:remote-node-connect
    #:remote-node-accept-connect
+   #:connected-remote-nodes
    #:encode-control-message
    #:decode-control-message
    #:node
