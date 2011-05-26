@@ -118,7 +118,6 @@
 
    ;; Special variables
    #:*atom-symbol-package*
-   #:*remote-nodes*
    #:*lisp-t-is-erlang-true*
    #:*lisp-nil-is-erlang-empty-list*
    #:*lisp-nil-is-erlang-false*

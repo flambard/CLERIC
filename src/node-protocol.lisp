@@ -81,22 +81,20 @@
 
 (defun receive-node-messages (&key timeout)
   "Waits for and receives messages from connected nodes."
-  (when (null *remote-nodes*)
-    (warn "Not connected to any nodes.")
-    (return-from receive-node-messages nil))
-  (multiple-value-bind (ready-sockets time-left)
-      (usocket:wait-for-input
-       (mapcar #'remote-node-socket *remote-nodes*)
-       :timeout timeout
-       :ready-only t)
-    (declare (ignore time-left))
-    (loop
-       for socket in ready-sockets
-       ;; Find the REMOTE-NODE object that corresponds to the socket object and
-       ;; bind *ATOM-CACHE* to the node's atom cache.
-       ;; OR, pass the whole REMOTE-NODE object to READ-NODE-MESSAGE.
-       for message = (read-node-message (usocket:socket-stream socket))
-       unless (eq message 'tick) collect message)))
+  (let ((sockets (remote-node-sockets)))
+    (when (null sockets)
+      (warn "Not connected to any nodes.")
+      (return-from receive-node-messages nil))
+    (multiple-value-bind (ready-sockets time-left)
+        (usocket:wait-for-input sockets :timeout timeout :ready-only t)
+      (declare (ignore time-left))
+      (loop
+         for socket in ready-sockets
+         ;; Find the REMOTE-NODE object that corresponds to the socket object
+         ;; and bind *ATOM-CACHE* to the node's atom cache.
+         ;; OR, pass the whole REMOTE-NODE object to READ-NODE-MESSAGE.
+         for message = (read-node-message (usocket:socket-stream socket))
+         unless (eq message 'tick) collect message))))
 
 
 (alexandria:define-constant +tock+ #(0 0 0 0)

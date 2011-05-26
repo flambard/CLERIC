@@ -1,5 +1,8 @@
 (in-package :cleric)
 
+(defvar *remote-nodes* (list)
+  "Remote nodes connected to.")
+
 
 (defclass remote-node ()
   ((socket :reader remote-node-socket :initarg :socket)
@@ -77,3 +80,6 @@
 
 (defun find-connected-remote-node (node-name) ;; Make NODE-NAME a node designator
   (find node-name *remote-nodes* :key #'remote-node-name :test #'string=)) ;; Perhaps also check full name?
+
+(defun remote-node-sockets ()
+  (mapcar #'remote-node-socket *remote-nodes*))

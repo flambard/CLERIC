@@ -10,9 +10,6 @@
 
 (defvar *pid-id-counter* 0)
 
-(defvar *remote-nodes* (list)
-  "Remote nodes connected to.")
-
 (defvar *cached-atoms* #()
   "A vector of cached atoms.")
 
