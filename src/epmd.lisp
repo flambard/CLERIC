@@ -195,8 +195,7 @@
                                  (error 'unreachable-error))))
                      (epmd (usocket:socket-stream socket)))
                 (write-sequence
-                 (make-alive2-request (cleric::node-name *this-node*)
-                                      (listening-port))
+                 (make-alive2-request (node-name (this-node)) (listening-port))
                  epmd)
                 (finish-output epmd)
                 (let ((creation (read-alive2-response epmd)))

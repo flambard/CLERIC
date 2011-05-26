@@ -174,7 +174,7 @@
 (defun perform-client-handshake (stream cookie)
   (write-sequence (make-name-message +highest-version-supported+
                                      (capability-flags)
-                                     *this-node*)
+                                     (this-node))
                   stream)
   (finish-output stream)
   (let ((status (read-status-message stream)))
@@ -218,7 +218,7 @@
       (write-sequence (make-challenge-message +highest-version-supported+
                                               (capability-flags)
                                               challenge
-                                              *this-node*)
+                                              (this-node))
                       stream)
       (finish-output stream)
       (multiple-value-bind (new-challenge digest)

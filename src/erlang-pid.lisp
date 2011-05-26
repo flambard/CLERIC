@@ -25,7 +25,7 @@
 (defun make-pid ()
   "Create a new Erlang PID."
   (make-instance 'erlang-pid
-                 :node (make-symbol *this-node*)
+                 :node (make-symbol (this-node))
                  :id (generate-new-pid-id)
                  :serial #(0 0 0 0) ;; What to set here?
                  :creation 1)) ;; What to set here?

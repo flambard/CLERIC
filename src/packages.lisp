@@ -89,6 +89,9 @@
    #:listening-port
    #:start-listening
    #:stop-listening
+   #:this-node
+   #:node-name
+   #:node-host
 
    ;; Conditions
    #:not-implemented-error
@@ -115,7 +118,6 @@
 
    ;; Special variables
    #:*atom-symbol-package*
-   #:*this-node*
    #:*remote-nodes*
    #:*lisp-t-is-erlang-true*
    #:*lisp-nil-is-erlang-empty-list*

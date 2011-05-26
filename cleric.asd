@@ -16,6 +16,8 @@
             ((:file "packages")
              (:file "listen"
                     :depends-on ("packages"))
+             (:file "local-node"
+                    :depends-on ("packages"))
              (:file "macros"
                     :depends-on ("packages"))
              (:file "generic-functions"
@@ -24,6 +26,7 @@
              (:file "remote-node"
                     :depends-on ("packages"
                                  "listen"
+                                 "local-node"
                                  "atom-cache"
                                  "special-variables"))
              (:file "conditions"
@@ -57,6 +60,7 @@
                                  "bops"))
              (:file "epmd"
                     :depends-on ("packages"
+                                 "local-node"
                                  "conditions"
                                  "remote-node"
                                  "bops"
@@ -82,6 +86,7 @@
                                  "erlang-tuple"))
              (:file "handshake"
                     :depends-on ("packages"
+                                 "local-node"
                                  "conditions"
                                  "bops"
                                  "constants"
@@ -144,6 +149,7 @@
                                  "bops"))
              (:file "erlang-pid"
                     :depends-on ("packages"
+                                 "local-node"
                                  "constants"
                                  "conditions"
                                  "special-variables"

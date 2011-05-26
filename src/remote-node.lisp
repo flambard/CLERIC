@@ -77,24 +77,3 @@
 
 (defun find-connected-remote-node (node-name) ;; Make NODE-NAME a node designator
   (find node-name *remote-nodes* :key #'remote-node-name :test #'string=)) ;; Perhaps also check full name?
-
-
-;;;
-;;; Helper functions
-;;;
-
-(defun node-name (node-string)
-  "Return the name part of a node identifier"
-  ;; All characters up to a #\@ is the name
-  (let ((pos (position #\@ node-string)))
-    (if pos
-        (subseq node-string 0 pos)
-        node-string)))
-
-(defun node-host (node-string)
-  "Return the host part of a node identifier"
-  ;; All characters after a #\@ is the host
-  (let ((pos (position #\@ node-string)))
-    (if pos
-        (subseq node-string (1+ pos))
-        "localhost"))) ;; OK with localhost??
