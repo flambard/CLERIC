@@ -485,8 +485,7 @@
   <blockquote>
     <p>Accept connection from a remote node and perform handshake using
       <i>cookie</i>.</p>
-    <p>If the handshake is successful, the node is added to
-      <a href="#cleric_STremote-nodesST">*remote-nodes*</a> and the full node
+    <p>If the handshake is successful, the node is registered and the full node
       name is returned.</p>
   </blockquote>
   <br>
@@ -498,8 +497,8 @@
   <b>remote-node-connect</b> <i>remote-node cookie</i> => <i>t</i>
   <blockquote>
     <p>Connect and perform handshake with <i>remote-node</i>.
-      If the connection and handshake is successful the node is added to <a href="#cleric_STremote-nodesST">*remote-nodes*</a>
-      and the full node name, protocol version, and feature flags are printed on standard output.</p>
+      If the connection and handshake is successful the node is registered and
+      the full node name is returned.</p>
   </blockquote>
   <br>
 </p>
@@ -786,16 +785,6 @@
   <b>*lisp-t-is-erlang-true*</b>
   <blockquote>
     Initial value: <code>NIL</code>
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric_STremote-nodesST" />
-  [Special variable]<br>
-  <b>*remote-nodes*</b>
-  <blockquote>
-    Initial value: <code>()</code>
   </blockquote>
   <br>
 </p>
