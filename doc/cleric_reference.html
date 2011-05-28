@@ -714,7 +714,13 @@
   [Special variable]<br>
   <b>*atom-symbol-package*</b>
   <blockquote>
-    Initial value: <code>:KEYWORD</code>
+    <p>
+      Initial value: <code>:KEYWORD</code>
+    </p>
+    <p>
+      Defines the package in which new symbols sent from remote nodes will be
+      interned.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -724,7 +730,13 @@
   [Special variable]<br>
   <b>*erlang-false-is-lisp-nil*</b>
   <blockquote>
-    Initial value: <code>NIL</code>
+    <p>
+      Initial value: <code>NIL</code>
+    </p>
+    <p>
+      When <i>true</i>, the symbol <code>|false|</code> received from a remote
+      node will be translated to <code>NIL</code>.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -734,7 +746,13 @@
   [Special variable]<br>
   <b>*erlang-string-is-lisp-string*</b>
   <blockquote>
-    Initial value: <code>NIL</code>
+    <p>
+      Initial value: <code>NIL</code>
+    </p>
+    <p>
+      When <i>true</i>, a string received from a remote node will be translated
+      to a string instead of a list of integers.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -744,7 +762,13 @@
   [Special variable]<br>
   <b>*erlang-true-is-lisp-t*</b>
   <blockquote>
-    Initial value: <code>NIL</code>
+    <p>
+      Initial value: <code>NIL</code>
+    </p>
+    <p>
+      When <i>true</i>, the symbol <code>|true|</code> received from a remote
+      node will be translated to <code>T</code>.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -754,7 +778,16 @@
   [Special variable]<br>
   <b>*lisp-nil-at-tail-is-erlang-empty-list*</b>
   <blockquote>
-    Initial value: <code>T</code>
+    <p>
+      Initial value: <code>T</code>
+    </p>
+    <p>
+      When <i>true</i>, translate <code>NIL</code> at the tail of a list to an
+      empty list when sending to a remote node.
+    </p>
+    <p>
+      <i>Note: You will most likely never need to change this variable.</i>
+    </p>
   </blockquote>
   <br>
 </p>
@@ -764,7 +797,13 @@
   [Special variable]<br>
   <b>*lisp-nil-is-erlang-empty-list*</b>
   <blockquote>
-    Initial value: <code>T</code>
+    <p>
+      Initial value: <code>T</code>
+    </p>
+    <p>
+      When <i>true</i>, translate a non-tail <code>NIL</code> to an empty list
+      when sending to a remote node.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -774,7 +813,13 @@
   [Special variable]<br>
   <b>*lisp-nil-is-erlang-false*</b>
   <blockquote>
-    Initial value: <code>NIL</code>
+    <p>
+      Initial value: <code>NIL</code>
+    </p>
+    <p>
+      When <i>true</i>, translate a non-tail <code>NIL</code> to the symbol
+      <code>|false|</code> when sending to a remote node.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -784,7 +829,13 @@
   [Special variable]<br>
   <b>*lisp-string-is-erlang-binary*</b>
   <blockquote>
-    <p>Initial value: <code>NIL</code></p>
+    <p>
+      Initial value: <code>NIL</code>
+    </p>
+    <p>
+      When <i>true</i>, translate a string to a binary when sending to a remote
+      node.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -794,7 +845,13 @@
   [Special variable]<br>
   <b>*lisp-t-is-erlang-true*</b>
   <blockquote>
-    Initial value: <code>NIL</code>
+    <p>
+      Initial value: <code>NIL</code>
+    </p>
+    <p>
+      When <i>true</i>, translate <code>T</code> to the symbol
+      <code>|true|</code> when sending to a remote node.
+    </p>
   </blockquote>
   <br>
 </p>
