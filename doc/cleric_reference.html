@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -20,24 +20,36 @@
   <code>CLERIC-BOPS</code>, and <code>CLERIC-EPMD</code> packages.
 </p>
 
-<p>The latest version of this document is available here: <a href="http://common-lisp.net/project/cleric/doc/cleric_reference.html">http://common-lisp.net/project/cleric/doc/cleric_reference.html</a></p>
+<p>The latest version of this document is available here:
+  <a href="http://common-lisp.net/project/cleric/doc/cleric_reference.html">
+    http://common-lisp.net/project/cleric/doc/cleric_reference.html
+  </a>
+</p>
 
-<p><i>Note that the API is in flux as long as CLERIC is at version 0.0.X.</i></p>
+<p>
+  <i>Note that the API is in flux as long as CLERIC is at version 0.0.X.</i>
+</p>
 
 <hr>
 <a name="CLERIC" />
 <h2>The CLERIC package</h2>
 
-<p>CLERIC is an implementation of the Erlang distribution protocol, making it possible for a Lisp program to act as an <i>Erlang node</i>. Similar libraries exist for other languages; <i>erl_interface</i> for C and <i>jinterface</i> for Java are part of the official Erlang distribution.
+<p>
+  CLERIC is an implementation of the Erlang distribution protocol, making it
+  possible for a Lisp program to act as an <i>Erlang node</i>. Similar libraries
+  exist for other languages; <i>erl_interface</i> for C and <i>jinterface</i>
+  for Java are part of the official Erlang distribution.
+</p>
 
-  <h3>Types and Classes</h3>
+<h3>Types and Classes</h3>
 
 <p>
   <a name="cleric_erlang-translatable" />
   [Type]<br>
   <b>erlang-translatable</b>
   <blockquote>
-    The type <i>erlang-translatable</i> contains all types of Lisp objects that may be translated to Erlang objects.
+    The type <i>erlang-translatable</i> contains all types of Lisp objects that
+    may be translated to Erlang objects.
   </blockquote>
   <br>
 </p>
@@ -219,7 +231,10 @@
   [Generic function]<br>
   <b>arity</b> <i>tuple-or-fun</i> => <i>arity</i>
   <blockquote>
-    <p>Returns the arity of <i>tuple-or-fun</i>. For tuples that means the number of elements and for Funs the number of arguments.</p>
+    <p>
+      Returns the arity of <i>tuple-or-fun</i>. For tuples that means the number
+      of elements and for Funs the number of arguments.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -297,9 +312,11 @@
 <p>
   <a name="cleric_decode" />
   [Function]<br>
-  <b>decode</b> <i>bytes <code>&amp;key</code> start version-tag</i> => <i>erlang-term, position</i>
+  <b>decode</b> <i>bytes <code>&amp;key</code> start version-tag</i> =>
+  <i>erlang-term, position</i>
   <blockquote>
-    Decodes the sequence <i>bytes</i> into Erlang terms. <i>position</i> is the number of bytes consumed from <i>bytes</i>.
+    Decodes the sequence <i>bytes</i> into Erlang terms. <i>position</i> is the
+    number of bytes consumed from <i>bytes</i>.
   </blockquote>
   <br>
 </p>
@@ -307,9 +324,12 @@
 <p>
   <a name="cleric_decode-control-message" />
   [Function]<br>
-  <b>decode-control-message</b> <i>bytes <code>&amp;key</code> start version-tag</i> => <i>control-message, position</i>
+  <b>decode-control-message</b>
+  <i>bytes <code>&amp;key</code> start version-tag</i> =>
+  <i>control-message, position</i>
   <blockquote>
-    Decodes the sequence <i>bytes</i> into a Erlang control message. <i>position</i> is the number of bytes consumed from <i>bytes</i>.
+    Decodes the sequence <i>bytes</i> into a Erlang control message.
+    <i>position</i> is the number of bytes consumed from <i>bytes</i>.
   </blockquote>
   <br>
 </p>
@@ -327,7 +347,8 @@
 <p>
   <a name="cleric_encode" />
   [Generic function]<br>
-  <b>encode</b> <i>erlang-translatable-object <code>&amp;key</code> version-tag atom-cache-entries</i> => <i>bytes</i>
+  <b>encode</b> <i>erlang-translatable-object <code>&amp;key</code> version-tag
+    atom-cache-entries</i> => <i>bytes</i>
   <blockquote>
     Encodes <i>erlang-translatable-object</i> into a sequence of bytes.
   </blockquote>
@@ -337,7 +358,8 @@
 <p>
   <a name="cleric_encode-control-message" />
   [Generic function]<br>
-  <b>encode-control-message</b> <i>control-message <code>&amp;key</code> version-tag atom-cache-entries</i> => <i>bytes</i>
+  <b>encode-control-message</b> <i>control-message <code>&amp;key</code>
+    version-tag atom-cache-entries</i> => <i>bytes</i>
   <blockquote>
     Encodes <i>control-message</i> into a sequence of bytes.
   </blockquote>
@@ -369,7 +391,9 @@
   [Function]<br>
   <b>link</b> <i>from-pid to-pid</i> => <i>nil</i>
   <blockquote>
-    Establish a process link between <i>from-pid</i> and <i>to-pid</i>. Sends a <i>Link</i> control message to the node where the process <i>to-pid</i> is located.
+    Establish a process link between <i>from-pid</i> and <i>to-pid</i>. Sends a
+    <i>Link</i> control message to the node where the process <i>to-pid</i> is
+    located.
   </blockquote>
   <br>
 </p>
@@ -452,7 +476,8 @@
   [Generic function]<br>
   <b>node</b> <i>erlang-identifier</i> => <i>symbol</i>
   <blockquote>
-    Returns the node of <i>erlang-identifier</i>. An Erlang identifier is either a Pid, Port, or a reference object.
+    Returns the node of <i>erlang-identifier</i>. An Erlang identifier is either
+    a Pid, Port, or a reference object.
   </blockquote>
   <br>
 </p>
@@ -470,10 +495,16 @@
 <p>
   <a name="cleric_receive-node-messages" />
   [Function]<br>
-  <b>receive-node-messages</b> <i><code>&amp;key</code> timeout</i> => <i>control-messages</i>
+  <b>receive-node-messages</b> <i><code>&amp;key</code> timeout</i> =>
+  <i>control-messages</i>
   <blockquote>
-    <p><i>timeout</i> defaults to <code>NIL</code>.</p>
-    <p>Waits for and receives messages from connected nodes. Returns a list of received messages.</p>
+    <p>
+      <i>timeout</i> defaults to <code>NIL</code>.
+    </p>
+    <p>
+      Waits for and receives messages from connected nodes. Returns a list of
+      received messages.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -483,7 +514,8 @@
   [Function]<br>
   <b>reg-send</b> <i>from-pid to-name node message</i> => <i>nil</i>
   <blockquote>
-    Sends <i>message</i> from <i>from-pid</i> to registered process <i>to-name</i> on <i>node</i>.
+    Sends <i>message</i> from <i>from-pid</i> to registered process
+    <i>to-name</i> on <i>node</i>.
   </blockquote>
   <br>
 </p>
@@ -493,10 +525,14 @@
   [Function]<br>
   <b>remote-node-accept-connect</b> <i>cookie</i> => <i>full-node-name</i>
   <blockquote>
-    <p>Accept connection from a remote node and perform handshake using
-      <i>cookie</i>.</p>
-    <p>If the handshake is successful, the node is registered and the full node
-      name is returned.</p>
+    <p>
+      Accept connection from a remote node and perform handshake using
+      <i>cookie</i>.
+    </p>
+    <p>
+      If the handshake is successful, the node is registered and the full node
+      name is returned.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -506,9 +542,11 @@
   [Function]<br>
   <b>remote-node-connect</b> <i>remote-node cookie</i> => <i>t</i>
   <blockquote>
-    <p>Connect and perform handshake with <i>remote-node</i>.
+    <p>
+      Connect and perform handshake with <i>remote-node</i>.
       If the connection and handshake is successful the node is registered and
-      the full node name is returned.</p>
+      the full node name is returned.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -549,7 +587,9 @@
   <b>remote-node-socket</b> <i>remote-node</i> => <i>socket-object</i>
   <blockquote>
     Returns the <a href="http://common-lisp.net/project/usocket/">usocket</a>
-    <a href="http://common-lisp.net/project/usocket/api-docs.shtml#stream-usocket">socket object</a>
+    <a href="http://common-lisp.net/project/usocket/api-docs.shtml#stream-usocket">
+      socket object
+    </a>
     used for communicating with <i>remote-node</i>.
   </blockquote>
   <br>
@@ -570,7 +610,10 @@
   [Generic function]<br>
   <b>size</b> <i>tuple-or-binary</i> => <i>size</i>
   <blockquote>
-    <p>Returns the size of <i>tuple-or-binary</i> which means the number of elements in a tuple or the number of bytes in a binary.</p>
+    <p>
+      Returns the size of <i>tuple-or-binary</i> which means the number of
+      elements in a tuple or the number of bytes in a binary.
+    </p>
   </blockquote>
   <br>
 </p>
@@ -592,7 +635,8 @@
 <p>
   <a name="cleric_start-listening-on-socket-restart" />
   [Function]<br>
-  <b>start-listening-on-socket-restart</b> <i>condition</i> => <i><code>T</code></i>
+  <b>start-listening-on-socket-restart</b> <i>condition</i> =>
+  <i><code>T</code></i>
   <blockquote>
     <p>Invokes the <code>start-listening-on-socket</code> restart.</p>
     <p><i>condition</i> is ignored.</p>
@@ -640,7 +684,8 @@
   [Generic function]<br>
   <b>to-name</b> <i>reg-send-control-message</i> => <i>registered-name</i>
   <blockquote>
-    Returns the registered process name of the receiver of <i>reg-send-control-message</i>.
+    Returns the registered process name of the receiver of
+    <i>reg-send-control-message</i>.
   </blockquote>
   <br>
 </p>
@@ -702,7 +747,8 @@
   [Function]<br>
   <b>unlink</b> <i>from-pid to-pid</i> => <i>nil</i>
   <blockquote>
-    Unlinks <i>from-pid</i> and <i>to-pid</i>. Sends an <i>Unlink</i> control message to the node where <i>to-pid</i> is located.
+    Unlinks <i>from-pid</i> and <i>to-pid</i>. Sends an <i>Unlink</i> control
+    message to the node where <i>to-pid</i> is located.
   </blockquote>
   <br>
 </p>
@@ -1193,12 +1239,18 @@
 <p>
   <a name="cleric-epmd_lookup-node" />
   [Function]<br>
-  <b>lookup-node</b> <i>node-name <code>&amp;optional</code> host</i> => <i>remote-node</i>
+  <b>lookup-node</b> <i>node-name <code>&amp;optional</code> host</i> =>
+  <i>remote-node</i>
   <blockquote>
-    <p><i>host</i> defaults to <code>"localhost"</code>.</p>
-    <p>Queries the EPMD at <i>host</i> for node <i>node-name</i>.
-      If the node exists, a <a href="#cleric_remote-node"><i>remote-node</i></a> object is returned representing that node.
-      Otherwise <code>NIL</code> is returned.</p>
+    <p>
+      <i>host</i> defaults to <code>"localhost"</code>.
+    </p>
+    <p>
+      Queries the EPMD at <i>host</i> for node <i>node-name</i>.
+      If the node exists, a <a href="#cleric_remote-node"><i>remote-node</i></a>
+      object is returned representing that node.
+      Otherwise <code>NIL</code> is returned.
+    </p>
   </blockquote>
   <br>
 </p>
