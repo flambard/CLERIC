@@ -328,8 +328,15 @@
   <b>decode</b> <i>bytes <code>&amp;key</code> start version-tag</i> =>
   <i>erlang-term, position</i>
   <blockquote>
-    Decodes the sequence <i>bytes</i> into Erlang terms. <i>position</i> is the
-    number of bytes consumed from <i>bytes</i>.
+    <p>
+      <i>start</i> defaults to <code>0</code>.
+      <br/>
+      <i>version-tag</i> defaults to <code>NIL</code>.
+    </p>
+    Decodes the sequence <i>bytes</i> into Erlang terms, starting from position
+    <i>start</i>. <i>position</i> is the number of bytes consumed from
+    <i>bytes</i>. If <i>version-tag</i> is <i>true</i>, <i>bytes</i> is expected
+    to begin with a version tag.
   </blockquote>
   <br>
 </p>
@@ -350,7 +357,14 @@
   <b>encode</b> <i>erlang-translatable-object <code>&amp;key</code> version-tag
     atom-cache-entries</i> => <i>bytes</i>
   <blockquote>
+    <p>
+      <i>version-tag</i> defaults to <code>NIL</code>.
+      <br/>
+      <i>atom-cache-entries</i> defaults to <code>NIL</code>.
+    </p>
     Encodes <i>erlang-translatable-object</i> into a sequence of bytes.
+    If <i>version-tag</i> is <i>true</i>, <i>bytes</i> will start with a version
+    tag.
   </blockquote>
   <br>
 </p>
