@@ -335,19 +335,6 @@
 </p>
 
 <p>
-  <a name="cleric_decode-control-message" />
-  [Function]<br>
-  <b>decode-control-message</b>
-  <i>bytes <code>&amp;key</code> start version-tag</i> =>
-  <i>control-message, position</i>
-  <blockquote>
-    Decodes the sequence <i>bytes</i> into a Erlang control message.
-    <i>position</i> is the number of bytes consumed from <i>bytes</i>.
-  </blockquote>
-  <br>
-</p>
-
-<p>
   <a name="cleric_elements" />
   [Generic function]<br>
   <b>elements</b> <i>tuple</i> => <i>elements</i>
@@ -364,17 +351,6 @@
     atom-cache-entries</i> => <i>bytes</i>
   <blockquote>
     Encodes <i>erlang-translatable-object</i> into a sequence of bytes.
-  </blockquote>
-  <br>
-</p>
-
-<p>
-  <a name="cleric_encode-control-message" />
-  [Generic function]<br>
-  <b>encode-control-message</b> <i>control-message <code>&amp;key</code>
-    version-tag atom-cache-entries</i> => <i>bytes</i>
-  <blockquote>
-    Encodes <i>control-message</i> into a sequence of bytes.
   </blockquote>
   <br>
 </p>
