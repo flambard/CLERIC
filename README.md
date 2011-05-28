@@ -36,5 +36,6 @@ To check out the latest code, use git:
 - [usocket](http://common-lisp.net/project/usocket/)
 - [CL-MD5](http://www.cliki.net/CL-MD5)
 - [IEEE-Floats](http://common-lisp.net/project/ieee-floats/)
+- [Alexandria](http://common-lisp.net/project/alexandria/)
 
 Quicklisp and ASDF-Install will download and install these libraries automatically when installing CLERIC.
