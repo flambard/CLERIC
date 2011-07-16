@@ -34,6 +34,7 @@ To check out the latest code, use git:
 ### Dependencies
 
 - [usocket](http://common-lisp.net/project/usocket/)
+- [FLEXI-STREAMS](http://weitz.de/flexi-streams/)
 - [CL-MD5](http://www.cliki.net/CL-MD5)
 - [IEEE-Floats](http://common-lisp.net/project/ieee-floats/)
 - [Alexandria](http://common-lisp.net/project/alexandria/)
