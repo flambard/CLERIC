@@ -53,7 +53,7 @@
     (write-uint16 node-name-length stream)
     (write-string node-name stream)
     (write-uint16 extra-field-length stream)
-    (write-sequence (coerce '(vector octet) extra) stream))
+    (write-sequence (coerce extra '(vector octet)) stream))
   t)
 
 
