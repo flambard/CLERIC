@@ -50,35 +50,6 @@
 
 (defconstant +distribution-header-tag+ 68)
 
-(defun read-distribution-header (stream)
-  ;; Assume +protocol-version+ is read
-  (handler-case
-      (let ((tag (read-byte stream))
-	    (number-of-refs (read-byte stream)))
-	(cond
-	  ((/= tag +distribution-header-tag+)
-	   (error 'unexpected-message-tag-error
-		  :received-tag tag
-		  :expected-tags +distribution-header-tag+))
-	  ((= 0 number-of-refs)
-	   (values (vector)))
-	  (t
-	   ;; Read Flags and pluck the last half byte
-	   (let* ((half-bytes (read-flags number-of-refs stream))
-		  (indices (subseq half-bytes 0 number-of-refs))
-		  (last-half-byte (nth number-of-refs half-bytes))
-		  (currently-unused (ldb (byte 3 1) last-half-byte))
-		  (use-long-atoms (= 1 (ldb (byte 1 0) last-half-byte))))
-	     (declare (ignore currently-unused))
-	     (values
-	      ;; Read AtomCacheRefs and return a vector of atoms.
-	      (map 'vector
-		   #'(lambda (flags)
-		       (read-atom-cache-ref flags stream use-long-atoms))
-		   indices) ) )) ))
-    (end-of-file ()
-      (error 'connection-closed-error))) )
-
 (defun decode-distribution-header (bytes &optional (pos 0))
   (let ((tag (aref bytes pos))
 	(number-of-refs (aref bytes (1+ pos))))
@@ -159,10 +130,6 @@
 
 ;;; Helper functions
 
-(defun read-flags (number-of-refs stream)
-  (decode-flags number-of-refs
-		(read-bytes (1+ (floor (/ number-of-refs 2))) stream)))
-
 (defun decode-flags (number-of-refs bytes &optional (pos 0))
   (loop ;; Read Flags and divide into half-bytes
      with fbytes = (1+ (floor (/ number-of-refs 2)))
@@ -170,23 +137,6 @@
      collect (ldb (byte 4 0) byte) into half-bytes ;; Least significant
      collect (ldb (byte 4 4) byte) into half-bytes ;; Most significant
      finally (return (values half-bytes (+ pos fbytes))) ))
-
-
-(defun read-atom-cache-ref (flags stream &optional long-atoms)
-  (let ((new-entry (= 1 (ldb (byte 1 3) flags)))
-	(segment-index (ldb (byte 3 0) flags))
-	(internal-segment-index (read-byte stream)))
-    (if new-entry
-	(let* ((len (if long-atoms
-			(read-uint16 stream)
-			(read-byte stream)))
-	       (atom (make-atom (read-bytes-as-string len stream))))
-	  (atom-cache-add atom
-			  *atom-cache*
-			  segment-index
-			  internal-segment-index)
-	  atom)
-	(atom-cache-get *atom-cache* segment-index internal-segment-index))))
 
 (defun decode-atom-cache-ref (flags bytes &optional long-atoms (pos 0))
   (let ((new-entry (= 1 (ldb (byte 1 3) flags)))
