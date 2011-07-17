@@ -23,14 +23,14 @@
 (defun read-name-message (stream)
   (handler-case
       (let ((message-length (read-uint16 stream))
-            (tag (read-byte stream)))
-        (if (= tag (char-code #\n))
+            (tag (read-char stream)))
+        (if (char= tag #\n)
             (values (read-uint16 stream)
                     (read-uint32 stream)
-                    (read-bytes-as-string (- message-length 7) stream))
+                    (read-string (- message-length 7) stream))
             (error 'unexpected-message-tag-error
                    :received-tag tag
-                   :expected-tags (list (char-code #\n)))))
+                   :expected-tags (list #\n))))
     (end-of-file () (error 'connection-closed-error))))
 
 
@@ -56,12 +56,12 @@
 (defun read-status-message (stream)
   (handler-case
       (let ((message-length (read-uint16 stream))
-            (tag (read-byte stream)))
-        (if (= tag (char-code #\s))
-            (read-bytes-as-string (1- message-length) stream)
+            (tag (read-char stream)))
+        (if (char= tag #\s)
+            (read-string (1- message-length) stream)
             (error 'unexpected-message-tag-error
                    :received-tag tag
-                   :expected-tags (list (char-code #\s)))))
+                   :expected-tags (list #\s))))
     (end-of-file () (error 'connection-closed-error))))
 
 
@@ -88,15 +88,15 @@
 (defun read-challenge-message (stream)
   (handler-case
       (let ((message-length (read-uint16 stream))
-            (tag (read-byte stream)))
-        (if (= tag (char-code #\n))
+            (tag (read-char stream)))
+        (if (char= tag #\n)
             (values (read-uint16 stream)
                     (read-uint32 stream)
                     (read-uint32 stream)
-                    (read-bytes-as-string (- message-length 11) stream))
+                    (read-string (- message-length 11) stream))
             (error 'unexpected-message-tag-error
                    :received-tag tag
-                   :expected-tags (list (char-code #\n)))))
+                   :expected-tags (list #\n))))
     (end-of-file () (error 'connection-closed-error))))
 
 
@@ -119,16 +119,16 @@
 (defun read-challenge-reply-message (stream)
   (handler-case
       (let ((message-length (read-uint16 stream))
-            (tag (read-byte stream)))
+            (tag (read-char stream)))
         (cond
           ((/= 21 message-length)
            (error 'unexpected-message-length-error
                   :received-length message-length
                   :expected-length 21))
-          ((/= tag (char-code #\r))
+          ((char/= tag #\r)
            (error 'unexpected-message-tag-error
                   :received-tag tag
-                  :expected-tags (list (char-code #\r))))
+                  :expected-tags (list #\r)))
           (t
            (values (read-uint32 stream)
                    (read-bytes 16 stream)))))
@@ -152,16 +152,16 @@
 (defun read-challenge-ack-message (stream)
   (handler-case
       (let ((message-length (read-uint16 stream))
-            (tag (read-byte stream)))
+            (tag (read-char stream)))
         (cond
           ((/= 17 message-length)
            (error 'unexpected-message-length-error
                   :received-length message-length
                   :expected-length 17))
-          ((/= tag (char-code #\a))
+          ((char/= tag #\a)
            (error 'unexpected-message-tag-error
                   :received-tag tag
-                  :expected-tags (list (char-code #\a))))
+                  :expected-tags (list #\a)))
           (t
            (read-bytes 16 stream))))
     (end-of-file () (error 'connection-closed-error))))
