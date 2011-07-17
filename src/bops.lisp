@@ -67,4 +67,5 @@
 
 (defun read-string (n stream)
   (let ((str (make-string n)))
-    (read-sequence str stream)))
+    (read-sequence str stream)
+    str))
