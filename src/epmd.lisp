@@ -91,7 +91,7 @@
 ;;
 
 (defun write-port-please2-request (stream node-name)
-  (write-sequence (uint16-to-bytes (1+ (length node-name))) stream)
+  (write-uint16 (1+ (length node-name)) stream)
   (write-char +port-please2-req+ stream)
   (write-string node-name stream)
   t)
