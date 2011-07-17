@@ -7,11 +7,11 @@
   "The default TCP port the EPMD listens on.")
 
 ;;; EPMD message tags
-(defconstant +port2-resp+       (char-code #\w))
-(defconstant +alive2-req+       (char-code #\x))
-(defconstant +alive2-resp+      (char-code #\y))
-(defconstant +port-please2-req+ (char-code #\z))
-(defconstant +names-req+        (char-code #\n))
+(defconstant +port2-resp+       #\w)
+(defconstant +alive2-req+       #\x)
+(defconstant +alive2-resp+      #\y)
+(defconstant +port-please2-req+ #\z)
+(defconstant +names-req+        #\n)
 
 ;; Node type tags
 (defconstant +node-type-hidden+ 72)
@@ -44,7 +44,7 @@
          (extra-field-length (length extra))
          (message-length (+ 13 node-name-length extra-field-length)))
     (write-uint16 message-length stream)
-    (write-byte +alive2-req+ stream)
+    (write-char +alive2-req+ stream)
     (write-uint16 port stream)
     (write-byte +node-type-hidden+ stream)
     (write-byte +protocol-tcpip4+ stream)
@@ -67,11 +67,11 @@
 
 (defun read-alive2-response (stream)
   (handler-case
-      (let* ((tag (read-byte stream))
+      (let* ((tag (read-char stream))
              (result (read-byte stream))
              (creation (read-uint16 stream)))
         (cond
-          ((/= tag +alive2-resp+)
+          ((char/= tag +alive2-resp+)
            (error 'unexpected-message-tag-error
                   :tag tag
                   :expected-tags (list +alive2-resp+)))
@@ -92,7 +92,7 @@
 
 (defun write-port-please2-request (stream node-name)
   (write-sequence (uint16-to-bytes (1+ (length node-name))) stream)
-  (write-byte +port-please2-req+ stream)
+  (write-char +port-please2-req+ stream)
   (write-string node-name stream)
   t)
 
@@ -116,10 +116,10 @@
 
 (defun read-port-please2-response (stream host)
   (handler-case
-      (let ((tag (read-byte stream))
+      (let ((tag (read-char stream))
             (result (read-byte stream)))
         (cond
-          ((/= tag +port2-resp+)
+          ((char/= tag +port2-resp+)
            (error 'unexpected-message-tag-error
                   :tag tag
                   :expected-tags (list +port2-resp+)))
@@ -158,13 +158,9 @@
 ;; 1 byte:  'n'            [NAMES_REQ message]
 ;;
 
-(defun make-names-request ()
-  (concatenate '(vector octet)
-               (uint16-to-bytes 1)
-               (vector +names-req+)))
-
 (defun write-names-request (stream)
-  (write-sequence (make-names-request) stream)
+  (write-uint16 1 stream)
+  (write-char +names-req+ stream)
   t)
 
 
