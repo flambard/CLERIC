@@ -41,6 +41,8 @@
         (handler-bind ((condition #'(lambda (condition)
                                       (declare (ignore condition))
                                       (usocket:socket-close socket))))
+          (setf (usocket:socket-stream socket)
+                (make-flexi-stream (usocket:socket-stream socket)))
           (multiple-value-bind (full-node-name flags version)
               (perform-client-handshake (usocket:socket-stream socket) cookie)
             (declare (ignore full-node-name flags version))
