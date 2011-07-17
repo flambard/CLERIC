@@ -81,12 +81,6 @@
                  (uint32-to-bytes (length bytes))
                  bytes)))
 
-(defun read-external-binary (stream) ;; OBSOLETE?
-  ;; Assume tag +binary-ext+ is read
-  (let* ((length (read-uint32 stream))
-         (bytes (read-bytes length stream)))
-    (make-instance 'erlang-binary :bytes bytes)))
-
 (defun decode-external-binary (bytes &optional (pos 0))
   (let ((length (bytes-to-uint32 bytes pos))
         (pos4 (+ 4 pos)))
@@ -110,13 +104,6 @@
                  (uint32-to-bytes (length bytes))
                  (vector bits)
                  bytes)))
-
-(defun read-external-bit-binary (stream) ;; OBSOLETE?
-  ;; Assume tag +bit-binary-ext+ is read
-  (let* ((length (read-uint32 stream)))
-    (make-instance 'erlang-binary
-                   :bits (read-byte stream)
-                   :bytes (read-bytes length stream))))
 
 (defun decode-external-bit-binary (bytes &optional (pos 0))
   (let ((length (bytes-to-uint32 bytes pos))

@@ -27,28 +27,6 @@
     (t
      (encode-external-large-big x))))
 
-(defun read-erlang-integer (stream) ;; OBSOLETE?
-  (let ((tag (read-byte stream)))
-    (case tag
-      (#.+small-integer-ext+
-       (read-external-small-integer stream))
-      (#.+integer-ext+
-       (read-external-integer stream))
-      (#.+small-big-ext+
-       (read-external-small-big stream))
-      (#.+large-big-ext+
-       (read-external-large-big stream))
-      (#'+compressed-term+
-       (read-compressed-erlang-term stream))
-      (otherwise
-       (error 'unexpected-message-tag-error
-              :received-tag tag
-              :expected-tags (list +small-integer-ext+
-                                   +integer-ext+
-                                   +small-big-ext+
-                                   +large-big-ext+
-                                   +compressed-term+))) )))
-
 (defun decode-erlang-integer (bytes &optional (pos 0))
   (let ((tag (aref bytes pos)))
     (case tag
@@ -83,10 +61,6 @@
 (defun encode-external-small-integer (uint8) ;; (<= 0 X 255)
   (vector +small-integer-ext+ uint8))
 
-(defun read-external-small-integer (stream) ;; OBSOLETE?
-  ;; Assume tag +small-integer-ext+ is read
-  (decode-external-small-integer (read-bytes 1 stream)))
-
 (defun decode-external-small-integer (bytes &optional (pos 0))
   (values (aref bytes pos)
           (1+ pos)))
@@ -102,10 +76,6 @@
 
 (defun encode-external-integer (int32) ;; (<= (- (expt 2 31)) X (1- (expt 2 31)))
   (concatenate '(vector octet) (vector +integer-ext+) (uint32-to-bytes int32)))
-
-(defun read-external-integer (stream) ;; OBSOLETE?
-  ;; Assume tag +integer-ext+ is read
-  (decode-external-integer (read-bytes 4 stream)))
 
 (defun decode-external-integer (bytes &optional (pos 0))
   (values (bytes-to-signed-int32 bytes pos)
@@ -130,14 +100,6 @@
     (concatenate '(vector octet)
                  (vector +small-big-ext+ length sign)
                  (bignum-to-bytes unsigned-bignum length))))
-
-(defun read-external-small-big (stream) ;; OBSOLETE?
-  ;; Assume tag +small-big-ext+ is read
-  (let ((length (read-byte stream)))
-    (decode-external-small-big
-     (concatenate '(vector octet)
-                  (vector length)
-                  (read-bytes (1+ length) stream)))))
 
 (defun decode-external-small-big (bytes &optional (pos 0))
   (let ((length (aref bytes pos))
@@ -167,14 +129,6 @@
                  (uint32-to-bytes length)
                  (vector sign)
                  (bignum-to-bytes unsigned-bignum length))))
-
-(defun read-external-large-big (stream)
-  ;; Assume tag +large-big-ext+ is read
-  (let ((length-bytes (read-bytes 4 stream)))
-    (decode-external-large-big
-     (concatenate '(vector octet)
-                  length-bytes
-                  (read-bytes (bytes-to-uint32 length-bytes) stream)))))
 
 (defun decode-external-large-big (bytes &optional (pos 0))
   (let ((length (bytes-to-uint32 bytes pos))

@@ -34,10 +34,6 @@
                (vector +new-float-ext+)
                (double-float-to-bytes double-float)))
 
-(defun read-external-new-float (stream) ;; OBSOLETE?
-  ;; Assume tag +new-float-ext+ is read
-  (decode-external-new-float (read-bytes 8 stream)))
-
 (defun decode-external-new-float (bytes &optional (pos 0))
   (values (bytes-to-double-float (subseq bytes pos))
           (+ 8 pos)))
@@ -57,10 +53,6 @@
   (concatenate '(vector octet)
                (vector +float-ext+)
                (string-to-bytes (format nil "~(~,20E~)" float))))
-
-(defun read-external-float (stream) ;; OBSOLETE?
-  ;; Assume tag +float-ext+ is read
-  (decode-external-float (read-bytes 31 stream)))
 
 (defun decode-external-float (bytes &optional (pos 0))
   (let ((string (bytes-to-string bytes 31 pos)))

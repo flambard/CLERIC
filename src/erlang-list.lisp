@@ -34,10 +34,6 @@
 (defun encode-external-nil ()
   (vector +nil-ext+))
 
-(defun read-external-nil (stream)
-  ;; Assume tag +nil-ext+ is read
-  (decode-external-nil (read-bytes 0 stream)))
-
 (defun decode-external-nil (bytes &optional (pos 0))
   (declare (ignore bytes))
   (values nil pos))
@@ -59,10 +55,6 @@
                  (uint32-to-bytes length)
                  elements
                  tail)))
-
-(defun read-external-list (stream) ;; OBSOLETE?
-  ;; Assume tag +list-ext+ is read
-  (read-list-contents stream (read-uint32 stream)))
 
 (defun decode-external-list (bytes &optional (pos 0))
   (decode-list-contents bytes (bytes-to-uint32 bytes pos) (+ 4 pos)))
@@ -87,12 +79,6 @@
                              (encode tail
                                      :atom-cache-entries atom-cache-entries))))
          (return (values bytes tail-bytes length))) ))
-
-(defun read-list-contents (stream length)
-  (if (= 0 length)
-      (read-erlang-term stream)
-      (cons (read-erlang-term stream)
-            (read-list-contents stream (1- length)))))
 
 (defun decode-list-contents (bytes length &optional (pos 0))
   (if (= 0 length)

@@ -41,14 +41,6 @@
                    (string-to-bytes chars)
                    (coerce chars 'vector))))
 
-(defun read-external-string (stream) ;; OBSOLETE?
-  ;; Assume tag +string-ext+ is read
-  (let ((length-bytes (read-bytes 2 stream)))
-    (decode-external-string
-     (concatenate '(vector octet)
-                  length-bytes
-                  (read-bytes (bytes-to-uint16 length-bytes) stream)))))
-
 (defun decode-external-string (bytes &optional (pos 0))
   (let* ((length (bytes-to-uint16 bytes pos))
          (bytes (subseq bytes (+ 2 pos) (+ 2 length pos))))

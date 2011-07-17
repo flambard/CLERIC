@@ -88,18 +88,6 @@
                  (encode uniq)
                  (list-contents-to-bytes free-vars))))
 
-(defun read-external-fun (stream) ;; OBSOLETE?
-  ;; Assume tag +fun-ext+ is read
-  (let ((free-vars-length (read-uint32 stream)))
-    (make-instance 'erlang-old-internal-fun
-                   :pid (read-erlang-pid stream)
-                   :module (read-erlang-atom stream)
-                   :index (read-erlang-integer stream)
-                   :uniq (read-erlang-integer stream)
-                   :free-vars (loop
-                                 repeat free-vars-length
-                                 collect (read-erlang-term stream)))))
-
 (defun decode-external-fun (bytes &optional (pos 0))
   (let ((free-vars-length (bytes-to-uint32 bytes pos)))
     (multiple-value-bind* (((pid pos1) (decode-erlang-pid bytes (+ pos 4)))
@@ -145,14 +133,6 @@
                    (vector +new-fun-ext+)
                    (uint32-to-bytes (+ 4 (length bytes)))
                    bytes))))
-
-(defun read-external-new-fun (stream) ;; OBSOLETE?
-  ;; Assume tag +new-fun-ext+ is read
-  (let ((size-bytes (read-bytes 4 stream)))
-    (decode-external-new-fun
-     (concatenate '(vector octet)
-                  size-bytes
-                  (read-bytes (- (bytes-to-uint32 size-bytes) 4) stream)))))
 
 (defun decode-external-new-fun (bytes &optional (pos 0))
   (let ((size (bytes-to-uint32 bytes pos))
@@ -200,13 +180,6 @@
                  (encode module)
                  (encode function)
                  (encode arity))))
-
-(defun read-external-export (stream) ;; OBSOLETE?
-  ;; Assume tag +export-ext+ is read
-  (make-instance 'erlang-external-fun
-                 :module (read-erlang-atom stream)
-                 :function (read-erlang-atom stream)
-                 :arity (read-erlang-integer stream)))
 
 (defun decode-external-export (bytes &optional (pos 0))
   (multiple-value-bind* (((module pos1) (decode-erlang-atom bytes pos))

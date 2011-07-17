@@ -52,13 +52,6 @@
                  id
                  (vector creation))))
 
-(defun read-external-reference (stream) ;; OBSOLETE?
-  ;; Assume tag +reference-ext+ is read
-  (make-instance 'erlang-reference
-                 :node (read-erlang-atom stream)
-                 :id (read-bytes 4 stream)
-                 :creation (read-byte stream)))
-
 (defun decode-external-reference (bytes &optional (pos 0))
   (multiple-value-bind (node pos1) (decode-erlang-atom bytes pos)
     (values (make-instance 'erlang-reference
@@ -84,14 +77,6 @@
                  (encode node)
                  (vector creation)
                  id))) ;; Several 4-byte IDs..
-
-(defun read-external-new-reference (stream) ;; OBSOLETE?
-  ;; Assume tag +new-reference-ext+ is read
-  (let ((length (read-uint16 stream)))
-    (make-instance 'erlang-reference
-                   :node (read-erlang-atom stream)
-                   :creation (read-byte stream)
-                   :id (read-bytes (* 4 length) stream))))
 
 (defun decode-external-new-reference (bytes &optional (pos 0))
   (let ((length (bytes-to-uint16 bytes pos)))

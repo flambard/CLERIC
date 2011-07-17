@@ -47,19 +47,6 @@
 (defmethod encode ((x erlang-pid) &key &allow-other-keys)
   (encode-external-pid x))
 
-(defun read-erlang-pid (stream) ;; OBSOLETE?
-  (let ((tag (read-byte stream)))
-    (case tag
-      (#.+pid-ext+
-       (read-external-pid stream))
-      (#.+compressed-term+
-       (read-compressed-erlang-term stream))
-      (otherwise
-       (error 'unexpected-erlang-term
-              :received-tag tag
-              :expected-tags (list +pid-ext+
-                                   +compressed-term+))) )))
-
 (defun decode-erlang-pid (bytes &optional (pos 0))
   (let ((tag (aref bytes pos)))
     (case tag
@@ -90,14 +77,6 @@
                  id
                  serial
                  (vector creation))))
-
-(defun read-external-pid (stream) ;; OBSOLETE?
-  ;; Assume tag +pid-ext+ is read
-  (make-instance 'erlang-pid
-                 :node (read-erlang-atom stream)
-                 :id (read-bytes 4 stream)
-                 :serial (read-bytes 4 stream)
-                 :creation (read-byte stream)))
 
 (defun decode-external-pid (bytes &optional (pos 0))
   (multiple-value-bind (node pos1) (decode-erlang-atom bytes pos)

@@ -50,26 +50,6 @@
       (encode-external-small-tuple x atom-cache-entries)
       (encode-external-large-tuple x atom-cache-entries)))
 
-(defun read-erlang-tuple (stream &optional use-version-tag) ;; OBSOLETE?
-  (when use-version-tag
-    (let ((version (read-byte stream)))
-      (unless (= version +protocol-version+)
-        (error 'unexpected-message-tag-error
-               :received-tag version
-               :expected-tags (list +protocol-version+)))))
-  (let ((tag (read-byte stream)))
-    (case tag
-      (#.+small-tuple-ext+ (read-external-small-tuple stream))
-      (#.+large-tuple-ext+ (read-external-large-tuple stream))
-      (#.+compressed-term+
-       (read-compressed-erlang-term stream))
-      (otherwise
-       (error 'unexpected-message-tag-error
-              :received-tag tag
-              :expected-tags (list +small-tuple-ext+
-                                   +large-tuple-ext+
-                                   +compressed-term+))) )))
-
 (defun decode-erlang-tuple (bytes &key (start 0) (version-tag nil))
   (when version-tag
     (let ((version (aref bytes start)))
@@ -108,11 +88,6 @@
                     (encode element :atom-cache-entries atom-cache-entries))
                 (elements tuple))))
 
-(defun read-external-small-tuple (stream) ;; OBSOLETE?
-  ;; Assume tag +small-tuple-ext+ is read
-  (make-instance 'erlang-tuple
-                 :elements (read-tuple-contents stream (read-byte stream))))
-
 (defun decode-external-small-tuple (bytes &optional (pos 0))
   (let ((arity (aref bytes pos)))
     (multiple-value-bind (elements new-pos)
@@ -138,11 +113,6 @@
                     (encode element :atom-cache-entries atom-cache-entries))
                 (elements tuple))))
 
-(defun read-external-large-tuple (stream)
-  ;; Assume tag +large-tuple-ext+ is read
-  (make-instance 'erlang-tuple
-                 :elements (read-tuple-contents stream (read-uint32 stream))))
-
 (defun decode-external-large-tuple (bytes &optional (pos 0))
   (let ((arity (bytes-to-uint32 bytes pos)))
     (multiple-value-bind (elements new-pos)
@@ -159,9 +129,6 @@
      for element across vector
      do (setf bytes (concatenate '(vector octet) bytes (funcall fn element)))
      finally (return bytes)))
-
-(defun read-tuple-contents (stream arity)
-  (coerce (loop repeat arity collect (read-erlang-term stream)) 'vector))
 
 (defun decode-tuple-contents (bytes arity pos)
   (loop

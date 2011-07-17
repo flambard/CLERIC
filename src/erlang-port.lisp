@@ -43,13 +43,6 @@
                  id
                  (vector creation))))
 
-(defun read-external-port (stream) ;; OBSOLETE?
-  ;; Assume tag +port-ext+ is read
-  (make-instance 'erlang-port
-                 :node (read-erlang-atom stream)
-                 :id (read-bytes 4 stream)
-                 :creation (read-byte stream)))
-
 (defun decode-external-port (bytes &optional (pos 0))
   (multiple-value-bind (node pos1) (decode-erlang-atom bytes pos)
     (values (make-instance 'erlang-port

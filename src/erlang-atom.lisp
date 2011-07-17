@@ -41,32 +41,6 @@
          (t
           (encode-external-atom x)) ))) ))
 
-(defun read-erlang-atom (stream) ;; OBSOLETE?
-  (let* ((tag (read-byte stream))
-         (symbol (case tag
-                   (#.+atom-cache-ref+
-                    (read-external-atom-cache-ref stream))
-                   (#.+atom-ext+
-                    (read-external-atom stream))
-                   (#.+small-atom-ext+
-                    (read-external-small-atom stream))
-                   (#.+compressed-term+
-                    (read-compressed-erlang-term stream))
-                   (otherwise
-                    (error 'unexpected-message-tag-error
-                           :received-tag tag
-                           :expected-tags (list +atom-cache-ref+
-                                                +atom-ext+
-                                                +small-atom-ext+
-                                                +compressed-term+))) )))
-    (cond
-      ((and (eq symbol '|true|) *erlang-true-is-lisp-t*)
-       T)
-      ((and (eq symbol '|false|) *erlang-false-is-lisp-nil*)
-       NIL)
-      (t
-       symbol)) ))
-
 (defun decode-erlang-atom (bytes &optional (pos 0))
   (let ((tag (aref bytes pos)))
     (multiple-value-bind (symbol pos2)
@@ -109,10 +83,6 @@
                (vector +atom-cache-ref+)
                (vector reference-index)))
 
-(defun read-external-atom-cache-ref (stream) ;; OBSOLETE?
-  ;; Assume tag +atom-cache-ref+ is read
-  (decode-external-atom-cache-ref (read-bytes 1 stream)))
-
 (defun decode-external-atom-cache-ref (bytes &optional (pos 0))
   (values (svref *cached-atoms* (aref bytes pos))
           (1+ pos)))
@@ -132,14 +102,6 @@
                (vector +atom-ext+)
                (uint16-to-bytes (length (symbol-name atom)))
                (string-to-bytes (symbol-name atom))))
-
-(defun read-external-atom (stream) ;; OBSOLETE?
-  ;; Assume tag +atom-ext+ is read
-  (let* ((length-bytes (read-bytes 2 stream))
-         (length (bytes-to-uint16 length-bytes))
-         (atom-text (read-bytes length stream)))
-    (decode-external-atom
-     (concatenate '(vector octet) length-bytes atom-text))))
 
 (defun decode-external-atom (bytes &optional (pos 0))
   (let ((length (bytes-to-uint16 bytes pos))
@@ -162,13 +124,6 @@
                (vector +small-atom-ext+)
                (vector (length (symbol-name atom)))
                (string-to-bytes (symbol-name atom))))
-
-(defun read-external-small-atom (stream) ;; OBSOLETE?
-  ;; Assume tag +atom-small-ext+ is read
-  (let* ((length (read-byte stream))
-         (atom-text (read-bytes length stream)))
-    (decode-external-atom
-     (concatenate '(vector octet) (vector length) atom-text))))
 
 (defun decode-external-small-atom (bytes &optional (pos 0))
   (let ((length (aref bytes pos))
