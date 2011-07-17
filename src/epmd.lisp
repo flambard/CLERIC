@@ -39,22 +39,22 @@
 ;; M bytes: Extra             [???]
 ;;
 
-(defun make-alive2-request (node-name port &optional (extra #()))
+(defun write-alive2-request (stream node-name port &optional (extra #()))
   (let* ((node-name-length (length node-name))
          (extra-field-length (length extra))
          (message-length (+ 13 node-name-length extra-field-length)))
-    (concatenate 'vector
-                 (uint16-to-bytes message-length)
-                 (vector +alive2-req+)
-                 (uint16-to-bytes port)
-                 (vector +node-type-hidden+
-                         +protocol-tcpip4+)
-                 (uint16-to-bytes +lowest-version-supported+)
-                 (uint16-to-bytes +highest-version-supported+)
-                 (uint16-to-bytes node-name-length)
-                 (string-to-bytes node-name)
-                 (uint16-to-bytes extra-field-length)
-                 extra)))
+    (write-uint16 message-length stream)
+    (write-byte +alive2-req+ stream)
+    (write-uint16 port stream)
+    (write-byte +node-type-hidden+ stream)
+    (write-byte +protocol-tcpip4+ stream)
+    (write-uint16 +lowest-version-supported+ stream)
+    (write-uint16 +highest-version-supported+ stream)
+    (write-uint16 node-name-length stream)
+    (write-string node-name stream)
+    (write-uint16 extra-field-length stream)
+    (write-sequence (coerce '(vector octet) extra) stream))
+  t)
 
 
 ;;;
@@ -196,9 +196,8 @@
                                (usocket:connection-refused-error ()
                                  (error 'unreachable-error))))
                      (epmd (usocket:socket-stream socket)))
-                (write-sequence
-                 (make-alive2-request (node-name (this-node)) (listening-port))
-                 epmd)
+                (write-alive2-request
+                 epmd (node-name (this-node)) (listening-port))
                 (finish-output epmd)
                 (let ((creation (read-alive2-response epmd)))
                   (declare (ignore creation))
