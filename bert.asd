@@ -6,7 +6,7 @@
 (asdf:defsystem :bert
   :description "BERT serializer."
   :author "Markus Flambard <mflambard@common-lisp.net>"
-  :version "0.1.0"
+  :version "0.1.1"
   :license "MIT License"
   :depends-on (:cleric :alexandria)
   :components
