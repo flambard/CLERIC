@@ -76,7 +76,7 @@
 
 (defun encode-external-binary (erlang-binary)
   (with-slots (bytes) erlang-binary
-    (concatenate 'vector
+    (concatenate '(vector octet)
                  (vector +binary-ext+)
                  (uint32-to-bytes (length bytes))
                  bytes)))
@@ -105,7 +105,7 @@
 
 (defun encode-external-bit-binary (erlang-binary)
   (with-slots (bytes bits) erlang-binary
-    (concatenate 'vector
+    (concatenate '(vector octet)
                  (vector +bit-binary-ext+)
                  (uint32-to-bytes (length bytes))
                  (vector bits)

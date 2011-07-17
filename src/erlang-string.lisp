@@ -34,7 +34,7 @@
 ;;
 
 (defun encode-external-string (chars)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (vector +string-ext+)
                (uint16-to-bytes (length chars))
                (if (stringp chars)
@@ -45,7 +45,7 @@
   ;; Assume tag +string-ext+ is read
   (let ((length-bytes (read-bytes 2 stream)))
     (decode-external-string
-     (concatenate 'vector
+     (concatenate '(vector octet)
                   length-bytes
                   (read-bytes (bytes-to-uint16 length-bytes) stream)))))
 

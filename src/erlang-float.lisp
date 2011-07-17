@@ -30,7 +30,7 @@
 ;;
 
 (defun encode-external-new-float (double-float)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (vector +new-float-ext+)
                (double-float-to-bytes double-float)))
 
@@ -54,7 +54,7 @@
 ;; To unpack the float use sscanf with format "%lf".
 
 (defun encode-external-float (float)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (vector +float-ext+)
                (string-to-bytes (format nil "~(~,20E~)" float))))
 

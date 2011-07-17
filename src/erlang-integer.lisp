@@ -101,7 +101,7 @@
 ;;
 
 (defun encode-external-integer (int32) ;; (<= (- (expt 2 31)) X (1- (expt 2 31)))
-  (concatenate 'vector (vector +integer-ext+) (uint32-to-bytes int32)))
+  (concatenate '(vector octet) (vector +integer-ext+) (uint32-to-bytes int32)))
 
 (defun read-external-integer (stream) ;; OBSOLETE?
   ;; Assume tag +integer-ext+ is read
@@ -127,7 +127,7 @@
   (let* ((sign (if (< bignum 0) 1 0))
          (unsigned-bignum (abs bignum))
          (length (bignum-byte-length unsigned-bignum)))
-    (concatenate 'vector
+    (concatenate '(vector octet)
                  (vector +small-big-ext+ length sign)
                  (bignum-to-bytes unsigned-bignum length))))
 
@@ -135,7 +135,9 @@
   ;; Assume tag +small-big-ext+ is read
   (let ((length (read-byte stream)))
     (decode-external-small-big
-     (concatenate 'vector (vector length) (read-bytes (1+ length) stream)))))
+     (concatenate '(vector octet)
+                  (vector length)
+                  (read-bytes (1+ length) stream)))))
 
 (defun decode-external-small-big (bytes &optional (pos 0))
   (let ((length (aref bytes pos))
@@ -160,7 +162,7 @@
   (let* ((sign (if (< bignum 0) 1 0))
          (unsigned-bignum (abs bignum))
          (length (bignum-byte-length unsigned-bignum)))
-    (concatenate 'vector
+    (concatenate '(vector octet)
                  (vector +large-big-ext+)
                  (uint32-to-bytes length)
                  (vector sign)
@@ -170,7 +172,7 @@
   ;; Assume tag +large-big-ext+ is read
   (let ((length-bytes (read-bytes 4 stream)))
     (decode-external-large-big
-     (concatenate 'vector
+     (concatenate '(vector octet)
                   length-bytes
                   (read-bytes (bytes-to-uint32 length-bytes) stream)))))
 

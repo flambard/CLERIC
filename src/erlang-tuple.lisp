@@ -101,7 +101,7 @@
 ;;
 
 (defun encode-external-small-tuple (tuple atom-cache-entries)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (vector +small-tuple-ext+ (erlang-tuple-arity tuple))
                (mapconc-vector
                 #'(lambda (element)
@@ -130,7 +130,7 @@
 ;;
 
 (defun encode-external-large-tuple (tuple atom-cache-entries)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (vector +large-tuple-ext+)
                (uint32-to-bytes (erlang-tuple-arity tuple))
                (mapconc-vector
@@ -157,7 +157,7 @@
   (loop
      with bytes = #()
      for element across vector
-     do (setf bytes (concatenate 'vector bytes (funcall fn element)))
+     do (setf bytes (concatenate '(vector octet) bytes (funcall fn element)))
      finally (return bytes)))
 
 (defun read-tuple-contents (stream arity)

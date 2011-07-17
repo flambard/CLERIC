@@ -84,7 +84,7 @@
 
 (defun encode-external-pid (pid)
   (with-slots (node id serial creation) pid
-    (concatenate 'vector
+    (concatenate '(vector octet)
                  (vector +pid-ext+)
                  (encode node)
                  id

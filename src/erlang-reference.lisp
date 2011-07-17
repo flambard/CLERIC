@@ -46,7 +46,7 @@
 
 (defun encode-external-reference (ref)
   (with-slots (node id creation) ref
-    (concatenate 'vector
+    (concatenate '(vector octet)
                  (vector +reference-ext+)
                  (encode node)
                  id
@@ -78,7 +78,7 @@
 
 (defun encode-external-new-reference (ref)
   (with-slots (node creation id) ref
-    (concatenate 'vector
+    (concatenate '(vector octet)
                  (vector +new-reference-ext+)
                  (uint16-to-bytes (/ (length id) 4))
                  (encode node)

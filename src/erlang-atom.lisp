@@ -105,7 +105,7 @@
 ;;
 
 (defun encode-external-atom-cache-ref (reference-index)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (vector +atom-cache-ref+)
                (vector reference-index)))
 
@@ -128,7 +128,7 @@
 ;;
 
 (defun encode-external-atom (atom)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (vector +atom-ext+)
                (uint16-to-bytes (length (symbol-name atom)))
                (string-to-bytes (symbol-name atom))))
@@ -138,7 +138,8 @@
   (let* ((length-bytes (read-bytes 2 stream))
          (length (bytes-to-uint16 length-bytes))
          (atom-text (read-bytes length stream)))
-    (decode-external-atom (concatenate 'vector length-bytes atom-text))))
+    (decode-external-atom
+     (concatenate '(vector octet) length-bytes atom-text))))
 
 (defun decode-external-atom (bytes &optional (pos 0))
   (let ((length (bytes-to-uint16 bytes pos))
@@ -157,7 +158,7 @@
 ;;
 
 (defun encode-external-small-atom (atom)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (vector +small-atom-ext+)
                (vector (length (symbol-name atom)))
                (string-to-bytes (symbol-name atom))))
@@ -166,7 +167,8 @@
   ;; Assume tag +atom-small-ext+ is read
   (let* ((length (read-byte stream))
          (atom-text (read-bytes length stream)))
-    (decode-external-atom (concatenate 'vector (vector length) atom-text))))
+    (decode-external-atom
+     (concatenate '(vector octet) (vector length) atom-text))))
 
 (defun decode-external-small-atom (bytes &optional (pos 0))
   (let ((length (aref bytes pos))

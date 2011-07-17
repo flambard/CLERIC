@@ -111,11 +111,11 @@
 
 
 (defun make-distribution-header (&optional (cached-atoms #()))
-  (concatenate 'vector
-	       (vector +protocol-version+
-		       +distribution-header-tag+
-		       (length cached-atoms))
-	       (encode-atom-cache-refs cached-atoms)))
+  (concatenate '(vector octet)
+               (vector +protocol-version+
+                       +distribution-header-tag+
+                       (length cached-atoms))
+               (encode-atom-cache-refs cached-atoms)))
 
 (defun encode-atom-cache-refs (entries)
   (loop
@@ -135,7 +135,7 @@
        (nconc half-bytes
 	      (list (logior (if long-atoms 1 0)
 			    (ash currently-unused 1))))
-       (return (concatenate 'vector (encode-flags half-bytes) refs)) ))
+       (return (concatenate '(vector octet) (encode-flags half-bytes) refs)) ))
 
 (defun encode-flags (half-bytes)
   (loop

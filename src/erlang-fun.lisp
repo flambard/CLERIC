@@ -79,7 +79,7 @@
 
 (defun encode-external-fun (fun)
   (with-slots (module pid index uniq free-vars) fun
-    (concatenate 'vector
+    (concatenate '(vector octet)
                  (vector +fun-ext+)
                  (uint32-to-bytes (length free-vars))
                  (encode pid)
@@ -131,7 +131,7 @@
 
 (defun encode-external-new-fun (fun)
   (with-slots (module arity pid index uniq free-vars new-uniq new-index) fun
-    (let ((bytes (concatenate 'vector
+    (let ((bytes (concatenate '(vector octet)
                               (vector arity)
                               new-uniq
                               (uint32-to-bytes new-index)
@@ -141,7 +141,7 @@
                               (encode uniq)
                               (encode pid)
                               (list-contents-to-bytes free-vars))))
-      (concatenate 'vector
+      (concatenate '(vector octet)
                    (vector +new-fun-ext+)
                    (uint32-to-bytes (+ 4 (length bytes)))
                    bytes))))
@@ -150,7 +150,7 @@
   ;; Assume tag +new-fun-ext+ is read
   (let ((size-bytes (read-bytes 4 stream)))
     (decode-external-new-fun
-     (concatenate 'vector
+     (concatenate '(vector octet)
                   size-bytes
                   (read-bytes (- (bytes-to-uint32 size-bytes) 4) stream)))))
 
@@ -195,7 +195,7 @@
 
 (defun encode-external-export (fun)
   (with-slots (module function arity) fun
-    (concatenate 'vector
+    (concatenate '(vector octet)
                  (vector +export-ext+)
                  (encode module)
                  (encode function)

@@ -13,7 +13,7 @@
 ;;
 
 (defun make-name-message (version flags full-node-name)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (uint16-to-bytes (+ 7 (length full-node-name)))
                (vector (char-code #\n))
                (uint16-to-bytes version)
@@ -48,7 +48,7 @@
 ;;
 
 (defun make-status-message (status-string)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (uint16-to-bytes (1+ (length status-string)))
                (vector (char-code #\s))
                (string-to-bytes status-string)))
@@ -77,7 +77,7 @@
 ;;
 
 (defun make-challenge-message (version flags challenge full-node-name)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (uint16-to-bytes (+ 11 (length full-node-name)))
                (vector (char-code #\n))
                (uint16-to-bytes version)
@@ -110,7 +110,7 @@
 ;;
 
 (defun make-challenge-reply-message (challenge digest)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (uint16-to-bytes 21)
                (vector (char-code #\r))
                (uint32-to-bytes challenge)
@@ -144,7 +144,7 @@
 ;;
 
 (defun make-challenge-ack-message (digest)
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (uint16-to-bytes (1+ (length digest)))
                (vector (char-code #\a))
                digest))

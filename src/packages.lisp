@@ -1,6 +1,6 @@
 (defpackage #:cleric-bops
   (:documentation "Common byte operations used internally by CLERIC and BERT.")
-  (:use #:cl)
+  (:use #:cl #:flexi-streams)
   (:export
 
    #:bytes-to-signed-int32
@@ -30,7 +30,7 @@
 (defpackage #:common-lisp-erlang-interface
   (:documentation "CLERIC (Common Lisp Erlang Interface) - An implementation of the Erlang distribution protocol.")
   (:nicknames #:cleric)
-  (:use #:cl #:cleric-bops)
+  (:use #:cl #:cleric-bops #:flexi-streams)
   (:export
 
    ;; Type

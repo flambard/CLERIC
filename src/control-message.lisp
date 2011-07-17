@@ -142,7 +142,7 @@
 
 (defmethod encode-control-message ((object send) &key atom-cache-entries &allow-other-keys)
   (with-slots (cookie to-pid trace-token message) object
-    (concatenate 'vector
+    (concatenate '(vector octet)
 		 (encode (if trace-token
 			     (tuple +cm-send-tt+
 				    cookie
@@ -183,7 +183,7 @@
 
 (defmethod encode-control-message ((object reg-send) &key atom-cache-entries &allow-other-keys)
   (with-slots (from-pid cookie to-name trace-token message) object
-    (concatenate 'vector
+    (concatenate '(vector octet)
 		 (encode (if trace-token
 			     (tuple +cm-reg-send-tt+
 				    from-pid

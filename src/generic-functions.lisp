@@ -9,7 +9,7 @@
 
 (defmethod encode :around (x &key version-tag atom-cache-entries)
   (if version-tag
-      (concatenate 'vector
+      (concatenate '(vector octet)
 		   (vector +protocol-version+)
 		   (call-next-method x :atom-cache-entries atom-cache-entries))
       (call-next-method x :atom-cache-entries atom-cache-entries)))
