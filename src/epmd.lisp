@@ -187,11 +187,7 @@
     ((stream-var &optional (host "localhost")) &body body)
   "Create a local scope where STREAM-VAR is a socket stream connected to the EPMD."
   (let ((socket-var (gensym)))
-    `(let* ((,socket-var (handler-case (connect-to-epmd ,host)
-                           (usocket:connection-refused-error ()
-                             (error 'unreachable-error))
-                           (usocket:unknown-error ()
-                             (error 'host-unknown-error))))
+    `(let* ((,socket-var (connect-to-epmd ,host))
             (,stream-var (usocket:socket-stream ,socket-var)))
        (unwind-protect (progn ,@body)
          (usocket:socket-close ,socket-var))) ))
@@ -207,9 +203,7 @@
       (restart-case
           (if (not (listening-p))
               (error 'not-listening-on-socket)
-              (let* ((socket (handler-case (connect-to-epmd)
-                               (usocket:connection-refused-error ()
-                                 (error 'unreachable-error))))
+              (let* ((socket (connect-to-epmd))
                      (epmd (usocket:socket-stream socket)))
                 (write-alive2-request
                  epmd (node-name (this-node)) (listening-port))
@@ -259,7 +253,13 @@
 ;;;
 
 (defun connect-to-epmd (&optional (host "localhost"))
-  (let ((socket (usocket:socket-connect host +epmd-port+ :element-type 'octet)))
+  (let ((socket (handler-case (usocket:socket-connect host
+                                                      +epmd-port+
+                                                      :element-type 'octet)
+                  (usocket:connection-refused-error ()
+                    (error 'unreachable-error))
+                  (usocket:unknown-error ()
+                    (error 'host-unknown-error)))))
     (setf (usocket:socket-stream socket)
           (make-flexi-stream (usocket:socket-stream socket)))
     socket))
