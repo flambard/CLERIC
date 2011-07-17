@@ -18,6 +18,15 @@
   (bytes-to-unsigned-integer (read-bytes 4 stream) 4))
 
 
+(defun write-uint16 (int stream)
+  (write-sequence (uint16-to-bytes int) stream)
+  t)
+
+(defun write-uint32 (int stream)
+  (write-sequence (uint32-to-bytes int) stream)
+  t)
+
+
 (defun bytes-to-signed-int32 (bytes &optional (pos 0))
   (let ((int 0))
     (setf (ldb (byte 7 24) int) (aref bytes (+ 0 pos))) ;; All bits except the sign

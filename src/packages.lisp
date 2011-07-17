@@ -20,6 +20,9 @@
    #:uint32-to-bytes
    #:unsigned-integer-to-bytes
 
+   #:write-uint16
+   #:write-uint32
+
    #:string-to-bytes
 
    ))
