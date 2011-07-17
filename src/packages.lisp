@@ -12,6 +12,7 @@
    #:read-bytes
    #:read-bytes-as-string
    #:read-signed-int32
+   #:read-string
    #:read-uint16
    #:read-uint32
 
