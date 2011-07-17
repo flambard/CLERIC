@@ -90,11 +90,11 @@
 ;; N bytes: Node name
 ;;
 
-(defun make-port-please2-request (node-name)
-  (concatenate 'vector
-               (uint16-to-bytes (1+ (length node-name)))
-               (vector +port-please2-req+)
-               (string-to-bytes node-name)))
+(defun write-port-please2-request (stream node-name)
+  (write-sequence (uint16-to-bytes (1+ (length node-name))) stream)
+  (write-byte +port-please2-req+ stream)
+  (write-string node-name stream)
+  t)
 
 
 ;;;
@@ -132,7 +132,7 @@
                   (lowest-version-supported (read-uint16 stream))
                   (highest-version-supported (read-uint16 stream))
                   (node-name-length (read-uint16 stream))
-                  (node-name (read-bytes-as-string node-name-length stream))
+                  (node-name (read-string node-name-length stream))
                   (extra-field-length (read-uint16 stream))
                   (extra-field (read-bytes extra-field-length stream)))
              (make-instance 'remote-node
@@ -237,7 +237,7 @@
 (defun lookup-node (node-name &optional (host "localhost"))
   "Query the EPMD about a node. Returns a REMOTE-NODE object that represents the node."
   (with-epmd-connection-stream (epmd host)
-    (write-sequence (make-port-please2-request node-name) epmd)
+    (write-port-please2-request epmd node-name)
     (finish-output epmd)
     (read-port-please2-response epmd host)))
 
