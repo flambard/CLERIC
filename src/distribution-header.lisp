@@ -52,33 +52,33 @@
 
 (defun decode-distribution-header (bytes &optional (pos 0))
   (let ((tag (aref bytes pos))
-	(number-of-refs (aref bytes (1+ pos))))
+        (number-of-refs (aref bytes (1+ pos))))
     (cond
       ((/= tag +distribution-header-tag+)
        (error 'unexpected-message-tag-error
-	      :received-tag tag
-	      :expected-tags +distribution-header-tag+))
+              :received-tag tag
+              :expected-tags +distribution-header-tag+))
       ((= 0 number-of-refs)
        (values (vector)
-	       (+ 2 pos)))
+               (+ 2 pos)))
       (t
        ;; Read Flags and pluck the last half byte
        (multiple-value-bind (half-bytes pos1)
-	   (decode-flags number-of-refs bytes (+ 2 pos))
-	 (let* ((last-half-byte (nth number-of-refs half-bytes))
-		(currently-unused (ldb (byte 3 1) last-half-byte))
-		(use-long-atoms (= 1 (ldb (byte 1 0) last-half-byte))))
-	   (declare (ignore currently-unused))
-	   ;; Read AtomCacheRefs and return a vector of atoms.
-	   (loop
-	      for flags in (subseq half-bytes 0 number-of-refs)
-	      for (atom p) = (multiple-value-list
-			      (decode-atom-cache-ref
-			       flags bytes use-long-atoms pos1))
-	      do (setf pos1 p)
-	      collect atom into atoms
-	      finally (return (values (coerce atoms 'vector)
-				      pos1))) ))))))
+           (decode-flags number-of-refs bytes (+ 2 pos))
+         (let* ((last-half-byte (nth number-of-refs half-bytes))
+                (currently-unused (ldb (byte 3 1) last-half-byte))
+                (use-long-atoms (= 1 (ldb (byte 1 0) last-half-byte))))
+           (declare (ignore currently-unused))
+           ;; Read AtomCacheRefs and return a vector of atoms.
+           (loop
+              for flags in (subseq half-bytes 0 number-of-refs)
+              for (atom p) = (multiple-value-list
+                              (decode-atom-cache-ref
+                               flags bytes use-long-atoms pos1))
+              do (setf pos1 p)
+              collect atom into atoms
+              finally (return (values (coerce atoms 'vector)
+                                      pos1))) ))))))
 
 
 (defun make-distribution-header (&optional (cached-atoms #()))
@@ -95,17 +95,17 @@
      for (atom new-p index internal) across entries
      collect (logior index (if new-p (ash 1 3) 0)) into half-bytes
      nconc (if new-p
-	       (let ((atom-string (symbol-name atom)))
-		 `(,internal
-		   ,@(if long-atoms
-			 (coerce (uint16-to-bytes (length atom-string)) 'list)
-			 (list (length atom-string)))
-		   ,@(map 'list #'char-code atom-string)))
-	       `(,internal)) into refs
+               (let ((atom-string (symbol-name atom)))
+                 `(,internal
+                   ,@(if long-atoms
+                         (coerce (uint16-to-bytes (length atom-string)) 'list)
+                         (list (length atom-string)))
+                   ,@(map 'list #'char-code atom-string)))
+               `(,internal)) into refs
      finally
        (nconc half-bytes
-	      (list (logior (if long-atoms 1 0)
-			    (ash currently-unused 1))))
+              (list (logior (if long-atoms 1 0)
+                            (ash currently-unused 1))))
        (return (concatenate '(vector octet) (encode-flags half-bytes) refs)) ))
 
 (defun encode-flags (half-bytes)
@@ -123,7 +123,7 @@
 
 (defun long-atom-p (atom)
   (< 255 (atom-length atom)))
-  
+
 (defun atom-length (atom)
   (length (symbol-name atom)))
 
@@ -140,25 +140,25 @@
 
 (defun decode-atom-cache-ref (flags bytes &optional long-atoms (pos 0))
   (let ((new-entry (= 1 (ldb (byte 1 3) flags)))
-	(segment-index (ldb (byte 3 0) flags))
-	(internal-segment-index (aref bytes pos)))
+        (segment-index (ldb (byte 3 0) flags))
+        (internal-segment-index (aref bytes pos)))
     (if new-entry
-	(let (pos1 len)
-	  (if long-atoms
-	      (progn
-		(setf len (bytes-to-uint16 bytes (1+ pos)))
-		(setf pos1 (+ 3 pos)))
-	      (progn
-		(setf len (aref bytes (1+ pos)))
-		(setf pos1 (+ 2 pos))))
-	  (let ((atom (make-atom (bytes-to-string bytes len pos1))))
-	    (atom-cache-add atom
-			    *atom-cache*
-			    segment-index
-			    internal-segment-index)
-	    (values atom
-		    (+ pos1 len))))
-	(values (atom-cache-get *atom-cache*
-				segment-index
-				internal-segment-index)
-		(1+ pos)))))
+        (let (pos1 len)
+          (if long-atoms
+              (progn
+                (setf len (bytes-to-uint16 bytes (1+ pos)))
+                (setf pos1 (+ 3 pos)))
+              (progn
+                (setf len (aref bytes (1+ pos)))
+                (setf pos1 (+ 2 pos))))
+          (let ((atom (make-atom (bytes-to-string bytes len pos1))))
+            (atom-cache-add atom
+                            *atom-cache*
+                            segment-index
+                            internal-segment-index)
+            (values atom
+                    (+ pos1 len))))
+        (values (atom-cache-get *atom-cache*
+                                segment-index
+                                internal-segment-index)
+                (1+ pos)))))
