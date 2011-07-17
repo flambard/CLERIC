@@ -138,7 +138,7 @@
 (defpackage #:cleric-epmd
   (:documentation
    "Functions for querying the EPMD (Erlang Port Mapper Daemon).")
-  (:use #:cl #:cleric #:cleric-bops)
+  (:use #:cl #:cleric #:cleric-bops #:flexi-streams)
   (:export
 
    #:publish
