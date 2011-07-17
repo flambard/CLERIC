@@ -256,7 +256,7 @@
 (defun connect-to-epmd (&optional (host "localhost"))
   (let ((socket (usocket:socket-connect host +epmd-port+ :element-type 'octet)))
     (setf (usocket:socket-stream socket)
-          (make-flexi-stream (usocket:socket-stream socket) :element-type 'octet))
+          (make-flexi-stream (usocket:socket-stream socket)))
     socket))
 
 
