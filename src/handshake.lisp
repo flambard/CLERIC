@@ -12,13 +12,13 @@
 ;; N bytes: Full node name
 ;;
 
-(defun make-name-message (version flags full-node-name)
-  (concatenate '(vector octet)
-               (uint16-to-bytes (+ 7 (length full-node-name)))
-               (vector (char-code #\n))
-               (uint16-to-bytes version)
-               (uint32-to-bytes flags)
-               (string-to-bytes full-node-name)))
+(defun write-name-message (stream version flags full-node-name)
+  (write-uint16 (+ 7 (length full-node-name)) stream)
+  (write-char #\n stream)
+  (write-uint16 version stream)
+  (write-uint32 flags stream)
+  (write-string full-node-name stream)
+  t)
 
 (defun read-name-message (stream)
   (handler-case
@@ -47,11 +47,11 @@
 ;;          "alive"
 ;;
 
-(defun make-status-message (status-string)
-  (concatenate '(vector octet)
-               (uint16-to-bytes (1+ (length status-string)))
-               (vector (char-code #\s))
-               (string-to-bytes status-string)))
+(defun write-status-message (stream status-string)
+  (write-uint16 (1+ (length status-string)) stream)
+  (write-char #\s stream)
+  (write-string status-string stream)
+  t)
 
 (defun read-status-message (stream)
   (handler-case
@@ -76,14 +76,14 @@
 ;; N bytes: Full node name
 ;;
 
-(defun make-challenge-message (version flags challenge full-node-name)
-  (concatenate '(vector octet)
-               (uint16-to-bytes (+ 11 (length full-node-name)))
-               (vector (char-code #\n))
-               (uint16-to-bytes version)
-               (uint32-to-bytes flags)
-               (uint32-to-bytes challenge)
-               (string-to-bytes full-node-name)))
+(defun write-challenge-message (stream version flags challenge full-node-name)
+  (write-uint16 (+ 11 (length full-node-name)) stream)
+  (write-char #\n stream)
+  (write-uint16 version stream)
+  (write-uint32 flags stream)
+  (write-uint32 challenge stream)
+  (write-string full-node-name)
+  t)
 
 (defun read-challenge-message (stream)
   (handler-case
@@ -109,12 +109,12 @@
 ;; 16 bytes: Digest
 ;;
 
-(defun make-challenge-reply-message (challenge digest)
-  (concatenate '(vector octet)
-               (uint16-to-bytes 21)
-               (vector (char-code #\r))
-               (uint32-to-bytes challenge)
-               digest))
+(defun write-challenge-reply-message (stream challenge digest)
+  (write-uint16 21 stream)
+  (write-char #\r stream)
+  (write-uint32 challenge stream)
+  (write-sequence digest stream)
+  t)
 
 (defun read-challenge-reply-message (stream)
   (handler-case
@@ -143,11 +143,11 @@
 ;; 16 bytes: Digest
 ;;
 
-(defun make-challenge-ack-message (digest)
-  (concatenate '(vector octet)
-               (uint16-to-bytes (1+ (length digest)))
-               (vector (char-code #\a))
-               digest))
+(defun write-challenge-ack-message (stream digest)
+  (write-uint16 (1+ (length digest)) stream)
+  (write-char #\a stream)
+  (write-sequence digest stream)
+  t)
 
 (defun read-challenge-ack-message (stream)
   (handler-case
@@ -172,10 +172,8 @@
 ;;;
 
 (defun perform-client-handshake (stream cookie)
-  (write-sequence (make-name-message +highest-version-supported+
-                                     (capability-flags)
-                                     (this-node))
-                  stream)
+  (write-name-message
+   stream +highest-version-supported+ (capability-flags) (this-node))
   (finish-output stream)
   (let ((status (read-status-message stream)))
     (cond
@@ -185,8 +183,7 @@
            (read-challenge-message stream)
          (let ((new-challenge (generate-challenge))
                (digest (calculate-digest challenge cookie)))
-           (write-sequence (make-challenge-reply-message new-challenge digest)
-                           stream)
+           (write-challenge-reply-message stream new-challenge digest)
            (finish-output stream)
            (unless (equal-digests (calculate-digest new-challenge cookie)
                                   (read-challenge-ack-message stream))
@@ -213,22 +210,21 @@
 (defun perform-server-handshake (stream cookie)
   (multiple-value-bind (version flags full-node-name) (read-name-message stream)
     ;; TODO: Check if node is allowed to connect to us
-    (write-sequence (make-status-message "ok") stream)
+    (write-status-message stream "ok")
     (let ((challenge (generate-challenge)))
-      (write-sequence (make-challenge-message +highest-version-supported+
-                                              (capability-flags)
-                                              challenge
-                                              (this-node))
-                      stream)
+      (write-challenge-message stream
+                               +highest-version-supported+
+                               (capability-flags)
+                               challenge
+                               (this-node))
       (finish-output stream)
       (multiple-value-bind (new-challenge digest)
           (read-challenge-reply-message stream)
         (unless (equal-digests (calculate-digest challenge cookie) digest)
           (error 'handshake-failed-error
                  :reason "Received incorrect digest"))
-        (write-sequence
-         (make-challenge-ack-message (calculate-digest new-challenge cookie))
-         stream)
+        (write-challenge-ack-message
+         stream (calculate-digest new-challenge cookie))
         (finish-output stream)
         (values full-node-name flags version) )))) ;; Connect successful
 
