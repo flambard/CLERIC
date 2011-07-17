@@ -164,7 +164,8 @@
                (vector +names-req+)))
 
 (defun write-names-request (stream)
-  (write-sequence (make-names-request) stream))
+  (write-sequence (make-names-request) stream)
+  t)
 
 
 ;;;
