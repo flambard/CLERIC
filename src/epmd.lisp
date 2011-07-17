@@ -159,9 +159,12 @@
 ;;
 
 (defun make-names-request ()
-  (concatenate 'vector
+  (concatenate '(vector octet)
                (uint16-to-bytes 1)
                (vector +names-req+)))
+
+(defun write-names-request (stream)
+  (write-sequence (make-names-request) stream))
 
 
 ;;;
@@ -172,12 +175,11 @@
 ;;
 
 (defun read-names-response (stream)
-  (values (handler-case (read-bytes 4 stream)
+  (values (handler-case (read-uint32 stream)
             (end-of-file () (error 'connection-closed-error)))
-          (coerce (loop
-                     for byte = (read-byte stream nil)
-                     while byte collect (code-char byte))
-                  'string)))
+          (loop
+             for line = (read-line stream nil)
+             while line collect line)))
 
 
 ;;;
@@ -242,12 +244,12 @@
 (defun print-all-registered-nodes (&optional (host "localhost") (stream t))
   "Query the EPMD about all registered nodes and print the information."
   (with-epmd-connection-stream (epmd host)
-    (write-sequence (make-names-request) epmd)
+    (write-names-request epmd)
     (finish-output epmd)
     (multiple-value-bind (epmd-port node-info)
         (read-names-response epmd)
       (declare (ignore epmd-port))
-      (princ node-info stream)
+      (format stream "~{~a~%~}" node-info)
       t)))
 
 
