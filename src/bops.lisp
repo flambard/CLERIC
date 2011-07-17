@@ -68,6 +68,3 @@
 (defun read-string (n stream)
   (let ((str (make-string n)))
     (read-sequence str stream)))
-
-(defun read-bytes-as-string (n stream)
-  (bytes-to-string (read-bytes n stream)))
