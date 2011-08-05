@@ -95,9 +95,9 @@
                            &key (distribution-header nil) (cache-atoms nil))
   (if distribution-header
       (let ((cached-atoms (when cache-atoms (make-atom-cache-entries))))
-        (let ((dh (make-distribution-header cached-atoms))
-              (cm (encode-control-message control-message
-                                          :atom-cache-entries cached-atoms)))
+        (let ((cm (encode-control-message control-message
+                                          :atom-cache-entries cached-atoms))
+              (dh (make-distribution-header cached-atoms)))
           (write-uint32 (+ (length dh) (length cm)) stream)
           (write-sequence dh stream)
           (write-sequence cm stream)))
