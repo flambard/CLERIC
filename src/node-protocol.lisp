@@ -114,8 +114,10 @@
     (when (= 0 length) ;; Received TICK. Send TOCK.
       (write-sequence +tock+ stream)
       (finish-output stream)
-      (unless (listen stream)
-        (return-from read-node-message 'tick)))
+      (return-from read-node-message
+        (if (listen stream)
+            (read-node-message stream)
+            'tick)))
     (let ((bytes (handler-case (read-bytes length stream)
                    (end-of-file ()
                      (error 'connection-closed-error)))))
