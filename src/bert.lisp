@@ -5,7 +5,7 @@
 
 (defpackage #:bert
   (:documentation "BERT (Binary ERlang Term).")
-  (:use #:cl #:cleric #:cleric-bops #:flexi-streams)
+  (:use #:cl #:cleric #:cleric-bops)
   (:shadow #:encode #:decode)
   (:export
 
@@ -115,7 +115,9 @@
 (defmethod encode (object &key berp-header)
   (let ((bytes (cleric:encode (translate-complex-type object) :version-tag t)))
     (if berp-header
-        (concatenate '(vector octet) (uint32-to-bytes (length bytes)) bytes)
+        (concatenate '(vector (unsigned-byte 8))
+                     (uint32-to-bytes (length bytes))
+                     bytes)
         bytes)))
 
 
