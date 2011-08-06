@@ -5,7 +5,7 @@
 
 (defpackage #:bert
   (:documentation "BERT (Binary ERlang Term).")
-  (:use #:cl #:cleric #:cleric-bops)
+  (:use #:cl #:cleric #:cleric-bops #:alexandria)
   (:shadow #:encode #:decode)
   (:export
 
@@ -52,11 +52,11 @@
   (:documentation "Encodes the BERT-translatable object to a vector of bytes."))
 
 
-(alexandria:define-constant true (tuple '|bert| '|true|)
+(define-constant true (tuple '|bert| '|true|)
   :test #'match-p
   :documentation "BERT boolean true term.")
 
-(alexandria:define-constant false (tuple '|bert| '|false|)
+(define-constant false (tuple '|bert| '|false|)
   :test #'match-p
   :documentation "BERT boolean false term.")
 
@@ -169,7 +169,7 @@
   (assert (typep term 'erlang-tuple))
   (with-slots (elements) term
     (assert (string= "bert" (symbol-name (aref elements 0))))
-    (alexandria:eswitch ((aref elements 1) :test #'string= :key #'symbol-name)
+    (eswitch ((aref elements 1) :test #'string= :key #'symbol-name)
       ("nil" nil)
       ("true" t)
       ("false" nil)
