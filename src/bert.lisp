@@ -87,10 +87,10 @@
 
 (defmethod translate-complex-type ((dict hash-table))
   (tuple '|bert| '|dict|
-	 (loop
-	    for key being the hash-keys in dict using (hash-value value)
-	    collect (tuple (translate-complex-type key)
-			   (translate-complex-type value))) ))
+         (loop
+            for key being the hash-keys in dict using (hash-value value)
+            collect (tuple (translate-complex-type key)
+                           (translate-complex-type value))) ))
 
 
 (defmethod translate-complex-type ((nil-symbol (eql nil)))
@@ -101,7 +101,7 @@
 (defmethod translate-complex-type ((tuple erlang-tuple))
   (with-slots (elements) tuple
     (make-instance 'erlang-tuple
-		   :elements (map 'vector #'translate-complex-type elements))))
+                   :elements (map 'vector #'translate-complex-type elements))))
 
 
 (defmethod translate-complex-type ((lst list))
@@ -146,7 +146,7 @@
   (when (and (typep bert-term 'erlang-tuple) (< 0 (arity bert-term)))
     (let ((first-element (aref (elements bert-term) 0)))
       (and (symbolp first-element)
-	   (string= "bert" (symbol-name first-element))))))
+           (string= "bert" (symbol-name first-element))))))
 
 
 (defun translate-complex-terms (term)
@@ -160,8 +160,8 @@
     ((typep term 'erlang-tuple)
      (with-slots (elements) term
        (make-instance
-	'erlang-tuple
-	:elements (map 'vector #'translate-complex-terms elements))))
+        'erlang-tuple
+        :elements (map 'vector #'translate-complex-terms elements))))
     (t
      (error "~a is not a BERT term." term)) ))
 
@@ -188,21 +188,21 @@
      with hash = (make-hash-table)
      for tuple in dict
      do (let* ((elements (elements tuple))
-	       (key (aref elements 0))
-	       (value (aref elements 1)))
-	  (setf (gethash key hash) value))
+               (key (aref elements 0))
+               (value (aref elements 1)))
+          (setf (gethash key hash) value))
      finally (return hash)))
 
 (defun translate-time-term (megaseconds seconds microseconds)
   (make-instance 'bert-time
-		 :megaseconds megaseconds
-		 :seconds seconds
-		 :microseconds microseconds))
+                 :megaseconds megaseconds
+                 :seconds seconds
+                 :microseconds microseconds))
 
 (defun translate-regex-term (source options)
   (make-instance 'bert-regex
-		 :source source
-		 :options options))
+                 :source source
+                 :options options))
 
 
 (defun decode (bytes)
