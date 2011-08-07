@@ -80,6 +80,7 @@
    #:connected-remote-nodes
    #:node
    #:make-pid
+   #:make-reference
    #:trace-token
    #:from-pid
    #:to-pid

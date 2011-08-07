@@ -8,6 +8,8 @@
   ()
   (:documentation "Erlang ref."))
 
+(defvar *reference-id-counter* 0)
+
 
 ;;;
 ;;; Methods
@@ -24,6 +26,16 @@
      repeat (/ (length bytes) 4)
      for pos from 0 by 4
      collect (subseq bytes pos (+ 4 pos))))
+
+(defun make-reference ()
+  "Create a new Erlang reference."
+  (make-instance 'erlang-reference
+                 :node (make-symbol (this-node))
+                 :id (generate-new-reference-id)
+                 :creation 1)) ;; What to set here?
+
+(defun generate-new-reference-id ()
+  (uint32-to-bytes (incf *reference-id-counter*)))
 
 
 ;;;
