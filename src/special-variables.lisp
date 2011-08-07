@@ -8,8 +8,6 @@
 (defvar *listening-socket* nil
   "The listening socket. NIL if not listening.")
 
-(defvar *pid-id-counter* 0)
-
 (defvar *cached-atoms* #()
   "A vector of cached atoms.")
 

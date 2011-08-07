@@ -8,6 +8,8 @@
   ((serial :initarg :serial))
   (:documentation "Erlang PID."))
 
+(defvar *pid-id-counter* 0)
+
 
 ;;;
 ;;; Methods
