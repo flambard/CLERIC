@@ -32,9 +32,19 @@
   (assert (every #'(lambda (b) (typep b '(unsigned-byte 8))) bytes))
   (make-instance 'erlang-binary :bytes (coerce bytes 'vector)))
 
+(define-compiler-macro binary (&rest bytes)
+  (if (every #'(lambda (byte) (typep byte '(unsigned-byte 8))) bytes)
+      (make-instance 'erlang-binary :bytes (coerce bytes 'vector))
+      `(make-instance 'erlang-binary :bytes (vector ,@bytes)) ))
+
 (defun string-to-binary (string)
   "Creates an Erlang binary from the characters in STRING."
   (make-instance 'erlang-binary :bytes (string-to-bytes string)))
+
+(define-compiler-macro string-to-binary (&whole form string)
+  (if (stringp string)
+      (make-instance 'erlang-binary :bytes (string-to-bytes string))
+      form))
 
 (defun bytes-to-binary (bytes)
   "Creates an Erlang binary from BYTES."
