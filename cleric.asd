@@ -25,6 +25,7 @@
                                  "constants"))
              (:file "remote-node"
                     :depends-on ("packages"
+                                 "handshake"
                                  "listen"
                                  "local-node"
                                  "atom-cache"
