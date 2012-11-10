@@ -5,7 +5,7 @@
 
 (defpackage #:bert
   (:documentation "BERT (Binary ERlang Term).")
-  (:use #:cl #:cleric #:cleric-bops #:alexandria)
+  (:use #:cl #:cleric-bops #:cleric-etf #:alexandria)
   (:shadow #:encode #:decode)
   (:export
 
