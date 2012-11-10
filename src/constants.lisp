@@ -51,21 +51,6 @@
 (defconstant +dflag-dist-hdr-atom-cache+ #x2000)
 (defconstant +dflag-small-atom-tags+     #x4000)
 
-;;; Control message tags
-(defconstant +cm-link+         1) ; {1, FromPid, ToPid}
-(defconstant +cm-send+         2) ; {2, Cookie, ToPid} followed by a message
-(defconstant +cm-exit+         3) ; {3, FromPid, ToPid, Reason}
-(defconstant +cm-unlink+       4) ; {4, FromPid, ToPid}
-(defconstant +cm-node-link+    5) ; {5}
-(defconstant +cm-reg-send+     6) ; {6, FromPid, Cookie, ToName} followed by a message
-(defconstant +cm-group-leader+ 7) ; {7, FromPid, ToPid}
-(defconstant +cm-exit2+        8) ; {8, FromPid, ToPid, Reason}
-;; New control messages for distrvsn = 1 (OTP R4)
-(defconstant +cm-send-tt+     12) ; {12, Cookie, ToPid, TraceToken} followed by a message
-(defconstant +cm-exit-tt+     13) ; {13, FromPid, ToPid, TraceToken, Reason}
-(defconstant +cm-reg-send-tt+ 16) ; {16, FromPid, Cookie, ToName, TraceToken} followed by a message
-(defconstant +cm-exit2-tt+    18) ; {18, FromPid, ToPid, TraceToken, Reason}
-
 
 ;;; Erlang protocol version
 (defconstant +lowest-version-supported+ 5

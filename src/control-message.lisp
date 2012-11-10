@@ -2,21 +2,40 @@
 
 ;;; ControlMessage
 ;;
-;; LINK: {1, FromPid, ToPid}
-;; SEND: {2, Cookie, ToPid}
-;; EXIT: {3, FromPid, ToPid, Reason}
-;; UNLINK: {4, FromPid, ToPid}
-;; NODE_LINK: {5}
-;; REG_SEND: {6, FromPid, Cookie, ToName}
+;; LINK:         {1, FromPid, ToPid}
+;; SEND:         {2, Cookie, ToPid}
+;; EXIT:         {3, FromPid, ToPid, Reason}
+;; UNLINK:       {4, FromPid, ToPid}
+;; NODE_LINK:    {5}
+;; REG_SEND:     {6, FromPid, Cookie, ToName}
 ;; GROUP_LEADER: {7, FromPid, ToPid}
-;; EXIT2: {8, FromPid, ToPid, Reason}
+;; EXIT2:        {8, FromPid, ToPid, Reason}
 ;;
-;; SEND_TT: {12, Cookie, ToPid, TraceToken}
-;; EXIT_TT: {13, FromPid, ToPid, TraceToken, Reason}
+;; SEND_TT:     {12, Cookie, ToPid, TraceToken}
+;; EXIT_TT:     {13, FromPid, ToPid, TraceToken, Reason}
 ;; REG_SEND_TT: {16, FromPid, Cookie, ToName, TraceToken}
-;; EXIT2_TT: {18, FromPid, ToPid, TraceToken, Reason}
+;; EXIT2_TT:    {18, FromPid, ToPid, TraceToken, Reason}
 ;;
 
+;;; Control message tags
+(defconstant +cm-link+         1)
+(defconstant +cm-send+         2)
+(defconstant +cm-exit+         3)
+(defconstant +cm-unlink+       4)
+(defconstant +cm-node-link+    5)
+(defconstant +cm-reg-send+     6)
+(defconstant +cm-group-leader+ 7)
+(defconstant +cm-exit2+        8)
+;; New control messages for distrvsn = 1 (OTP R4)
+(defconstant +cm-send-tt+     12)
+(defconstant +cm-exit-tt+     13)
+(defconstant +cm-reg-send-tt+ 16)
+(defconstant +cm-exit2-tt+    18)
+
+
+;;;
+;;; Control message classes
+;;;
 
 (defclass control-message ()
   ((trace-token :reader trace-token :initarg :trace-token :initform nil)))
