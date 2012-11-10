@@ -2,6 +2,24 @@
 
 (in-package :cleric)
 
+;;; Distribution header capability flags (from dist.hrl)
+(defconstant +dflag-published+           #x0001)
+(defconstant +dflag-atom-cache+          #x0002) ;; old atom cache
+(defconstant +dflag-extended-references+ #x0004)
+(defconstant +dflag-dist-monitor+        #x0008)
+(defconstant +dflag-fun-tags+            #x0010)
+(defconstant +dflag-dist-monitor-name+   #x0020)
+(defconstant +dflag-hidden-atom-cache+   #x0040)
+(defconstant +dflag-new-fun-tags+        #x0080)
+(defconstant +dflag-extended-pids-ports+ #x0100)
+(defconstant +dflag-export-ptr-tag+      #x0200)
+(defconstant +dflag-bit-binaries+        #x0400)
+(defconstant +dflag-new-floats+          #x0800)
+(defconstant +dflag-unicode-io+          #x1000)
+(defconstant +dflag-dist-hdr-atom-cache+ #x2000)
+(defconstant +dflag-small-atom-tags+     #x4000)
+
+
 ;;;
 ;;; Name message
 ;;
