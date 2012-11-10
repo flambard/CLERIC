@@ -34,8 +34,8 @@
     (setf (ldb (byte 8 8) int) (aref bytes (+ 2 pos)))
     (setf (ldb (byte 8 0) int) (aref bytes (+ 3 pos)))
     (if (= 1 (ldb (byte 1 7) (aref bytes (+ 0 pos)))) ;; The sign bit
-	(- (1+ (logxor int #x7FFFFFFF))) ;; Two's complement
-	int)))
+        (- (1+ (logxor int #x7FFFFFFF))) ;; Two's complement
+        int)))
 
 (defun read-signed-int32 (stream)
   (bytes-to-signed-int32 (read-bytes 4 stream)))
