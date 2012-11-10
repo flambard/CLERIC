@@ -60,6 +60,7 @@
                                  "bops"))
              (:file "epmd"
                     :depends-on ("packages"
+                                 "listen"
                                  "local-node"
                                  "conditions"
                                  "remote-node"
