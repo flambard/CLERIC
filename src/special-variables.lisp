@@ -5,9 +5,6 @@
 (defvar *atom-symbol-package* :keyword
   "The package in which atom symbols are interned. Symbols are uninterned if NIL.")
 
-(defvar *listening-socket* nil
-  "The listening socket. NIL if not listening.")
-
 (defvar *cached-atoms* #()
   "A vector of cached atoms.")
 

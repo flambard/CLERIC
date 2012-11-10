@@ -1,5 +1,8 @@
 (in-package :cleric)
 
+(defvar *listening-socket* nil
+  "The listening socket. NIL if not listening.")
+
 (defun listening-p ()
   (not (null *listening-socket*)))
 
