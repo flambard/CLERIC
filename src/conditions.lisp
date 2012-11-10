@@ -11,10 +11,6 @@
 (defun try-again-condition-p (condition)
   (typep condition 'try-again))
 
-(defun try-connect-again-restart (condition)
-  (declare (ignore condition))
-  (invoke-restart 'try-connect-again))
-
 (define-condition handshake-failed-error (error)
   ((reason :reader reason :initarg :reason))
   (:documentation "This error is signaled if the handshake during connection to a remote node fails."))
@@ -23,11 +19,6 @@
   ;; END-OF-FILE
   ()
   (:documentation "This error is signaled when trying to read from a socket stream that has been closed."))
-
-(define-condition node-unreachable-error (error)
-  ;; USOCKET:CONNECTION-REFUSED-ERROR
-  ()
-  (:documentation "This error is signaled when trying to connect to a node that is unreachable."))
 
 (define-condition malformed-message-error (error)
   ((bytes :reader bytes :initarg :bytes))

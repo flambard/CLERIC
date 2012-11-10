@@ -28,6 +28,15 @@
   (usocket:socket-stream (remote-node-socket node)))
 
 
+(define-condition node-unreachable-error (error)
+  ;; USOCKET:CONNECTION-REFUSED-ERROR
+  ()
+  (:documentation "This error is signaled when trying to connect to a node that is unreachable."))
+
+(defun try-connect-again-restart (condition)
+  (declare (ignore condition))
+  (invoke-restart 'try-connect-again))
+
 (defun remote-node-connect (remote-node cookie)
   "Connect and perform handshake with a remote node."
   (let ((socket
