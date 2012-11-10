@@ -3,11 +3,11 @@
 (in-package :cleric)
 
 (defstruct (atom-cache (:constructor make-atom-cache ())
-		       (:print-object print-atom-cache))
+                       (:print-object print-atom-cache))
   "Erlang atom cache"
   (segments (make-array '(8 256) :element-type 'symbol :initial-element nil)
-	    :type (array symbol (8 256))
-	    :read-only t))
+            :type (array symbol (8 256))
+            :read-only t))
 
 (defvar *atom-cache* (make-atom-cache)
   "An atom cache.")
@@ -15,9 +15,9 @@
 (defun print-atom-cache (cache stream)
   (print-unreadable-object (cache stream :type t :identity t)
     (format stream "~a/2048"
-	    (loop
-	       for index upto 2047
-	       counting (row-major-aref (atom-cache-segments cache) index)))))
+            (loop
+               for index upto 2047
+               counting (row-major-aref (atom-cache-segments cache) index)))))
 
 (defun atom-cache-print-atoms (cache &optional (stream *standard-output*))
   (dotimes (segment 8)
@@ -49,6 +49,6 @@
 (defun atom-cache-add-new (symbol cache)
   (let ((location (atom-cache-location-of symbol cache)))
     (if location
-	(atom-cache-add symbol cache (car location) (cdr location))
-	(let ((free (atom-cache-find-free cache)))
-	  (atom-cache-add symbol cache (car free) (cdr free))))))
+        (atom-cache-add symbol cache (car location) (cdr location))
+        (let ((free (atom-cache-find-free cache)))
+          (atom-cache-add symbol cache (car free) (cdr free))))))
