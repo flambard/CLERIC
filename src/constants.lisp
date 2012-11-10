@@ -2,10 +2,6 @@
 
 (in-package :cleric)
 
-;;; Node protocol type tags
-(defconstant +pass-through+ 112)
-
-
 ;;; Erlang data tags
 (defconstant +compressed-term+    80)
 (defconstant +new-float-ext+      70)

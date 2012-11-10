@@ -1,5 +1,7 @@
 (in-package :cleric)
 
+(defconstant +pass-through+ 112)
+
 (alexandria:define-constant +tock+
     (make-array 4 :element-type 'octet :initial-element 0)
   :test #'equalp)
