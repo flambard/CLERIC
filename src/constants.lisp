@@ -45,10 +45,3 @@
 (defconstant +dflag-unicode-io+          #x1000)
 (defconstant +dflag-dist-hdr-atom-cache+ #x2000)
 (defconstant +dflag-small-atom-tags+     #x4000)
-
-
-;;; Erlang protocol version
-(defconstant +lowest-version-supported+ 5
-  "Lowest version of the Erlang distribution protocol supported.")
-(defconstant +highest-version-supported+ 5
-  "Highest version of the Erlang distribution protocol supported.")
