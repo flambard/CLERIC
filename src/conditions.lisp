@@ -1,4 +1,4 @@
-(in-package :cleric)
+(in-package :cleric-etf)
 
 (define-condition not-implemented-error (program-error)
   ((comment :reader comment :initarg :comment))

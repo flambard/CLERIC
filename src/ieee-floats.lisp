@@ -1,6 +1,6 @@
 ;;;; Depends on the IEEE-Floats library
 
-(in-package :cleric)
+(in-package :cleric-etf)
 
 (defun double-float-to-bytes (f)
   (let ((bits (ieee-floats:encode-float64 f)))

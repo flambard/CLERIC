@@ -1,6 +1,6 @@
 ;;;; Atom cache entries
 
-(in-package :cleric)
+(in-package :cleric-etf)
 
 (defun make-atom-cache-entries ()
   (make-array 256

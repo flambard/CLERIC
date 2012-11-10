@@ -1,4 +1,4 @@
-(in-package :cleric)
+(in-package :cleric-etf)
 
 (defmacro multiple-value-bind* (bind-clauses &body body)
   (if (null bind-clauses) `(progn ,@body)

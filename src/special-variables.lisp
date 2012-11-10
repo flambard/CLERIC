@@ -1,6 +1,6 @@
 ;;;; Special variables
 
-(in-package :cleric)
+(in-package :cleric-etf)
 
 (defvar *atom-symbol-package* :keyword
   "The package in which atom symbols are interned. Symbols are uninterned if NIL.")

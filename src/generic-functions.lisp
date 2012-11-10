@@ -1,4 +1,4 @@
-(in-package :cleric)
+(in-package :cleric-etf)
 
 ;;;;
 ;;;; ENCODE - For encoding Erlang terms

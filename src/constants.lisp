@@ -1,6 +1,6 @@
 ;;;; Constants
 
-(in-package :cleric)
+(in-package :cleric-etf)
 
 ;;; Erlang data tags
 (defconstant +compressed-term+    80)
