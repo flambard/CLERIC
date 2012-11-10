@@ -133,6 +133,14 @@
 				 +cm-reg-send-tt+ +cm-exit2-tt+))) ))
 
 
+;;;;
+;;;; ENCODE-CONTROL-MESSAGE - For encoding Control Messages
+;;;;
+
+(defgeneric encode-control-message (control-message &key version-tag atom-cache-entries)
+  (:documentation "Encodes the Control Message to a vector of bytes."))
+
+
 (defmethod encode-control-message ((object link) &key atom-cache-entries &allow-other-keys)
   (with-slots (from-pid to-pid) object
     (encode

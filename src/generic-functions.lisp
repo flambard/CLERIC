@@ -16,14 +16,6 @@
 
 
 ;;;;
-;;;; ENCODE-CONTROL-MESSAGE - For encoding Control Messages
-;;;;
-
-(defgeneric encode-control-message (control-message &key version-tag atom-cache-entries)
-  (:documentation "Encodes the Control Message to a vector of bytes."))
-
-
-;;;;
 ;;;; MATCH-P - Predicate for comparing Erlang objects
 ;;;;
 
