@@ -3,6 +3,28 @@
 (defvar *listening-socket* nil
   "The listening socket. NIL if not listening.")
 
+
+;;;
+;;; Conditions
+;;;
+
+(define-condition already-listening-on-socket (error)
+  ((port :reader port :initarg :port))
+  (:documentation "This error is signaled when trying to listen on a socket when already listening on an existing socket."))
+
+(define-condition not-listening-on-socket (error)
+  ()
+  (:documentation "This condition is signaled when trying to accept connections with a listening socket."))
+
+(defun start-listening-on-socket-restart (condition)
+  (declare (ignore condition))
+  (invoke-restart 'start-listening-on-socket))
+
+
+;;;
+;;; Socket listening functions
+;;;
+
 (defun listening-p ()
   (not (null *listening-socket*)))
 
