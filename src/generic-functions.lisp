@@ -8,9 +8,9 @@
   (:documentation "Encodes the Erlang translatable object to a vector of bytes."))
 
 (defmethod encode :around (x &key version-tag atom-cache-entries)
-  (if version-tag
+  (if (integerp version-tag)
       (concatenate '(vector octet)
-                   (vector +protocol-version+)
+                   (vector version-tag)
                    (call-next-method x :atom-cache-entries atom-cache-entries))
       (call-next-method x :atom-cache-entries atom-cache-entries)))
 

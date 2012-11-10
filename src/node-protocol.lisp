@@ -101,7 +101,8 @@
           (write-uint32 (+ (length dh) (length cm)) stream)
           (write-sequence dh stream)
           (write-sequence cm stream)))
-      (let ((cm (encode-control-message control-message :version-tag t)))
+      (let ((cm (encode-control-message control-message
+                                        :version-tag +protocol-version+)))
         (write-uint32 (1+ (length cm)) stream)
         (write-byte +pass-through+ stream)
         (write-sequence cm stream)))
@@ -123,7 +124,9 @@
                      (error 'connection-closed-error)))))
       (case (aref bytes 0)
         (#.+pass-through+
-         (decode-control-message bytes :start 1 :version-tag t))
+         (decode-control-message bytes
+                                 :start 1
+                                 :version-tag +protocol-version+))
         (#.+protocol-version+
          (multiple-value-bind (cache pos) (decode-distribution-header bytes 1)
            (let ((*cached-atoms* cache))

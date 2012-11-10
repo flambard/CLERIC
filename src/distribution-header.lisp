@@ -48,6 +48,7 @@
 ;; +----------------------+
 ;;
 
+(defconstant +protocol-version+ 131)
 (defconstant +distribution-header-tag+ 68)
 
 (defun decode-distribution-header (bytes &optional (pos 0))

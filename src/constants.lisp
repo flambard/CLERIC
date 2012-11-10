@@ -4,7 +4,6 @@
 
 ;;; Node protocol type tags
 (defconstant +pass-through+ 112)
-(defconstant +protocol-version+ 131)
 
 
 ;;; Erlang data tags

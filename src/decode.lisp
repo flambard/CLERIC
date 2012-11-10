@@ -6,12 +6,12 @@
 
 (defun decode (bytes &key (start 0) (version-tag nil))
   "Decode a sequence of bytes to an Erlang object."
-  (when version-tag
+  (when (integerp version-tag)
     (let ((version (aref bytes start)))
-      (unless (= version +protocol-version+)
+      (unless (= version version-tag)
         (error 'unexpected-message-tag-error
                :received-tag version
-               :expected-tags (list +protocol-version+))))
+               :expected-tags (list version-tag))))
     (incf start))
   (let ((tag (aref bytes start)))
     (case tag

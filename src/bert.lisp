@@ -44,6 +44,7 @@
 
 (in-package :bert)
 
+(defconstant +protocol-version+ 131)
 
 (defgeneric translate-complex-type (object)
   (:documentation "Translates tuples with the 'bert' tag to corresponding Lisp objects."))
@@ -113,7 +114,8 @@
 
 
 (defmethod encode (object &key berp-header)
-  (let ((bytes (cleric:encode (translate-complex-type object) :version-tag t)))
+  (let ((bytes (cleric:encode (translate-complex-type object)
+                              :version-tag +protocol-version+)))
     (if berp-header
         (concatenate '(vector (unsigned-byte 8))
                      (uint32-to-bytes (length bytes))
@@ -206,6 +208,7 @@
 
 
 (defun decode (bytes)
-  (multiple-value-bind (term pos) (cleric:decode bytes :version-tag t)
+  (multiple-value-bind (term pos)
+      (cleric:decode bytes :version-tag +protocol-version+)
     (values (translate-complex-terms term) pos)))
 
