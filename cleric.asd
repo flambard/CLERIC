@@ -28,8 +28,7 @@
                                  "handshake"
                                  "listen"
                                  "local-node"
-                                 "atom-cache"
-                                 "special-variables"))
+                                 "atom-cache"))
              (:file "conditions"
                     :depends-on ("packages"))
              (:file "constants"
@@ -51,10 +50,7 @@
                                  "classes"))
              (:file "distribution-header"
                     :depends-on ("packages"
-                                 "constants"
-                                 "conditions"
                                  "atom-cache"
-                                 "special-variables"
                                  "bops"))
              (:file "ieee-floats" ;; Needs IEEE-Floats library
                     :depends-on ("packages"
@@ -63,10 +59,8 @@
                     :depends-on ("packages"
                                  "listen"
                                  "local-node"
-                                 "conditions"
                                  "remote-node"
-                                 "bops"
-                                 "constants"))
+                                 "bops"))
              (:file "decode"
                     :depends-on ("packages"
                                  "conditions"
@@ -89,22 +83,17 @@
              (:file "handshake"
                     :depends-on ("packages"
                                  "local-node"
-                                 "conditions"
                                  "bops"
-                                 "constants"
                                  "md5"))
              (:file "md5" ;; Needs MD5 library
                     :depends-on ("packages"))
              (:file "control-message"
                     :depends-on ("packages"
-                                 "generic-functions"
-                                 "constants"
                                  "classes"
                                  "decode"))
              (:file "node-protocol"
                     :depends-on ("packages"
                                  "macros"
-                                 "conditions"
                                  "distribution-header"
                                  "classes"
                                  "bops"
