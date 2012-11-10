@@ -4,22 +4,6 @@
   ((comment :reader comment :initarg :comment))
   (:documentation "The signaling function is not implemented yet."))
 
-(define-condition try-again ()
-  ((reason :reader reason :initarg :reason))
-  (:documentation "This condition is signaled when trying to connect to a remote node that is busy."))
-
-(defun try-again-condition-p (condition)
-  (typep condition 'try-again))
-
-(define-condition handshake-failed-error (error)
-  ((reason :reader reason :initarg :reason))
-  (:documentation "This error is signaled if the handshake during connection to a remote node fails."))
-
-(define-condition connection-closed-error (error)
-  ;; END-OF-FILE
-  ()
-  (:documentation "This error is signaled when trying to read from a socket stream that has been closed."))
-
 (define-condition malformed-message-error (error)
   ((bytes :reader bytes :initarg :bytes))
   (:documentation "This error is signaled when a protocol message is malformed."))

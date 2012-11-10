@@ -19,6 +19,22 @@
 (defconstant +dflag-dist-hdr-atom-cache+ #x2000)
 (defconstant +dflag-small-atom-tags+     #x4000)
 
+(define-condition try-again ()
+  ((reason :reader reason :initarg :reason))
+  (:documentation "This condition is signaled when trying to connect to a remote node that is busy."))
+
+(defun try-again-condition-p (condition)
+  (typep condition 'try-again))
+
+(define-condition connection-closed-error (error)
+  ;; END-OF-FILE
+  ()
+  (:documentation "This error is signaled when trying to read from a socket stream that has been closed."))
+
+(define-condition handshake-failed-error (error)
+  ((reason :reader reason :initarg :reason))
+  (:documentation "This error is signaled if the handshake during connection to a remote node fails."))
+
 
 ;;;
 ;;; Name message
