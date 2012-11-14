@@ -5,51 +5,48 @@
     (usocket:octet-buffer-to-integer bytes n :start pos)))
 
 (defun bytes-to-uint16 (bytes &optional (pos 0))
-  (bytes-to-unsigned-integer bytes 2 pos))
+  (nibbles:ub16ref/be bytes pos))
 
 (defun bytes-to-uint32 (bytes &optional (pos 0))
-  (bytes-to-unsigned-integer bytes 4 pos))
+  (nibbles:ub32ref/be bytes pos))
 
 
 (defun read-uint16 (stream)
-  (bytes-to-unsigned-integer (read-bytes 2 stream) 2))
+  (nibbles:read-ub16/be stream))
 
 (defun read-uint32 (stream)
-  (bytes-to-unsigned-integer (read-bytes 4 stream) 4))
+  (nibbles:read-ub32/be stream))
 
 
 (defun write-uint16 (int stream)
-  (write-sequence (uint16-to-bytes int) stream)
+  (nibbles:write-ub16/be int stream)
   t)
 
 (defun write-uint32 (int stream)
-  (write-sequence (uint32-to-bytes int) stream)
+  (nibbles:write-ub32/be int stream)
   t)
 
 
 (defun bytes-to-signed-int32 (bytes &optional (pos 0))
-  (let ((int 0))
-    (setf (ldb (byte 7 24) int) (aref bytes (+ 0 pos))) ;; All bits except the sign
-    (setf (ldb (byte 8 16) int) (aref bytes (+ 1 pos)))
-    (setf (ldb (byte 8 8) int) (aref bytes (+ 2 pos)))
-    (setf (ldb (byte 8 0) int) (aref bytes (+ 3 pos)))
-    (if (= 1 (ldb (byte 1 7) (aref bytes (+ 0 pos)))) ;; The sign bit
-        (- (1+ (logxor int #x7FFFFFFF))) ;; Two's complement
-        int)))
+  (nibbles:sb32ref/be bytes pos))
 
 (defun read-signed-int32 (stream)
-  (bytes-to-signed-int32 (read-bytes 4 stream)))
+  (nibbles:read-sb32/be stream))
 
 
 (defun unsigned-integer-to-bytes (uint number-of-bytes)
-  (let ((bytes (make-array number-of-bytes :element-type '(unsigned-byte 8))))
+  (let ((bytes (nibbles:make-octet-vector number-of-bytes)))
     (usocket:integer-to-octet-buffer uint bytes number-of-bytes)))
 
 (defun uint16-to-bytes (int)
-  (unsigned-integer-to-bytes int 2))
+  (let ((bytes (nibbles:make-octet-vector 2)))
+    (setf (nibbles:ub16ref/be bytes 0) int)
+    bytes))
 
 (defun uint32-to-bytes (int)
-  (unsigned-integer-to-bytes int 4))
+  (let ((bytes (nibbles:make-octet-vector 4)))
+    (setf (nibbles:ub32ref/be bytes 0) int)
+    bytes))
 
 
 (defun string-to-bytes (string)
@@ -60,7 +57,7 @@
 
 
 (defun read-bytes (n stream)
-  (let ((bytes (make-array n :element-type '(unsigned-byte 8))))
+  (let ((bytes (nibbles:make-octet-vector n)))
     (read-sequence bytes stream)
     ;; Does it block until the whole sequence is filled when reading from a socket?
     bytes))

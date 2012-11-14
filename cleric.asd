@@ -9,7 +9,7 @@
   :author "Markus Flambard <mflambard@common-lisp.net>"
   :version "0.1.2"
   :license "MIT License"
-  :depends-on (:usocket :flexi-streams :md5 :ieee-floats :alexandria)
+  :depends-on (:usocket :flexi-streams :md5 :ieee-floats :alexandria :nibbles)
   :components
   ((:module :src
             :components
