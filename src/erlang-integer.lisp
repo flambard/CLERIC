@@ -75,7 +75,9 @@
 ;;
 
 (defun encode-external-integer (int32) ;; (<= (- (expt 2 31)) X (1- (expt 2 31)))
-  (concatenate '(vector octet) (vector +integer-ext+) (uint32-to-bytes int32)))
+  (concatenate 'nibbles:simple-octet-vector
+               (vector +integer-ext+)
+               (uint32-to-bytes int32)))
 
 (defun decode-external-integer (bytes &optional (pos 0))
   (values (bytes-to-signed-int32 bytes pos)
@@ -97,7 +99,7 @@
   (let* ((sign (if (< bignum 0) 1 0))
          (unsigned-bignum (abs bignum))
          (length (bignum-byte-length unsigned-bignum)))
-    (concatenate '(vector octet)
+    (concatenate 'nibbles:simple-octet-vector
                  (vector +small-big-ext+ length sign)
                  (bignum-to-bytes unsigned-bignum length))))
 
@@ -124,7 +126,7 @@
   (let* ((sign (if (< bignum 0) 1 0))
          (unsigned-bignum (abs bignum))
          (length (bignum-byte-length unsigned-bignum)))
-    (concatenate '(vector octet)
+    (concatenate 'nibbles:simple-octet-vector
                  (vector +large-big-ext+)
                  (uint32-to-bytes length)
                  (vector sign)

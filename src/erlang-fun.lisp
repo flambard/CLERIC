@@ -79,7 +79,7 @@
 
 (defun encode-external-fun (fun)
   (with-slots (module pid index uniq free-vars) fun
-    (concatenate '(vector octet)
+    (concatenate 'nibbles:simple-octet-vector
                  (vector +fun-ext+)
                  (uint32-to-bytes (length free-vars))
                  (encode pid)
@@ -119,7 +119,7 @@
 
 (defun encode-external-new-fun (fun)
   (with-slots (module arity pid index uniq free-vars new-uniq new-index) fun
-    (let ((bytes (concatenate '(vector octet)
+    (let ((bytes (concatenate 'nibbles:simple-octet-vector
                               (vector arity)
                               new-uniq
                               (uint32-to-bytes new-index)
@@ -129,7 +129,7 @@
                               (encode uniq)
                               (encode pid)
                               (list-contents-to-bytes free-vars))))
-      (concatenate '(vector octet)
+      (concatenate 'nibbles:simple-octet-vector
                    (vector +new-fun-ext+)
                    (uint32-to-bytes (+ 4 (length bytes)))
                    bytes))))
@@ -175,7 +175,7 @@
 
 (defun encode-external-export (fun)
   (with-slots (module function arity) fun
-    (concatenate '(vector octet)
+    (concatenate 'nibbles:simple-octet-vector
                  (vector +export-ext+)
                  (encode module)
                  (encode function)

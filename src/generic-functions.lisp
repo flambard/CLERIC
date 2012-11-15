@@ -9,7 +9,7 @@
 
 (defmethod encode :around (x &key version-tag atom-cache-entries)
   (if (integerp version-tag)
-      (concatenate '(vector octet)
+      (concatenate 'nibbles:simple-octet-vector
                    (vector version-tag)
                    (call-next-method x :atom-cache-entries atom-cache-entries))
       (call-next-method x :atom-cache-entries atom-cache-entries)))

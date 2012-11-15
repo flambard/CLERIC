@@ -81,7 +81,7 @@
 ;;
 
 (defun encode-external-small-tuple (tuple atom-cache-entries)
-  (concatenate '(vector octet)
+  (concatenate 'nibbles:simple-octet-vector
                (vector +small-tuple-ext+ (erlang-tuple-arity tuple))
                (mapconc-vector
                 #'(lambda (element)
@@ -105,7 +105,7 @@
 ;;
 
 (defun encode-external-large-tuple (tuple atom-cache-entries)
-  (concatenate '(vector octet)
+  (concatenate 'nibbles:simple-octet-vector
                (vector +large-tuple-ext+)
                (uint32-to-bytes (erlang-tuple-arity tuple))
                (mapconc-vector
@@ -127,7 +127,9 @@
   (loop
      with bytes = #()
      for element across vector
-     do (setf bytes (concatenate '(vector octet) bytes (funcall fn element)))
+     do (setf bytes (concatenate 'nibbles:simple-octet-vector
+                                 bytes
+                                 (funcall fn element)))
      finally (return bytes)))
 
 (defun decode-tuple-contents (bytes arity pos)

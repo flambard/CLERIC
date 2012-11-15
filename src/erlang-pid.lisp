@@ -73,7 +73,7 @@
 
 (defun encode-external-pid (pid)
   (with-slots (node id serial creation) pid
-    (concatenate '(vector octet)
+    (concatenate 'nibbles:simple-octet-vector
                  (vector +pid-ext+)
                  (encode node)
                  id

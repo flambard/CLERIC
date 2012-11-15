@@ -79,7 +79,7 @@
 ;;
 
 (defun encode-external-atom-cache-ref (reference-index)
-  (concatenate '(vector octet)
+  (concatenate 'nibbles:simple-octet-vector
                (vector +atom-cache-ref+)
                (vector reference-index)))
 
@@ -98,7 +98,7 @@
 ;;
 
 (defun encode-external-atom (atom)
-  (concatenate '(vector octet)
+  (concatenate 'nibbles:simple-octet-vector
                (vector +atom-ext+)
                (uint16-to-bytes (length (symbol-name atom)))
                (string-to-bytes (symbol-name atom))))
@@ -120,7 +120,7 @@
 ;;
 
 (defun encode-external-small-atom (atom)
-  (concatenate '(vector octet)
+  (concatenate 'nibbles:simple-octet-vector
                (vector +small-atom-ext+)
                (vector (length (symbol-name atom)))
                (string-to-bytes (symbol-name atom))))

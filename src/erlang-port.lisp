@@ -37,7 +37,7 @@
 
 (defun encode-external-port (port)
   (with-slots (node id creation) port
-    (concatenate '(vector octet)
+    (concatenate 'nibbles:simple-octet-vector
                  (vector +port-ext+)
                  (encode node)
                  id

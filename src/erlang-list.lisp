@@ -50,7 +50,7 @@
 (defun encode-external-list (list &optional atom-cache-entries)
   (multiple-value-bind (elements tail length)
       (list-contents-to-bytes list atom-cache-entries)
-    (concatenate '(vector octet)
+    (concatenate 'nibbles:simple-octet-vector
                  (vector +list-ext+)
                  (uint32-to-bytes length)
                  elements
@@ -69,7 +69,7 @@
      for (element . tail) on list
      for length upfrom 1
      do (setf bytes (concatenate
-                     '(vector octet)
+                     'nibbles:simple-octet-vector
                      bytes
                      (encode element :atom-cache-entries atom-cache-entries)))
      finally

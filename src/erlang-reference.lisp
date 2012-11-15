@@ -58,7 +58,7 @@
 
 (defun encode-external-reference (ref)
   (with-slots (node id creation) ref
-    (concatenate '(vector octet)
+    (concatenate 'nibbles:simple-octet-vector
                  (vector +reference-ext+)
                  (encode node)
                  id
@@ -83,7 +83,7 @@
 
 (defun encode-external-new-reference (ref)
   (with-slots (node creation id) ref
-    (concatenate '(vector octet)
+    (concatenate 'nibbles:simple-octet-vector
                  (vector +new-reference-ext+)
                  (uint16-to-bytes (/ (length id) 4))
                  (encode node)

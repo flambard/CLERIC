@@ -34,7 +34,7 @@
 ;;
 
 (defun encode-external-string (chars)
-  (concatenate '(vector octet)
+  (concatenate 'nibbles:simple-octet-vector
                (vector +string-ext+)
                (uint16-to-bytes (length chars))
                (if (stringp chars)
