@@ -1,6 +1,6 @@
 (defpackage #:cleric-bops
   (:documentation "Common byte operations used internally by CLERIC and BERT.")
-  (:use #:cl #:flexi-streams)
+  (:use #:cl)
   (:export
 
    #:bytes-to-signed-int32
