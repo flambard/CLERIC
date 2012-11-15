@@ -1,4 +1,4 @@
-(in-package :cleric)
+(in-package :cleric-etf)
 
 (deftype erlang-translatable ()
   "A type that encompasses all types of Lisp objects that can be translated to Erlang objects."
