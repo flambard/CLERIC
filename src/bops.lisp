@@ -1,8 +1,13 @@
 (in-package :cleric-bops)
 
 (defun bytes-to-unsigned-integer (bytes &optional (number-of-bytes nil) (pos 0))
-  (let ((n (if number-of-bytes number-of-bytes (length bytes))))
-    (usocket:octet-buffer-to-integer bytes n :start pos)))
+  (loop
+     with n = (if number-of-bytes number-of-bytes (length bytes))
+     with uint = 0
+     for b upfrom pos
+     for i from (ash (1- n) 3) downto 0 by 8
+     do (setf (ldb (byte 8 i) uint) (aref bytes b))
+     finally (return uint)))
 
 (defun bytes-to-uint16 (bytes &optional (pos 0))
   (nibbles:ub16ref/be bytes pos))
@@ -35,8 +40,12 @@
 
 
 (defun unsigned-integer-to-bytes (uint number-of-bytes)
-  (let ((bytes (nibbles:make-octet-vector number-of-bytes)))
-    (usocket:integer-to-octet-buffer uint bytes number-of-bytes)))
+  (loop
+     with bytes = (nibbles:make-octet-vector number-of-bytes)
+     for b upfrom 0
+     for i from (ash (1- number-of-bytes) 3) downto 0 by 8
+     do (setf (aref bytes b) (ldb (byte 8 i) uint))
+     finally (return bytes)))
 
 (defun uint16-to-bytes (int)
   (let ((bytes (nibbles:make-octet-vector 2)))
