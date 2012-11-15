@@ -66,3 +66,12 @@
   (let ((str (make-string n)))
     (read-sequence str stream)
     str))
+
+
+(defun double-float-to-bytes (f)
+  (let ((bytes (nibbles:make-octet-vector 8)))
+    (setf (nibbles:ieee-double-ref/be bytes 0) f)
+    bytes))
+
+(defun bytes-to-double-float (bytes)
+  (nibbles:ieee-double-ref/be bytes 0))

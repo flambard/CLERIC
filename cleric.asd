@@ -9,7 +9,7 @@
   :author "Markus Flambard <mflambard@common-lisp.net>"
   :version "0.1.2"
   :license "MIT License"
-  :depends-on (:usocket :flexi-streams :md5 :ieee-floats :alexandria :nibbles)
+  :depends-on (:usocket :flexi-streams :md5 :alexandria :nibbles)
   :components
   ((:module :src
             :components
@@ -51,9 +51,6 @@
              (:file "distribution-header"
                     :depends-on ("packages"
                                  "atom-cache"
-                                 "bops"))
-             (:file "ieee-floats" ;; Needs IEEE-Floats library
-                    :depends-on ("packages"
                                  "bops"))
              (:file "epmd"
                     :depends-on ("packages"
@@ -116,7 +113,6 @@
                     :depends-on ("packages"
                                  "constants"
                                  "conditions"
-                                 "ieee-floats"
                                  "bops"))
              (:file "erlang-fun"
                     :depends-on ("packages"
