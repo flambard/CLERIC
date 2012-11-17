@@ -90,7 +90,6 @@
                                  "decode"))
              (:file "node-protocol"
                     :depends-on ("packages"
-                                 "macros"
                                  "distribution-header"
                                  "classes"
                                  "bops"
