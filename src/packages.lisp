@@ -1,5 +1,5 @@
 (defpackage #:cleric-bops
-  (:documentation "Common byte operations used internally by CLERIC and BERT.")
+  (:documentation "Common byte operations used internally by CLERIC.")
   (:use #:cl #:etf-bops)
   (:export
 
