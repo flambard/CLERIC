@@ -9,7 +9,7 @@
   :author "Markus Flambard <mflambard@common-lisp.net>"
   :version "0.1.2"
   :license "MIT License"
-  :depends-on (:erlang-term :usocket :flexi-streams :md5 :alexandria :nibbles)
+  :depends-on (:erlang-term :usocket :flexi-streams :md5 :alexandria)
   :components
   ((:module :src
             :components
