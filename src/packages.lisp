@@ -1,6 +1,6 @@
 (defpackage #:cleric-bops
   (:documentation "Common byte operations used internally by CLERIC and BERT.")
-  (:use #:cl)
+  (:use #:cl #:etf-bops)
   (:export
 
    #:bytes-to-signed-int32
@@ -26,69 +26,10 @@
 
    ))
 
-(defpackage #:cleric-etf
-  (:documentation "Erlang External Term Format")
-  (:use #:cl #:cleric-bops)
-  (:export
-
-   ;; Type
-   #:erlang-translatable
-   #:erlang-translatable-p
-
-   ;; Classes
-   #:erlang-binary
-   #:erlang-external-fun
-   #:erlang-old-internal-fun
-   #:erlang-new-internal-fun
-   #:erlang-pid
-   #:erlang-port
-   #:erlang-reference
-   #:erlang-tuple
-
-   ;; Class methods and functions
-   #:encode
-   #:decode
-   #:make-atom
-   #:match-p
-   #:bytes
-   #:bits-in-last-byte
-   #:module
-   #:arity
-   #:size
-   #:elements
-   #:tuple
-   #:binary
-   #:string-to-binary
-   #:bytes-to-binary
-   #:binary-to-string
-   #:node
-   #:make-pid
-   #:make-reference
-
-   ;; Conditions
-   #:not-implemented-error
-   #:malformed-external-erlang-term-error
-   #:untranslatable-lisp-object-error
-   #:unexpected-message-tag-error
-
-   ;; Special variables
-   #:*atom-symbol-package*
-   #:*cached-atoms*
-   #:*lisp-t-is-erlang-true*
-   #:*lisp-nil-is-erlang-empty-list*
-   #:*lisp-nil-is-erlang-false*
-   #:*lisp-nil-at-tail-is-erlang-empty-list*
-   #:*lisp-string-is-erlang-binary*
-   #:*erlang-true-is-lisp-t*
-   #:*erlang-false-is-lisp-nil*
-   #:*erlang-string-is-lisp-string*
-
-   ))
-
 (defpackage #:common-lisp-erlang-interface
   (:documentation "CLERIC (Common Lisp Erlang Interface) - An implementation of the Erlang distribution protocol.")
   (:nicknames #:cleric)
-  (:use #:cl #:cleric-bops #:flexi-streams)
+  (:use #:cl #:erlang-term #:etf-bops #:flexi-streams)
   (:export
 
    ;; Type
@@ -201,7 +142,7 @@
 (defpackage #:cleric-epmd
   (:documentation
    "Functions for querying the EPMD (Erlang Port Mapper Daemon).")
-  (:use #:cl #:cleric-bops #:cleric-etf #:flexi-streams)
+  (:use #:cl #:erlang-term #:etf-bops #:flexi-streams)
   (:export
 
    #:publish
