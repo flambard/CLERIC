@@ -40,3 +40,38 @@
     (if pos
         (subseq node-string (1+ pos))
         "localhost"))) ;; OK with localhost??
+
+
+;;;
+;;; PID functions
+;;;
+
+(defvar *pid-id-counter* 0)
+
+(defun generate-new-pid-id ()
+  (uint32-to-bytes (incf *pid-id-counter*)))
+
+(defun make-pid ()
+  "Create a new Erlang PID."
+  (make-instance 'erlang-pid
+                 :node (make-symbol (this-node))
+                 :id (generate-new-pid-id)
+                 :serial #(0 0 0 0) ;; What to set here?
+                 :creation 1)) ;; What to set here?
+
+
+;;;
+;;; Ref functions
+;;;
+
+(defvar *reference-id-counter* 0)
+
+(defun generate-new-reference-id ()
+  (uint32-to-bytes (incf *reference-id-counter*)))
+
+(defun make-reference ()
+  "Create a new Erlang reference."
+  (make-instance 'erlang-reference
+                 :node (make-symbol (this-node))
+                 :id (generate-new-reference-id)
+                 :creation 1)) ;; What to set here?
