@@ -14,8 +14,10 @@
 (defconstant +names-req+        #\n)
 
 ;; Node type tags
-(defconstant +node-type-hidden+ 72)
-(defconstant +node-type-erlang+ 77)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defconstant +node-type-hidden+ 72)
+  (defconstant +node-type-erlang+ 77)
+  )
 
 (defconstant +protocol-tcpip4+ 0)
 
