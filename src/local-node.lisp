@@ -56,8 +56,11 @@
   (make-instance 'erlang-pid
                  :node (make-symbol (this-node))
                  :id (generate-new-pid-id)
-                 :serial #(0 0 0 0) ;; What to set here?
-                 :creation 1)) ;; What to set here?
+                 ;; What to set on serial and creation?
+                 :serial (make-array 4
+                                     :element-type '(unsigned-byte 8)
+                                     :initial-contents (list 0 0 0 0))
+                 :creation 1))
 
 
 ;;;
