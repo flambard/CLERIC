@@ -7,7 +7,7 @@
 (asdf:defsystem :cleric
   :description "Common Lisp Erlang Interface - An implementation of the Erlang distribution protocol."
   :author "Markus Flambard <mflambard@common-lisp.net>"
-  :version "0.1.2"
+  :version "0.2.0"
   :license "MIT License"
   :depends-on (:erlang-term :usocket :flexi-streams :md5 :alexandria)
   :components
