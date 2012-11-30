@@ -1,31 +1,3 @@
-(defpackage #:cleric-bops
-  (:documentation "Common byte operations used internally by CLERIC.")
-  (:use #:cl #:etf-bops)
-  (:export
-
-   #:bytes-to-signed-int32
-   #:bytes-to-string
-   #:bytes-to-uint16
-   #:bytes-to-uint32
-   #:bytes-to-unsigned-integer
-
-   #:read-bytes
-   #:read-signed-int32
-   #:read-string
-   #:read-uint16
-   #:read-uint32
-
-   #:uint16-to-bytes
-   #:uint32-to-bytes
-   #:unsigned-integer-to-bytes
-
-   #:write-uint16
-   #:write-uint32
-
-   #:string-to-bytes
-
-   ))
-
 (defpackage #:common-lisp-erlang-interface
   (:documentation "CLERIC (Common Lisp Erlang Interface) - An implementation of the Erlang distribution protocol.")
   (:nicknames #:cleric)
