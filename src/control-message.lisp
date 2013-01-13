@@ -18,19 +18,21 @@
 ;;
 
 ;;; Control message tags
-(defconstant +cm-link+         1)
-(defconstant +cm-send+         2)
-(defconstant +cm-exit+         3)
-(defconstant +cm-unlink+       4)
-(defconstant +cm-node-link+    5)
-(defconstant +cm-reg-send+     6)
-(defconstant +cm-group-leader+ 7)
-(defconstant +cm-exit2+        8)
-;; New control messages for distrvsn = 1 (OTP R4)
-(defconstant +cm-send-tt+     12)
-(defconstant +cm-exit-tt+     13)
-(defconstant +cm-reg-send-tt+ 16)
-(defconstant +cm-exit2-tt+    18)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defconstant +cm-link+         1)
+  (defconstant +cm-send+         2)
+  (defconstant +cm-exit+         3)
+  (defconstant +cm-unlink+       4)
+  (defconstant +cm-node-link+    5)
+  (defconstant +cm-reg-send+     6)
+  (defconstant +cm-group-leader+ 7)
+  (defconstant +cm-exit2+        8)
+  ;; New control messages for distrvsn = 1 (OTP R4)
+  (defconstant +cm-send-tt+     12)
+  (defconstant +cm-exit-tt+     13)
+  (defconstant +cm-reg-send-tt+ 16)
+  (defconstant +cm-exit2-tt+    18)
+  )
 
 
 ;;;
