@@ -1,10 +1,12 @@
 (in-package :cleric)
 
-(defconstant +lowest-version-supported+ 5
-  "Lowest version of the Erlang distribution protocol supported.")
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defconstant +lowest-version-supported+ 5
+    "Lowest version of the Erlang distribution protocol supported.")
 
-(defconstant +highest-version-supported+ 5
-  "Highest version of the Erlang distribution protocol supported.")
+  (defconstant +highest-version-supported+ 5
+    "Highest version of the Erlang distribution protocol supported.")
+  )
 
 (defvar *this-node* "lispnode@localhost"
   "The name and host for this node.")
