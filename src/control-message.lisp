@@ -87,66 +87,66 @@
 
 
 (defun make-control-message (tuple)
-  (case (erlang-tuple-ref tuple 0)
+  (case (tuple-ref tuple 0)
     (#.+cm-link+
      (make-instance 'link
-                    :from-pid (erlang-tuple-ref tuple 1)
-                    :to-pid (erlang-tuple-ref tuple 2)))
+                    :from-pid (tuple-ref tuple 1)
+                    :to-pid (tuple-ref tuple 2)))
     (#.+cm-send+
      (make-instance 'send
-                    :cookie (erlang-tuple-ref tuple 1)
-                    :to-pid (erlang-tuple-ref tuple 2)))
+                    :cookie (tuple-ref tuple 1)
+                    :to-pid (tuple-ref tuple 2)))
     (#.+cm-send-tt+
      (make-instance 'send
-                    :cookie (erlang-tuple-ref tuple 1)
-                    :to-pid (erlang-tuple-ref tuple 2)
-                    :trace-token (erlang-tuple-ref tuple 3)))
+                    :cookie (tuple-ref tuple 1)
+                    :to-pid (tuple-ref tuple 2)
+                    :trace-token (tuple-ref tuple 3)))
     (#.+cm-exit+
      (make-instance 'exit
-                    :from-pid (erlang-tuple-ref tuple 1)
-                    :to-pid (erlang-tuple-ref tuple 2)
-                    :reason (erlang-tuple-ref tuple 3)))
+                    :from-pid (tuple-ref tuple 1)
+                    :to-pid (tuple-ref tuple 2)
+                    :reason (tuple-ref tuple 3)))
     (#.+cm-exit-tt+
      (make-instance 'exit
-                    :from-pid (erlang-tuple-ref tuple 1)
-                    :to-pid (erlang-tuple-ref tuple 2)
-                    :trace-token (erlang-tuple-ref tuple 3)
-                    :reason (erlang-tuple-ref tuple 4)))
+                    :from-pid (tuple-ref tuple 1)
+                    :to-pid (tuple-ref tuple 2)
+                    :trace-token (tuple-ref tuple 3)
+                    :reason (tuple-ref tuple 4)))
     (#.+cm-unlink+
      (make-instance 'unlink
-                    :from-pid (erlang-tuple-ref tuple 1)
-                    :to-pid (erlang-tuple-ref tuple 2)))
+                    :from-pid (tuple-ref tuple 1)
+                    :to-pid (tuple-ref tuple 2)))
     (#.+cm-node-link+
      (make-instance 'node-link))
     (#.+cm-reg-send+
      (make-instance 'reg-send
-                    :from-pid (erlang-tuple-ref tuple 1)
-                    :cookie (erlang-tuple-ref tuple 2)
-                    :to-name (erlang-tuple-ref tuple 3)))
+                    :from-pid (tuple-ref tuple 1)
+                    :cookie (tuple-ref tuple 2)
+                    :to-name (tuple-ref tuple 3)))
     (#.+cm-reg-send-tt+
      (make-instance 'reg-send
-                    :from-pid (erlang-tuple-ref tuple 1)
-                    :cookie (erlang-tuple-ref tuple 2)
-                    :to-name (erlang-tuple-ref tuple 3)
-                    :trace-token (erlang-tuple-ref tuple 4)))
+                    :from-pid (tuple-ref tuple 1)
+                    :cookie (tuple-ref tuple 2)
+                    :to-name (tuple-ref tuple 3)
+                    :trace-token (tuple-ref tuple 4)))
     (#.+cm-group-leader+
      (make-instance 'group-leader
-                    :from-pid (erlang-tuple-ref tuple 1)
-                    :to-pid (erlang-tuple-ref tuple 2)))
+                    :from-pid (tuple-ref tuple 1)
+                    :to-pid (tuple-ref tuple 2)))
     (#.+cm-exit2+
      (make-instance 'exit2
-                    :from-pid (erlang-tuple-ref tuple 1)
-                    :to-pid (erlang-tuple-ref tuple 2)
-                    :reason (erlang-tuple-ref tuple 3)))
+                    :from-pid (tuple-ref tuple 1)
+                    :to-pid (tuple-ref tuple 2)
+                    :reason (tuple-ref tuple 3)))
     (#.+cm-exit2-tt+
      (make-instance 'exit2
-                    :from-pid (erlang-tuple-ref tuple 1)
-                    :to-pid (erlang-tuple-ref tuple 2)
-                    :trace-token (erlang-tuple-ref tuple 3)
-                    :reason (erlang-tuple-ref tuple 4)))
+                    :from-pid (tuple-ref tuple 1)
+                    :to-pid (tuple-ref tuple 2)
+                    :trace-token (tuple-ref tuple 3)
+                    :reason (tuple-ref tuple 4)))
     (otherwise
      (error 'unexpected-message-tag-error
-            :received-tag (erlang-tuple-ref tuple 0)
+            :received-tag (tuple-ref tuple 0)
             :expected-tags (list +cm-link+ +cm-send+ +cm-exit+
                                  +cm-unlink+ +cm-node-link+
                                  +cm-reg-send+ +cm-group-leader+
