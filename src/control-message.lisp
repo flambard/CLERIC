@@ -251,7 +251,8 @@
 (defun decode-control-message (bytes &key (start 0) (version-tag nil))
   "Decode a sequence of bytes to a Control Message."
   (multiple-value-bind (tuple pos)
-      (decode-erlang-tuple bytes :start start :version-tag version-tag)
+      (decode bytes :start start :version-tag version-tag)
+    ;; TODO: Make sure TUPLE is actually a tuple
     (let ((cm (make-control-message tuple)))
       (when (typep cm '(or send reg-send))
         (assert (< pos (length bytes)))
