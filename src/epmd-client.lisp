@@ -45,25 +45,15 @@
 (defun publish ()
   (if *epmd-socket*
       (error 'already-registered)
-      (restart-case
-          (if (not (listening-p))
-              (error 'not-listening-on-socket)
-              (let* ((socket (connect-to-epmd))
-                     (epmd (usocket:socket-stream socket)))
-                (write-alive2-request
-                 epmd (node-name (this-node)) (listening-port))
-                (finish-output epmd)
-                (let ((creation (read-alive2-response epmd)))
-                  (declare (ignore creation))
-                  (setf *epmd-socket* socket)
-                  t)))
-        (start-listening-on-socket ()
-          :report "Start listening on a socket."
-          :test (lambda (c)
-                  (declare (ignore c))
-                  (not (listening-p)))
-          (start-listening)
-          (publish)))))
+      (let* ((socket (connect-to-epmd))
+             (epmd (usocket:socket-stream socket)))
+        (write-alive2-request
+         epmd (node-name (this-node)) (listening-port))
+        (finish-output epmd)
+        (let ((creation (read-alive2-response epmd)))
+          (declare (ignore creation))
+          (setf *epmd-socket* socket)
+          t))))
 
 (defun published-p ()
   (not (null *epmd-socket*)))
