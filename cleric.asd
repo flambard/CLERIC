@@ -33,7 +33,10 @@
                     :depends-on ("packages"
                                  "atom-cache"))
              (:file "epmd"
+                    :depends-on ("packages"))
+             (:file "epmd-client"
                     :depends-on ("packages"
+                                 "epmd"
                                  "listen"
                                  "local-node"
                                  "remote-node"))
