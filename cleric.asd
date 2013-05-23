@@ -36,10 +36,7 @@
                     :depends-on ("packages"))
              (:file "epmd-client"
                     :depends-on ("packages"
-                                 "epmd-protocol"
-                                 "listen"
-                                 "local-node"
-                                 "remote-node"))
+                                 "epmd-protocol"))
              (:file "handshake"
                     :depends-on ("packages"
                                  "local-node"

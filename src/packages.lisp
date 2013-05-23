@@ -130,7 +130,7 @@
 (defpackage #:cleric-epmd-client
   (:documentation "An EPMD (Erlang Port Mapper Daemon) client.")
   (:nicknames :cleric-epmd) ;; Old name
-  (:use #:cl #:cleric #:cleric-epmd-protocol #:erlang-term #:flexi-streams)
+  (:use #:cl #:cleric-epmd-protocol #:flexi-streams)
   (:export
 
    #:publish
