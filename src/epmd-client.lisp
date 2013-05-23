@@ -1,6 +1,6 @@
 ;;;; Functions for querying EPMD (Erlang Port Mapped Daemon)
 
-(in-package :cleric-epmd)
+(in-package :cleric-epmd-client)
 
 ;;; EPMD port
 (defconstant +epmd-port+ 4369

@@ -111,9 +111,9 @@
 
    ))
 
-(defpackage #:cleric-epmd
-  (:documentation
-   "Functions for querying the EPMD (Erlang Port Mapper Daemon).")
+(defpackage #:cleric-epmd-client
+  (:documentation "An EPMD (Erlang Port Mapper Daemon) client.")
+  (:nicknames :cleric-epmd) ;; Old name
   (:use #:cl #:cleric #:erlang-term #:etf-bops #:flexi-streams)
   (:export
 
