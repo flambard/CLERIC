@@ -32,11 +32,11 @@
              (:file "distribution-header"
                     :depends-on ("packages"
                                  "atom-cache"))
-             (:file "epmd"
+             (:file "epmd-protocol"
                     :depends-on ("packages"))
              (:file "epmd-client"
                     :depends-on ("packages"
-                                 "epmd"
+                                 "epmd-protocol"
                                  "listen"
                                  "local-node"
                                  "remote-node"))
