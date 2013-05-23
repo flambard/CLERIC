@@ -42,13 +42,12 @@
 ;;; EPMD API
 ;;;
 
-(defun publish ()
+(defun publish (node-name listening-port)
   (if *epmd-socket*
       (error 'already-registered)
       (let* ((socket (connect-to-epmd))
              (epmd (usocket:socket-stream socket)))
-        (write-alive2-request
-         epmd (node-name (this-node)) (listening-port))
+        (write-alive2-request epmd node-name listening-port)
         (finish-output epmd)
         (let ((creation (read-alive2-response epmd)))
           (declare (ignore creation))
