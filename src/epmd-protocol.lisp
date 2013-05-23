@@ -1,6 +1,6 @@
 ;;;; The EPMD protocol
 
-(in-package :cleric-epmd-client)
+(in-package :cleric-epmd-protocol)
 
 ;;; EPMD message tags
 (defconstant +port2-resp+       #\w)

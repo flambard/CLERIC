@@ -111,10 +111,26 @@
 
    ))
 
+(defpackage #:cleric-epmd-protocol
+  (:documentation "EPMD network protocol functions.")
+  (:use #:cl #:etf-bops)
+  (:export
+
+   #:write-alive2-request
+   #:read-alive2-response
+
+   #:write-port-please2-request
+   #:read-port-please2-response
+
+   #:write-names-request
+   #:read-names-response
+
+   ))
+
 (defpackage #:cleric-epmd-client
   (:documentation "An EPMD (Erlang Port Mapper Daemon) client.")
   (:nicknames :cleric-epmd) ;; Old name
-  (:use #:cl #:cleric #:erlang-term #:etf-bops #:flexi-streams)
+  (:use #:cl #:cleric #:cleric-epmd-protocol #:erlang-term #:flexi-streams)
   (:export
 
    #:publish
