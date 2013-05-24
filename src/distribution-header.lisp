@@ -152,7 +152,8 @@
               (progn
                 (setf len (aref bytes (1+ pos)))
                 (setf pos1 (+ 2 pos))))
-          (let ((atom (make-atom (bytes-to-string bytes len pos1))))
+          (let ((atom (make-atom
+                       (octets-to-string bytes :start pos1 :end (+ pos1 len)))))
             (atom-cache-add atom
                             *atom-cache*
                             segment-index
