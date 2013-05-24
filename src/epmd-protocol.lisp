@@ -127,22 +127,23 @@
                   (lowest-version-supported (read-uint16 stream))
                   (highest-version-supported (read-uint16 stream))
                   (node-name-length (read-uint16 stream))
-                  (node-name (read-string node-name-length stream))
-                  (extra-field-length (read-uint16 stream))
-                  (extra-field (read-bytes extra-field-length stream)))
-             (make-instance 'remote-node
-                            :port port
-                            :node-type (case node-type
-                                         (#.+node-type-hidden+ 'hidden)
-                                         (#.+node-type-erlang+ 'erlang)
-                                         (otherwise
-                                          (error 'malformed-message-error)))
-                            :protocol protocol
-                            :lowest-version lowest-version-supported
-                            :highest-version highest-version-supported
-                            :name node-name
-                            :host host
-                            :extra-field extra-field) ))))
+                  (node-name (make-string node-name-length)))
+             (read-sequence node-name stream)
+             (let ((extra-field-length (read-uint16 stream))
+                   (extra-field (read-bytes extra-field-length stream)))
+               (make-instance 'remote-node
+                              :port port
+                              :node-type (case node-type
+                                           (#.+node-type-hidden+ 'hidden)
+                                           (#.+node-type-erlang+ 'erlang)
+                                           (otherwise
+                                            (error 'malformed-message-error)))
+                              :protocol protocol
+                              :lowest-version lowest-version-supported
+                              :highest-version highest-version-supported
+                              :name node-name
+                              :host host
+                              :extra-field extra-field) )))))
     (end-of-file () (error 'connection-closed-error))))
 
 
