@@ -149,11 +149,12 @@
                      (extra-field (read-bytes extra-field-length fs)))
                  (make-instance 'remote-node
                                 :port port
-                                :node-type (case node-type
-                                             (#.+node-type-hidden+ 'hidden)
-                                             (#.+node-type-erlang+ 'erlang)
-                                             (otherwise
-                                              (error 'malformed-message-error)))
+                                :node-type
+                                (case node-type
+                                  (#.+node-type-hidden+ 'hidden)
+                                  (#.+node-type-erlang+ 'erlang)
+                                  (otherwise
+                                   (error 'malformed-response-error)))
                                 :protocol protocol
                                 :lowest-version lowest-version-supported
                                 :highest-version highest-version-supported
