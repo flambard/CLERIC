@@ -12,16 +12,11 @@
 
 
 (defun connect-to-epmd (&optional (host "localhost"))
-  (let ((socket (handler-case (usocket:socket-connect host
-                                                      +epmd-port+
-                                                      :element-type 'octet)
-                  (usocket:connection-refused-error ()
-                    (error 'unreachable-error))
-                  (usocket:unknown-error ()
-                    (error 'host-unknown-error)))))
-    (setf (usocket:socket-stream socket)
-          (make-flexi-stream (usocket:socket-stream socket)))
-    socket))
+  (handler-case (usocket:socket-connect host +epmd-port+ :element-type 'octet)
+    (usocket:connection-refused-error ()
+      (error 'unreachable-error))
+    (usocket:unknown-error ()
+      (error 'host-unknown-error))))
 
 
 ;;;

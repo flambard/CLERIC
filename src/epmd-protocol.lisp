@@ -35,20 +35,21 @@
 ;;
 
 (defun write-alive2-request (stream node-name port &optional (extra #()))
-  (let* ((node-name-length (length node-name))
+  (let* ((fs (make-flexi-stream stream))
+         (node-name-length (length node-name))
          (extra-field-length (length extra))
          (message-length (+ 13 node-name-length extra-field-length)))
-    (write-uint16 message-length stream)
-    (write-char +alive2-req+ stream)
-    (write-uint16 port stream)
-    (write-byte +node-type-hidden+ stream)
-    (write-byte +protocol-tcpip4+ stream)
-    (write-uint16 +lowest-version-supported+ stream)
-    (write-uint16 +highest-version-supported+ stream)
-    (write-uint16 node-name-length stream)
-    (write-string node-name stream)
-    (write-uint16 extra-field-length stream)
-    (write-sequence (coerce extra '(vector octet)) stream))
+    (write-uint16 message-length fs)
+    (write-char +alive2-req+ fs)
+    (write-uint16 port fs)
+    (write-byte +node-type-hidden+ fs)
+    (write-byte +protocol-tcpip4+ fs)
+    (write-uint16 +lowest-version-supported+ fs)
+    (write-uint16 +highest-version-supported+ fs)
+    (write-uint16 node-name-length fs)
+    (write-string node-name fs)
+    (write-uint16 extra-field-length fs)
+    (write-sequence (coerce extra '(vector octet)) fs))
   t)
 
 
@@ -61,20 +62,21 @@
 ;;
 
 (defun read-alive2-response (stream)
-  (handler-case
-      (let* ((tag (read-char stream))
-             (result (read-byte stream))
-             (creation (read-uint16 stream)))
-        (cond
-          ((char/= tag +alive2-resp+)
-           (error 'unexpected-message-tag-error
-                  :tag tag
-                  :expected-tags (list +alive2-resp+)))
-          ((/= 0 result)
-           (error 'response-error))
-          (t
-           creation)))
-    (end-of-file () (error 'connection-closed-error))))
+  (let ((fs (make-flexi-stream stream)))
+    (handler-case
+        (let* ((tag (read-char fs))
+               (result (read-byte fs))
+               (creation (read-uint16 fs)))
+          (cond
+            ((char/= tag +alive2-resp+)
+             (error 'unexpected-message-tag-error
+                    :tag tag
+                    :expected-tags (list +alive2-resp+)))
+            ((/= 0 result)
+             (error 'response-error))
+            (t
+             creation)))
+      (end-of-file () (error 'connection-closed-error)))))
 
 
 ;;;
@@ -86,10 +88,11 @@
 ;;
 
 (defun write-port-please2-request (stream node-name)
-  (write-uint16 (1+ (length node-name)) stream)
-  (write-char +port-please2-req+ stream)
-  (write-string node-name stream)
-  t)
+  (let ((fs (make-flexi-stream stream)))
+    (write-uint16 (1+ (length node-name)) fs)
+    (write-char +port-please2-req+ fs)
+    (write-string node-name fs)
+    t))
 
 
 ;;;
@@ -110,41 +113,42 @@
 ;;
 
 (defun read-port-please2-response (stream host)
-  (handler-case
-      (let ((tag (read-char stream))
-            (result (read-byte stream)))
-        (cond
-          ((char/= tag +port2-resp+)
-           (error 'unexpected-message-tag-error
-                  :tag tag
-                  :expected-tags (list +port2-resp+)))
-          ((/= 0 result)
-           nil) ;; No nodes with that name.
-          (t
-           (let* ((port (read-uint16 stream))
-                  (node-type (read-byte stream))
-                  (protocol (read-byte stream))
-                  (lowest-version-supported (read-uint16 stream))
-                  (highest-version-supported (read-uint16 stream))
-                  (node-name-length (read-uint16 stream))
-                  (node-name (make-string node-name-length)))
-             (read-sequence node-name stream)
-             (let ((extra-field-length (read-uint16 stream))
-                   (extra-field (read-bytes extra-field-length stream)))
-               (make-instance 'remote-node
-                              :port port
-                              :node-type (case node-type
-                                           (#.+node-type-hidden+ 'hidden)
-                                           (#.+node-type-erlang+ 'erlang)
-                                           (otherwise
-                                            (error 'malformed-message-error)))
-                              :protocol protocol
-                              :lowest-version lowest-version-supported
-                              :highest-version highest-version-supported
-                              :name node-name
-                              :host host
-                              :extra-field extra-field) )))))
-    (end-of-file () (error 'connection-closed-error))))
+  (let ((fs (make-flexi-stream stream)))
+    (handler-case
+        (let ((tag (read-char fs))
+              (result (read-byte fs)))
+          (cond
+            ((char/= tag +port2-resp+)
+             (error 'unexpected-message-tag-error
+                    :tag tag
+                    :expected-tags (list +port2-resp+)))
+            ((/= 0 result)
+             nil) ;; No nodes with that name.
+            (t
+             (let* ((port (read-uint16 fs))
+                    (node-type (read-byte fs))
+                    (protocol (read-byte fs))
+                    (lowest-version-supported (read-uint16 fs))
+                    (highest-version-supported (read-uint16 fs))
+                    (node-name-length (read-uint16 fs))
+                    (node-name (make-string node-name-length)))
+               (read-sequence node-name fs)
+               (let ((extra-field-length (read-uint16 fs))
+                     (extra-field (read-bytes extra-field-length fs)))
+                 (make-instance 'remote-node
+                                :port port
+                                :node-type (case node-type
+                                             (#.+node-type-hidden+ 'hidden)
+                                             (#.+node-type-erlang+ 'erlang)
+                                             (otherwise
+                                              (error 'malformed-message-error)))
+                                :protocol protocol
+                                :lowest-version lowest-version-supported
+                                :highest-version highest-version-supported
+                                :name node-name
+                                :host host
+                                :extra-field extra-field) )))))
+      (end-of-file () (error 'connection-closed-error)))))
 
 
 ;;;
@@ -155,9 +159,10 @@
 ;;
 
 (defun write-names-request (stream)
-  (write-uint16 1 stream)
-  (write-char +names-req+ stream)
-  t)
+  (let ((fs (make-flexi-stream stream)))
+    (write-uint16 1 fs)
+    (write-char +names-req+ fs)
+    t))
 
 
 ;;;
@@ -168,9 +173,10 @@
 ;;
 
 (defun read-names-response (stream)
-  (values (handler-case (read-uint32 stream)
-            (end-of-file () (error 'connection-closed-error)))
-          (loop
-             for line = (read-line stream nil)
-             while line collect line)))
+  (let ((fs (make-flexi-stream stream)))
+    (values (handler-case (read-uint32 fs)
+              (end-of-file () (error 'connection-closed-error)))
+            (loop
+               for line = (read-line fs nil)
+               while line collect line))))
 

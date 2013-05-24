@@ -113,7 +113,7 @@
 
 (defpackage #:cleric-epmd-protocol
   (:documentation "EPMD network protocol functions.")
-  (:use #:cl #:etf-bops)
+  (:use #:cl #:etf-bops #:flexi-streams)
   (:export
 
    #:write-alive2-request
@@ -130,7 +130,7 @@
 (defpackage #:cleric-epmd-client
   (:documentation "An EPMD (Erlang Port Mapper Daemon) client.")
   (:nicknames :cleric-epmd) ;; Old name
-  (:use #:cl #:cleric-epmd-protocol #:flexi-streams)
+  (:use #:cl #:cleric-epmd-protocol)
   (:export
 
    #:publish
