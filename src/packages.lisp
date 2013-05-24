@@ -128,6 +128,16 @@
    #:malformed-response-error
    #:response-error
 
+   #:node-info
+   #:node-name
+   #:node-host
+   #:node-port
+   #:node-type
+   #:node-protocol
+   #:node-lowest-version
+   #:node-highest-version
+   #:node-extra-field
+
    ))
 
 (defpackage #:cleric-epmd-client

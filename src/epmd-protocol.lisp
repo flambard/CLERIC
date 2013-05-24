@@ -126,6 +126,16 @@
 ;; M bytes: Extra field
 ;;
 
+(defclass node-info ()
+  ((name :initarg :name :reader node-name)
+   (host :initarg :host :reader node-host)
+   (port :initarg :port :reader node-port)
+   (node-type :initarg :node-type :reader node-type)
+   (protocol :initarg :protocol :reader node-protocol)
+   (lowest-version :initarg :lowest-version :reader node-lowest-version)
+   (highest-version :initarg :highest-version :reader node-highest-version)
+   (extra-field :initarg :extra-field :reader node-extra-field)))
+
 (defun read-port-please2-response (stream host)
   (let ((fs (make-flexi-stream stream)))
     (handler-case
@@ -147,12 +157,12 @@
                (read-sequence node-name fs)
                (let ((extra-field-length (read-uint16 fs))
                      (extra-field (read-bytes extra-field-length fs)))
-                 (make-instance 'remote-node
+                 (make-instance 'node-info
                                 :port port
                                 :node-type
                                 (case node-type
-                                  (#.+node-type-hidden+ 'hidden)
-                                  (#.+node-type-erlang+ 'erlang)
+                                  (#.+node-type-hidden+ :hidden)
+                                  (#.+node-type-erlang+ :erlang)
                                   (otherwise
                                    (error 'malformed-response-error)))
                                 :protocol protocol
