@@ -76,7 +76,6 @@
    #:handshake-failed-error
    #:connection-closed-error
    #:node-unreachable-error
-   #:malformed-message-error
    #:malformed-external-erlang-term-error
    #:untranslatable-lisp-object-error
    #:unexpected-message-length-error
