@@ -125,6 +125,7 @@
    #:write-names-request
    #:read-names-response
 
+   #:connection-closed-error
    #:response-error
 
    ))

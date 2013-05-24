@@ -18,6 +18,11 @@
 (defconstant +protocol-tcpip4+ 0)
 
 
+(define-condition connection-closed-error (error)
+  ()
+  (:documentation
+   "This error is signaled when trying to read from a closed stream."))
+
 (define-condition response-error (error)
   ()
   (:documentation
