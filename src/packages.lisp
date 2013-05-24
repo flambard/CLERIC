@@ -125,6 +125,8 @@
    #:write-names-request
    #:read-names-response
 
+   #:response-error
+
    ))
 
 (defpackage #:cleric-epmd-client
@@ -142,6 +144,5 @@
    #:already-registered
    #:unreachable-error
    #:host-unknown-error
-   #:response-error
 
    ))

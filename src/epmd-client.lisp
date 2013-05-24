@@ -94,8 +94,3 @@
   ;; USOCKET:CONNECTION-REFUSED-ERROR
   ()
   (:documentation "This error is signaled when the EPMD is unreachable."))
-
-(define-condition response-error (error)
-  ;; Useful?
-  ()
-  (:documentation "This error is signaled when the EPMD sends an error response."))

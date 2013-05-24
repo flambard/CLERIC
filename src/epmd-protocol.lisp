@@ -18,6 +18,12 @@
 (defconstant +protocol-tcpip4+ 0)
 
 
+(define-condition response-error (error)
+  ()
+  (:documentation
+   "This error is signaled when the EPMD sends an error response."))
+
+
 ;;;
 ;;; ALIVE2_REQ
 ;;
