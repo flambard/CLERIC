@@ -126,6 +126,7 @@
    #:read-names-response
 
    #:connection-closed-error
+   #:malformed-response-error
    #:response-error
 
    ))

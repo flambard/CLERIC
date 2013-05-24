@@ -23,6 +23,11 @@
   (:documentation
    "This error is signaled when trying to read from a closed stream."))
 
+(define-condition malformed-response-error (error)
+  ()
+  (:documentation
+   "This error is signaled when the EPMD sends a malformed response."))
+
 (define-condition response-error (error)
   ()
   (:documentation
@@ -80,9 +85,7 @@
                (creation (read-uint16 fs)))
           (cond
             ((char/= tag +alive2-resp+)
-             (error 'unexpected-message-tag-error
-                    :tag tag
-                    :expected-tags (list +alive2-resp+)))
+             (error 'malformed-response-error))
             ((/= 0 result)
              (error 'response-error))
             (t
@@ -130,9 +133,7 @@
               (result (read-byte fs)))
           (cond
             ((char/= tag +port2-resp+)
-             (error 'unexpected-message-tag-error
-                    :tag tag
-                    :expected-tags (list +port2-resp+)))
+             (error 'malformed-response-error))
             ((/= 0 result)
              nil) ;; No nodes with that name.
             (t
