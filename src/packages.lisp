@@ -146,11 +146,25 @@
   (:use #:cl #:cleric-epmd-protocol)
   (:export
 
+   #:epmd-connection
    #:publish
+   #:published-node-name
+   #:published-node-port
    #:published-p
    #:unpublish
+
    #:lookup-node
    #:print-all-registered-nodes
+
+   #:node-info
+   #:node-name
+   #:node-host
+   #:node-port
+   #:node-type
+   #:node-protocol
+   #:node-lowest-version
+   #:node-highest-version
+   #:node-extra-field
 
    #:already-registered
    #:unreachable-error
