@@ -49,9 +49,6 @@
 
 (defun accept-connect ()
   (if *listening-socket*
-      (let ((socket (usocket:socket-accept *listening-socket*
-                                           :element-type '(unsigned-byte 8))))
-        (setf (usocket:socket-stream socket)
-              (make-flexi-stream (usocket:socket-stream socket)))
-        socket)
+      (usocket:socket-accept *listening-socket*
+                             :element-type '(unsigned-byte 8))
       (error 'not-listening-on-socket)))
