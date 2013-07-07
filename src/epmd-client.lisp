@@ -8,7 +8,9 @@
 
 
 (defun connect-to-epmd (&optional (host "localhost"))
-  (handler-case (usocket:socket-connect host +epmd-port+ :element-type 'octet)
+  (handler-case (usocket:socket-connect host
+                                        +epmd-port+
+                                        :element-type '(unsigned-byte 8))
     (usocket:connection-refused-error ()
       (error 'unreachable-error))
     (usocket:unknown-error ()
