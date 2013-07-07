@@ -155,8 +155,8 @@
                     (node-name-length (read-uint16 fs))
                     (node-name (make-string node-name-length)))
                (read-sequence node-name fs)
-               (let ((extra-field-length (read-uint16 fs))
-                     (extra-field (read-bytes extra-field-length fs)))
+               (let* ((extra-field-length (read-uint16 fs))
+                      (extra-field (read-bytes extra-field-length fs)))
                  (make-instance 'node-info
                                 :port port
                                 :node-type
