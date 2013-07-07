@@ -3,4 +3,4 @@
 (in-package :cleric)
 
 (defun calculate-digest (challenge cookie)
-  (md5:md5sum-sequence (format nil "~a~a" cookie challenge)))
+  (md5:md5sum-string (format nil "~a~a" cookie challenge)))
