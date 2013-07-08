@@ -10,8 +10,8 @@
    (port :reader remote-node-port :initarg :port)
    (node-type :initarg :node-type) ;; 'ERLANG or 'HIDDEN
    (protocol :initarg :protocol :initform 0) ;; 0 (TCP/IP v4)
-   (lowest-version :initarg :lowest-version)
    (highest-version :initarg :highest-version)
+   (lowest-version :initarg :lowest-version)
    (name :reader remote-node-name :initarg :name :documentation "The name of the remote node.")
    (host :reader remote-node-host :initarg :host)
    (full-name :initarg :full-name :initform nil)
