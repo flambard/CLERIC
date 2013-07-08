@@ -37,15 +37,27 @@
   (declare (ignore condition))
   (invoke-restart 'try-connect-again))
 
-(defun remote-node-connect (remote-node cookie)
+(defun make-remote-node (node-info)
+  (make-instance 'remote-node
+                 :port (cleric-epmd:node-port node-info)
+                 :node-type (cleric-epmd:node-type node-info)
+                 :protocol (cleric-epmd:node-protocol node-info)
+                 :highest-version (cleric-epmd:node-highest-version node-info)
+                 :lowest-version (cleric-epmd:node-lowest-version node-info)
+                 :name (cleric-epmd:node-name node-info)
+                 :host (cleric-epmd:node-host node-info)
+                 :extra-field (cleric-epmd:node-extra-field node-info)))
+
+(defun remote-node-connect (node-info cookie)
   "Connect and perform handshake with a remote node."
-  (let ((socket
-         (handler-case
-             (usocket:socket-connect (remote-node-host remote-node)
-                                     (remote-node-port remote-node)
-                                     :element-type '(unsigned-byte 8))
-           (usocket:connection-refused-error ()
-             (error 'node-unreachable-error)) )))
+  (let* ((remote-node (make-remote-node node-info))
+         (socket
+          (handler-case
+              (usocket:socket-connect (remote-node-host remote-node)
+                                      (remote-node-port remote-node)
+                                      :element-type '(unsigned-byte 8))
+            (usocket:connection-refused-error ()
+              (error 'node-unreachable-error)) )))
     (restart-case
         (handler-bind ((condition #'(lambda (condition)
                                       (declare (ignore condition))
@@ -57,7 +69,7 @@
             (register-connected-remote-node remote-node)))
       (try-connect-again ()
         :test try-again-condition-p
-        (remote-node-connect remote-node cookie))) ))
+        (remote-node-connect node-info cookie))) ))
 
 (defun remote-node-accept-connect (cookie)
   (let ((socket (restart-case (accept-connect)
