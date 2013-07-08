@@ -98,13 +98,15 @@
 (defun write-node-message (control-message stream
                            &key (distribution-header nil) (cache-atoms nil))
   (if distribution-header
-      (let ((cached-atoms (when cache-atoms (make-atom-cache-entries))))
-        (let ((cm (encode-control-message control-message
-                                          :atom-cache-entries cached-atoms))
-              (dh (make-distribution-header cached-atoms)))
-          (write-uint32 (+ (length dh) (length cm)) stream)
-          (write-sequence dh stream)
-          (write-sequence cm stream)))
+      (let ((cache-collector (when cache-atoms
+                               (make-atom-cache-collector *atom-cache*))))
+        (let ((etf-aci:*atom-cache* cache-collector))
+          (let ((cm (encode-control-message control-message))
+                (dh (make-distribution-header
+                     (cache-references cache-collector))))
+            (write-uint32 (+ (length dh) (length cm)) stream)
+            (write-sequence dh stream)
+            (write-sequence cm stream))))
       (let ((cm (encode-control-message control-message
                                         :version-tag +protocol-version+)))
         (write-uint32 (1+ (length cm)) stream)
@@ -133,7 +135,8 @@
                                  :version-tag +protocol-version+))
         (#.+protocol-version+
          (multiple-value-bind (cache pos) (decode-distribution-header bytes 1)
-           (let ((*cached-atoms* cache))
+           (let ((etf-aci:*atom-cache*
+                  (make-atom-cache-collector *atom-cache* cache)))
              (decode-control-message bytes :start pos :version-tag nil))))
         (otherwise
          (error 'unexpected-message-tag-error
