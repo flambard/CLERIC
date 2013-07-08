@@ -158,9 +158,12 @@
                             *atom-cache*
                             segment-index
                             internal-segment-index)
-            (values atom
+            (values (list atom new-entry segment-index internal-segment-index)
                     (+ pos1 len))))
-        (values (atom-cache-get *atom-cache*
-                                segment-index
-                                internal-segment-index)
+        (values (list (atom-cache-get *atom-cache*
+                                      segment-index
+                                      internal-segment-index)
+                      new-entry
+                      segment-index
+                      internal-segment-index)
                 (1+ pos)))))
