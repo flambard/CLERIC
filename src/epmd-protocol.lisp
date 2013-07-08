@@ -42,8 +42,8 @@
 ;; 2 bytes: Listening port
 ;; 1 byte:  72                [hidden node (not Erlang node)]
 ;; 1 byte:  0                 [protocol: tcp/ip v4]
-;; 2 bytes: 5                 [lowest version supported]
 ;; 2 bytes: 5                 [highest version supported]
+;; 2 bytes: 5                 [lowest version supported]
 ;; 2 bytes: Length of node name
 ;; N bytes: Node name
 ;; 2 bytes: Length of the Extra field
@@ -60,8 +60,8 @@
     (write-uint16 port fs)
     (write-byte +node-type-hidden+ fs)
     (write-byte +protocol-tcpip4+ fs)
-    (write-uint16 +lowest-version-supported+ fs)
     (write-uint16 +highest-version-supported+ fs)
+    (write-uint16 +lowest-version-supported+ fs)
     (write-uint16 node-name-length fs)
     (write-string node-name fs)
     (write-uint16 extra-field-length fs)
@@ -118,8 +118,8 @@
 ;; 2 bytes: Port
 ;; 1 byte:  Node type      [77 means Erlang node, 72 means hidden node]
 ;; 1 byte:  Protocol       [0 means TCP/IP v4]
-;; 2 bytes: Lowest version supported
 ;; 2 bytes: Highest version supported
+;; 2 bytes: Lowest version supported
 ;; 2 bytes: Node name length
 ;; N bytes: Node name
 ;; 2 bytes: Extra field length
@@ -132,8 +132,8 @@
    (port :initarg :port :reader node-port)
    (node-type :initarg :node-type :reader node-type)
    (protocol :initarg :protocol :reader node-protocol)
-   (lowest-version :initarg :lowest-version :reader node-lowest-version)
    (highest-version :initarg :highest-version :reader node-highest-version)
+   (lowest-version :initarg :lowest-version :reader node-lowest-version)
    (extra-field :initarg :extra-field :reader node-extra-field)))
 
 (defun read-port-please2-response (stream host)
@@ -150,8 +150,8 @@
              (let* ((port (read-uint16 fs))
                     (node-type (read-byte fs))
                     (protocol (read-byte fs))
-                    (lowest-version-supported (read-uint16 fs))
                     (highest-version-supported (read-uint16 fs))
+                    (lowest-version-supported (read-uint16 fs))
                     (node-name-length (read-uint16 fs))
                     (node-name (make-string node-name-length)))
                (read-sequence node-name fs)
@@ -166,8 +166,8 @@
                                   (otherwise
                                    (error 'malformed-response-error)))
                                 :protocol protocol
-                                :lowest-version lowest-version-supported
                                 :highest-version highest-version-supported
+                                :lowest-version lowest-version-supported
                                 :name node-name
                                 :host host
                                 :extra-field extra-field) )))))
