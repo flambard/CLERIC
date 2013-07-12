@@ -9,7 +9,7 @@
   :author "Markus Flambard <mflambard@common-lisp.net>"
   :version "0.2.1"
   :license "MIT License"
-  :depends-on (:erlang-term :usocket :flexi-streams :md5 :alexandria)
+  :depends-on (:epmd :erlang-term :usocket :flexi-streams :md5 :alexandria)
   :components
   ((:module :src
             :components
@@ -32,11 +32,6 @@
              (:file "distribution-header"
                     :depends-on ("packages"
                                  "atom-cache"))
-             (:file "epmd-protocol"
-                    :depends-on ("packages"))
-             (:file "epmd-client"
-                    :depends-on ("packages"
-                                 "epmd-protocol"))
              (:file "handshake"
                     :depends-on ("packages"
                                  "local-node"

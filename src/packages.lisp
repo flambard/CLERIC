@@ -110,40 +110,10 @@
 
    ))
 
-(defpackage #:cleric-epmd-protocol
-  (:documentation "EPMD network protocol functions.")
-  (:use #:cl #:etf-bops #:flexi-streams)
-  (:export
-
-   #:write-alive2-request
-   #:read-alive2-response
-
-   #:write-port-please2-request
-   #:read-port-please2-response
-
-   #:write-names-request
-   #:read-names-response
-
-   #:connection-closed-error
-   #:malformed-response-error
-   #:response-error
-
-   #:node-info
-   #:node-name
-   #:node-host
-   #:node-port
-   #:node-type
-   #:node-protocol
-   #:node-lowest-version
-   #:node-highest-version
-   #:node-extra-field
-
-   ))
-
 (defpackage #:cleric-epmd-client
   (:documentation "An EPMD (Erlang Port Mapper Daemon) client.")
   (:nicknames :cleric-epmd) ;; Old name
-  (:use #:cl #:cleric-epmd-protocol)
+  (:use #:cl #:epmd-client)
   (:export
 
    #:epmd-connection
