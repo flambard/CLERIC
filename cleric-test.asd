@@ -4,9 +4,10 @@
   :components
   ((:module :test
             :components
-            ((:file "tests")
-             (:file "cleric" :depends-on ("tests"))))))
+            ((:file "package")
+             (:file "cleric" :depends-on ("package"))))))
 
-(defmethod asdf:perform ((op asdf:test-op) (system (eql (asdf:find-system :cleric))))
+(defmethod asdf:perform ((op asdf:test-op)
+                         (system (eql (asdf:find-system :cleric))))
   (asdf:load-system :cleric-test)
   (asdf:test-system :cleric-test))
