@@ -1,8 +1,6 @@
-(in-package #:cleric-test)
+(in-package :cleric-test)
 
-#+nil(def-suite cleric :in cleric)
 (in-suite cleric)
-
 
 (test sbcl-challenge-md5-digest-bug
     ;; Bug in CLERIC::CALCULATE-DIGEST, it returned same MD5sum for different
