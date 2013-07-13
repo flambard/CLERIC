@@ -1,6 +1,6 @@
 (asdf:defsystem :cleric-test
   :description "Unit tests for CLERIC."
-  :depends-on (:cleric :eos)
+  :depends-on (:cleric :fiveam)
   :components
   ((:module :test
             :components

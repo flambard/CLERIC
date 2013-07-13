@@ -1,6 +1,6 @@
 (defpackage #:cleric-test
   (:documentation "Unit tests for CLERIC.")
-  (:use #:cl #:cleric #:eos)
+  (:use #:cl #:cleric #:fiveam)
   (:shadow #:run-all-tests)
   (:export
 
