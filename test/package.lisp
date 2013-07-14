@@ -1,6 +1,6 @@
 (defpackage #:cleric-test
   (:documentation "Unit tests for CLERIC.")
-  (:use #:cl #:cleric #:cleric-handshake-protocol #:eos #:flexi-streams)
+  (:use #:cl #:cleric #:cleric-handshake-protocol #:flexi-streams #:fiveam)
   (:shadow #:run-all-tests)
   (:export
 
