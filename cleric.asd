@@ -9,7 +9,13 @@
   :author "Markus Flambard <mflambard@common-lisp.net>"
   :version "0.2.1"
   :license "MIT License"
-  :depends-on (:epmd :erlang-term :usocket :flexi-streams :md5 :alexandria)
+  :depends-on (:epmd
+               :erlang-term
+               :usocket
+               :flexi-streams
+               :md5
+               :alexandria
+               :com.gigamonkeys.binary-data)
   :components
   ((:module :src
             :components
@@ -32,8 +38,11 @@
              (:file "distribution-header"
                     :depends-on ("packages"
                                  "atom-cache"))
+             (:file "handshake-protocol"
+                    :depends-on ("packages"))
              (:file "handshake"
                     :depends-on ("packages"
+                                 "handshake-protocol"
                                  "local-node"
                                  "md5"))
              (:file "md5" ;; Needs MD5 library

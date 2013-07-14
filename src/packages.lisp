@@ -1,7 +1,47 @@
+(defpackage #:cleric-handshake-protocol
+  (:documentation "Node distribution handshake protocol.")
+  (:use #:cl
+        #:com.gigamonkeys.binary-data
+        #:com.gigamonkeys.binary-data.common-datatypes)
+  (:export
+
+   #:write-message
+
+   #:name
+   #:make-name-message
+   #:read-name-message
+
+   #:status
+   #:make-status-message
+   #:read-status-message
+
+   #:challenge
+   #:make-challenge-message
+   #:read-challenge-message
+
+   #:challenge-reply
+   #:make-challenge-reply-message
+   #:read-challenge-reply-message
+
+   #:challenge-ack
+   #:make-challenge-ack-message
+   #:read-challenge-ack-message
+
+   #:digest
+   #:flags
+   #:full-node-name
+   #:version
+
+   ))
+
 (defpackage #:common-lisp-erlang-interface
   (:documentation "CLERIC (Common Lisp Erlang Interface) - An implementation of the Erlang distribution protocol.")
   (:nicknames #:cleric)
-  (:use #:cl #:erlang-term #:etf-bops #:flexi-streams)
+  (:use #:cl
+        #:cleric-handshake-protocol
+        #:erlang-term
+        #:etf-bops
+        #:flexi-streams)
   (:export
 
    ;; Type
@@ -141,3 +181,4 @@
    #:host-unknown-error
 
    ))
+

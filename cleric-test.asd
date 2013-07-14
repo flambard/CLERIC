@@ -5,7 +5,8 @@
   ((:module :test
             :components
             ((:file "package")
-             (:file "cleric-tests" :depends-on ("package"))))))
+             (:file "cleric-tests" :depends-on ("package"))
+             (:file "handshake-tests" :depends-on ("package"))))))
 
 (defmethod asdf:perform ((op asdf:test-op)
                          (system (eql (asdf:find-system :cleric))))
