@@ -41,36 +41,35 @@
 ;;;
 
 (defun perform-client-handshake (stream cookie)
-  (let ((fs (make-flexi-stream stream)))
-    (write-name-message
-     fs +highest-version-supported+ (capability-flags) (this-node))
-    (finish-output fs)
-    (let ((status (read-status-message fs)))
-      (cond
-        ((or (string= status "ok")
-             (string= status "ok_simultaneous"))
-         (multiple-value-bind (version flags challenge full-node-name)
-             (read-challenge-message fs)
-           (let ((new-challenge (generate-challenge))
-                 (digest (calculate-digest challenge cookie)))
-             (write-challenge-reply-message fs new-challenge digest)
-             (finish-output fs)
-             (unless (equal-digests (calculate-digest new-challenge cookie)
-                                    (read-challenge-ack-message fs))
-               (error 'handshake-failed-error
-                      :reason "Received incorrect digest"))
-             (values full-node-name flags version) ))) ;; Connect successful
-        ((string= status "nok")
-         (signal 'try-again
-                 :reason "Busy with other ongoing handshake"))
-        ((string= status "not_allowed")
-         (error 'handshake-failed-error
-                :reason "Connection not allowed"))
-        ((string= status "alive")
-         (error 'handshake-failed-error
-                :reason "Already connected."))
-        (t
-         (error "This should not happen (as usual).")) ) )))
+  (write-name-message
+   stream +highest-version-supported+ (capability-flags) (this-node))
+  (finish-output stream)
+  (let ((status (read-status-message stream)))
+    (cond
+      ((or (string= status "ok")
+           (string= status "ok_simultaneous"))
+       (multiple-value-bind (version flags challenge full-node-name)
+           (read-challenge-message stream)
+         (let ((new-challenge (generate-challenge))
+               (digest (calculate-digest challenge cookie)))
+           (write-challenge-reply-message stream new-challenge digest)
+           (finish-output stream)
+           (unless (equal-digests (calculate-digest new-challenge cookie)
+                                  (read-challenge-ack-message stream))
+             (error 'handshake-failed-error
+                    :reason "Received incorrect digest"))
+           (values full-node-name flags version) ))) ;; Connect successful
+      ((string= status "nok")
+       (signal 'try-again
+               :reason "Busy with other ongoing handshake"))
+      ((string= status "not_allowed")
+       (error 'handshake-failed-error
+              :reason "Connection not allowed"))
+      ((string= status "alive")
+       (error 'handshake-failed-error
+              :reason "Already connected."))
+      (t
+       (error "This should not happen (as usual).")) ) ))
 
 
 ;;;
@@ -78,26 +77,25 @@
 ;;;
 
 (defun perform-server-handshake (stream cookie)
-  (let ((fs (make-flexi-stream stream)))
-    (multiple-value-bind (version flags full-node-name) (read-name-message fs)
-      ;; TODO: Check if node is allowed to connect to us
-      (write-status-message fs "ok")
-      (let ((challenge (generate-challenge)))
-        (write-challenge-message fs
-                                 +highest-version-supported+
-                                 (capability-flags)
-                                 challenge
-                                 (this-node))
-        (finish-output fs)
-        (multiple-value-bind (new-challenge digest)
-            (read-challenge-reply-message fs)
-          (unless (equal-digests (calculate-digest challenge cookie) digest)
-            (error 'handshake-failed-error
-                   :reason "Received incorrect digest"))
-          (write-challenge-ack-message
-           fs (calculate-digest new-challenge cookie))
-          (finish-output fs)
-          (values full-node-name flags version) ))))) ;; Connect successful
+  (multiple-value-bind (version flags full-node-name) (read-name-message stream)
+    ;; TODO: Check if node is allowed to connect to us
+    (write-status-message stream "ok")
+    (let ((challenge (generate-challenge)))
+      (write-challenge-message stream
+                               +highest-version-supported+
+                               (capability-flags)
+                               challenge
+                               (this-node))
+      (finish-output stream)
+      (multiple-value-bind (new-challenge digest)
+          (read-challenge-reply-message stream)
+        (unless (equal-digests (calculate-digest challenge cookie) digest)
+          (error 'handshake-failed-error
+                 :reason "Received incorrect digest"))
+        (write-challenge-ack-message
+         stream (calculate-digest new-challenge cookie))
+        (finish-output stream)
+        (values full-node-name flags version) )))) ;; Connect successful
 
 
 ;;;
