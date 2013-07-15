@@ -6,7 +6,8 @@
 (define-binary-type byte-vector (bytes)
   (:reader (in)
     (let ((vector (make-array bytes :element-type '(unsigned-byte 8))))
-      (read-sequence vector in)))
+      (read-sequence vector in)
+      vector))
   (:writer (out value)
     (write-sequence value out)))
 
