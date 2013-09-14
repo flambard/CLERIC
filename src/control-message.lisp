@@ -164,7 +164,7 @@
 
 (defmethod encode-control-message ((object link) &key &allow-other-keys)
   (with-slots (from-pid to-pid) object
-    (encode (tuple +cm-link+ from-pid to-pid))))
+    (encode (tuple +cm-link+ from-pid to-pid) :version-tag nil)))
 
 
 (defmethod encode-control-message ((object send) &key &allow-other-keys)
@@ -172,23 +172,25 @@
     (concatenate '(vector octet)
                  (encode (if trace-token
                              (tuple +cm-send-tt+ cookie to-pid trace-token)
-                             (tuple +cm-send+ cookie to-pid)))
-                 (encode message))))
+                             (tuple +cm-send+ cookie to-pid))
+                         :version-tag nil)
+                 (encode message :version-tag nil))))
 
 
 (defmethod encode-control-message ((object exit) &key &allow-other-keys)
   (with-slots (from-pid to-pid trace-token reason) object
     (encode (if trace-token
                 (tuple +cm-exit-tt+ from-pid to-pid trace-token reason)
-                (tuple +cm-exit+ from-pid to-pid reason)))))
+                (tuple +cm-exit+ from-pid to-pid reason))
+            :version-tag nil)))
 
 (defmethod encode-control-message ((object unlink) &key &allow-other-keys)
   (with-slots (from-pid to-pid) object
-    (encode (tuple +cm-unlink+ from-pid to-pid))))
+    (encode (tuple +cm-unlink+ from-pid to-pid) :version-tag nil)))
 
 (defmethod encode-control-message ((object node-link) &key &allow-other-keys)
   (declare (ignorable object))
-  (encode (tuple +cm-node-link+)))
+  (encode (tuple +cm-node-link+) :version-tag nil))
 
 (defmethod encode-control-message ((object reg-send) &key &allow-other-keys)
   (with-slots (from-pid cookie to-name trace-token message) object
@@ -199,18 +201,20 @@
                                     cookie
                                     to-name
                                     trace-token)
-                             (tuple +cm-reg-send+ from-pid cookie to-name)))
-                 (encode message))))
+                             (tuple +cm-reg-send+ from-pid cookie to-name))
+                         :version-tag nil)
+                 (encode message :version-tag nil))))
 
 (defmethod encode-control-message ((object group-leader) &key &allow-other-keys)
   (with-slots (from-pid to-pid) object
-    (encode (tuple +cm-group-leader+ from-pid to-pid))))
+    (encode (tuple +cm-group-leader+ from-pid to-pid) :version-tag nil)))
 
 (defmethod encode-control-message ((object exit2) &key &allow-other-keys)
   (with-slots (from-pid to-pid trace-token reason) object
     (encode (if trace-token
                 (tuple +cm-exit2-tt+ from-pid to-pid trace-token reason)
-                (tuple +cm-exit2+ from-pid to-pid reason)))))
+                (tuple +cm-exit2+ from-pid to-pid reason))
+            :version-tag nil)))
 
 
 (defun decode-control-message (bytes &key (start 0) (version-tag nil))
