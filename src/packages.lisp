@@ -40,8 +40,7 @@
   (:use #:cl
         #:cleric-handshake-protocol
         #:erlang-term
-        #:etf-bops
-        #:flexi-streams)
+        #:etf-bops)
   (:export
 
    ;; Type

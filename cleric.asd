@@ -12,7 +12,6 @@
   :depends-on (:epmd
                :erlang-term
                :usocket
-               :flexi-streams
                :md5
                :alexandria
                :com.gigamonkeys.binary-data)

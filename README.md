@@ -27,7 +27,6 @@ To check out the latest code, use git:
 - [cl-erlang-term](https://github.com/flambard/cl-erlang-term)
 - [usocket](http://common-lisp.net/project/usocket/)
 - [binary-data](https://github.com/gigamonkey/monkeylib-binary-data)
-- [FLEXI-STREAMS](http://weitz.de/flexi-streams/)
 - [CL-MD5](http://www.cliki.net/CL-MD5)
 - [Alexandria](http://common-lisp.net/project/alexandria/)
 
