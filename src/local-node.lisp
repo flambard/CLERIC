@@ -55,14 +55,13 @@
 
 (defun make-pid ()
   "Create a new Erlang PID."
-  (make-instance 'erlang-pid
-                 :node (make-symbol (this-node))
-                 :id (generate-new-pid-id)
-                 ;; What to set on serial and creation?
-                 :serial (make-array 4
-                                     :element-type '(unsigned-byte 8)
-                                     :initial-contents (list 0 0 0 0))
-                 :creation 1))
+  (erlang-term:make-pid (this-node)
+                        (generate-new-pid-id)
+                        ;; What to set on serial and creation?
+                        (make-array 4
+                                    :element-type '(unsigned-byte 8)
+                                    :initial-contents (list 0 0 0 0))
+                        1))
 
 
 ;;;
@@ -76,7 +75,5 @@
 
 (defun make-reference ()
   "Create a new Erlang reference."
-  (make-instance 'erlang-reference
-                 :node (make-symbol (this-node))
-                 :id (generate-new-reference-id)
-                 :creation 1)) ;; What to set here?
+  ;; What should creation be set to?
+  (erlang-term:make-reference (this-node) (generate-new-reference-id) 1))

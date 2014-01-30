@@ -41,6 +41,7 @@
         #:cleric-handshake-protocol
         #:erlang-term
         #:etf-bops)
+  (:shadow #:make-pid #:make-reference)
   (:export
 
    ;; Type
