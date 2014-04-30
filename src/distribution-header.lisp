@@ -143,22 +143,16 @@
         (segment-index (ldb (byte 3 0) flags))
         (internal-segment-index (aref bytes pos)))
     (if new-entry
-        (let (pos1 len)
-          (if long-atoms
-              (progn
-                (setf len (bytes-to-uint16 bytes (1+ pos)))
-                (setf pos1 (+ 3 pos)))
-              (progn
-                (setf len (aref bytes (1+ pos)))
-                (setf pos1 (+ 2 pos))))
-          (let ((atom (make-atom
-                       (octets-to-string bytes :start pos1 :end (+ pos1 len)))))
-            (atom-cache-add atom
-                            *atom-cache*
-                            segment-index
-                            internal-segment-index)
-            (values (list atom new-entry segment-index internal-segment-index)
-                    (+ pos1 len))))
+        (multiple-value-bind (atom end-pos)
+            (if long-atoms
+                (erlang-term::decode-external-atom bytes (1+ pos))
+                (erlang-term::decode-external-small-atom bytes (1+ pos)))
+          (atom-cache-add atom
+                          *atom-cache*
+                          segment-index
+                          internal-segment-index)
+          (values (list atom new-entry segment-index internal-segment-index)
+                  end-pos))
         (values (list (atom-cache-get *atom-cache*
                                       segment-index
                                       internal-segment-index)
