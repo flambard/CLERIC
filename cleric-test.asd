@@ -1,6 +1,6 @@
 (asdf:defsystem :cleric-test
   :description "Unit tests for CLERIC."
-  :depends-on (:cleric :fiveam :flexi-streams)
+  :depends-on (:cleric :erlang-term-test :fiveam :flexi-streams)
   :components
   ((:module :test
             :components
