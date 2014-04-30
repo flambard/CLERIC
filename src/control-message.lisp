@@ -169,7 +169,7 @@
 
 (defmethod encode-control-message ((object send) &key &allow-other-keys)
   (with-slots (cookie to-pid trace-token message) object
-    (concatenate '(vector octet)
+    (concatenate '(vector (unsigned-byte 8))
                  (encode (if trace-token
                              (tuple +cm-send-tt+ cookie to-pid trace-token)
                              (tuple +cm-send+ cookie to-pid))
@@ -194,7 +194,7 @@
 
 (defmethod encode-control-message ((object reg-send) &key &allow-other-keys)
   (with-slots (from-pid cookie to-name trace-token message) object
-    (concatenate '(vector octet)
+    (concatenate '(vector (unsigned-byte 8))
                  (encode (if trace-token
                              (tuple +cm-reg-send-tt+
                                     from-pid

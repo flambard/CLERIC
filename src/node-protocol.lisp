@@ -5,7 +5,7 @@
   )
 
 (alexandria:define-constant +tock+
-    (make-array 4 :element-type 'octet :initial-element 0)
+    (make-array 4 :element-type '(unsigned-byte 8) :initial-element 0)
   :test #'equalp)
 
 

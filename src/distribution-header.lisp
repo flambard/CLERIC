@@ -82,7 +82,7 @@
 
 
 (defun make-distribution-header (&optional (cached-atoms #()))
-  (concatenate '(vector octet)
+  (concatenate '(vector (unsigned-byte 8))
                (vector +protocol-version+
                        +distribution-header-tag+
                        (length cached-atoms))
@@ -106,7 +106,9 @@
        (nconc half-bytes
               (list (logior (if long-atoms 1 0)
                             (ash currently-unused 1))))
-       (return (concatenate '(vector octet) (encode-flags half-bytes) refs)) ))
+       (return (concatenate '(vector (unsigned-byte 8))
+                            (encode-flags half-bytes)
+                            refs)) ))
 
 (defun encode-flags (half-bytes)
   (loop
