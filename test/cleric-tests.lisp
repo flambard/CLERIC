@@ -12,6 +12,7 @@
   )
 
 (test decode-distribution-header
+  ;;; Atom cache ref decoding
   ;; Decode new short atom cache ref
   (let ((etf-aci:*atom-cache* (make-instance 'erlang-term-test::mock-atom-cache))
         (bytes (vector 0 4 65 66 66 65)))
@@ -32,4 +33,9 @@
         (bytes (vector 0)))
     (is (equalp (list :abba nil 0 0)
                 (cleric::decode-atom-cache-ref #b0000 bytes t 0))))
+  )
+
+(test encode-distribution-header
+  (is (equalp #(131 68 0)
+              (cleric::make-distribution-header)))
   )
