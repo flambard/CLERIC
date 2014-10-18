@@ -20,7 +20,9 @@
                 (cleric::decode-atom-cache-ref #b1000 bytes nil 0))))
   ;; Decode new long atom cache ref
   (let ((etf-aci:*atom-cache* (make-instance 'erlang-term-test::mock-atom-cache))
-        (bytes (vector 0 0 4 65 66 66 65)))
+        (bytes (coerce (vector 0 0 4 65 66 66 65) '(vector (unsigned-byte 8)))))
+    ;; Coercion needed to satisfy nibbles. Internally, this function will
+    ;; always be called with a byte vector of the correct type.
     (is (equalp (list :abba t 0 0)
                 (cleric::decode-atom-cache-ref #b1000 bytes t 0))))
   ;; Decode already registered short atom cache ref
