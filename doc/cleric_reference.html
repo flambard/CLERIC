@@ -328,7 +328,7 @@
     <p>
       <i>start</i> defaults to <code>0</code>.
       <br/>
-      <i>version-tag</i> defaults to <code>NIL</code>.
+      <i>version-tag</i> defaults to <code>131</code>.
     </p>
     Decodes the sequence <i>bytes</i> into Erlang terms, starting from position
     <i>start</i>. <i>position</i> is the number of bytes consumed from
@@ -350,18 +350,18 @@
 
 <p>
   <a name="cleric_encode" />
-  [Generic function]<br>
-  <b>encode</b> <i>erlang-translatable-object <code>&amp;key</code> version-tag
-    atom-cache-entries</i> => <i>bytes</i>
+  [Function]<br>
+  <b>encode</b> <i>term <code>&amp;key</code> version-tag compressed</i> =>
+  <i>bytes</i>
   <blockquote>
     <p>
-      <i>version-tag</i> defaults to <code>NIL</code>.
+      <i>version-tag</i> defaults to <code>131</code>.
       <br/>
-      <i>atom-cache-entries</i> defaults to <code>NIL</code>.
+      <i>compressed</i> defaults to <code>NIL</code>.
     </p>
-    Encodes <i>erlang-translatable-object</i> into a sequence of bytes.
-    If <i>version-tag</i> is <i>true</i>, <i>bytes</i> will start with a version
-    tag.
+    Encodes <i>term</i> into a sequence of bytes. If <i>version-tag</i> has
+    an integer value, <i>bytes</i> will start with a version tag byte of that
+    value.
   </blockquote>
   <br>
 </p>
