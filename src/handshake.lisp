@@ -49,7 +49,7 @@
     (cond
       ((or (string= status "ok")
            (string= status "ok_simultaneous"))
-       (with-slots (version flags challenge full-node-name)
+       (with-slots (flags challenge full-node-name)
            (read-challenge-message stream)
          (let ((new-challenge (generate-challenge)))
            (write-message stream
@@ -61,7 +61,7 @@
                                     digest)
                (error 'handshake-failed-error
                       :reason "Received incorrect digest"))
-             (values full-node-name flags version) )))) ;; Connect successful
+             (values full-node-name flags))))) ;; Connect successful
       ((string= status "nok")
        (signal 'try-again
                :reason "Busy with other ongoing handshake"))

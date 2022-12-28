@@ -11,6 +11,8 @@
   (:writer (out value)
     (write-sequence value out)))
 
+;; Described in https://www.erlang.org/doc/apps/erts/erl_dist_protocol.html#distribution-handshake
+
 (define-binary-class handshake-message ()
   ((message-length u2)
    (tag            iso-8859-1-char)))
@@ -20,24 +22,28 @@
 ;;; Name message
 ;;
 ;; 2 bytes: Length of message
-;; 1 byte:  'n'
-;; 2 bytes: Version
-;; 4 bytes: Flags
+;; 1 byte:  'N'
+;; 8 bytes: Flags
+;; 4 bytes: Creation
+;; 2 bytes: Name length
 ;; N bytes: Full node name
 ;;
 
 (define-binary-class name (handshake-message)
-  ((version        u2)
-   (flags          u4)
-   (full-node-name (iso-8859-1-string :length (- message-length 7)))))
+  ((flags          (unsigned-integer :bytes 8 :bits-per-byte 8))
+   (creation       u4)
+   (name-length    u2)
+   (full-node-name (iso-8859-1-string :length name-length))))
 
-(defun make-name-message (version flags full-node-name)
-  (make-instance 'name
-                 :message-length (+ 7 (length full-node-name))
-                 :tag #\n
-                 :version version
-                 :flags flags
-                 :full-node-name full-node-name))
+(defun make-name-message (flags creation full-node-name)
+  (let ((name-length (length full-node-name)))
+    (make-instance 'name
+                  :message-length (+ 15 name-length)
+                  :tag #\N
+                  :flags flags
+                  :creation creation
+                  :name-length name-length
+                  :full-node-name full-node-name)))
 
 (defun read-name-message (stream)
   (read-value 'name stream))
@@ -73,27 +79,29 @@
 ;;; Challenge message
 ;;
 ;; 2 bytes: Length of message
-;; 1 byte:  'n'
-;; 2 bytes: Version
-;; 4 bytes: Flags
+;; 1 byte:  'N'
+;; 8 bytes: Flags
 ;; 4 bytes: Challenge
 ;; N bytes: Full node name
 ;;
 
 (define-binary-class challenge (handshake-message)
-  ((version        u2)
-   (flags          u4)
+  ((flags          (unsigned-integer :bytes 8 :bits-per-byte 8))
    (challenge      u4)
-   (full-node-name (iso-8859-1-string :length (- message-length 11)))))
+   (creation       u4)
+   (name-length    u2)
+   (full-node-name (iso-8859-1-string :length name-length))))
 
-(defun make-challenge-message (version flags challenge full-node-name)
-  (make-instance 'challenge
-                 :message-length (+ 11 (length full-node-name))
-                 :tag #\n
-                 :version version
-                 :flags flags
-                 :challenge challenge
-                 :full-node-name full-node-name))
+(defun make-challenge-message (flags challenge creation full-node-name)
+  (let ((name-length (length full-node-name)))
+    (make-instance 'challenge
+                  :message-length (+ 19 name-length)
+                  :tag #\N
+                  :flags flags
+                  :challenge challenge
+                  :creation creation
+                  :name-length name-length
+                  :full-node-name full-node-name)))
 
 (defun read-challenge-message (stream)
   (read-value 'challenge stream))
