@@ -11,9 +11,15 @@
 (defvar *this-node* "lispnode@localhost"
   "The name and host for this node.")
 
+(defvar *this-node-creation* (- (get-universal-time)
+                                #.(encode-universal-time 0 0 0 1 1 1970))
+  "iex seems to use unix timestamps... let's use that.")
 
 (defun this-node ()
   *this-node*)
+
+(defun this-node-creation ()
+  *this-node-creation*)
 
 (defun (setf this-node) (node-name)
   ;; TODO: Add sanity checks.
@@ -57,11 +63,11 @@
   "Create a new Erlang PID."
   (erlang-term:make-pid (this-node)
                         (generate-new-pid-id)
-                        ;; What to set on serial and creation?
+                        ;; What to set on serial?
                         (make-array 4
                                     :element-type '(unsigned-byte 8)
                                     :initial-contents (list 0 0 0 0))
-                        1))
+                        (this-node-creation)))
 
 
 ;;;
